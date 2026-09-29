@@ -1,0 +1,32 @@
+"type6.as", line 12: Z(n: SingleInteger): Ring == SmallPrimeField n
+                     ..^
+[L12 C3] #1 (Warning) Function returns a domain that might not be constant (which may cause problems if it is used in a dependent type).
+
+"type6.as", line 17: f(R: Ring): Ring ==
+                     ..^
+[L17 C3] #2 (Warning) Function returns a domain that might not be constant (which may cause problems if it is used in a dependent type).
+
+four    = 4
+sixteen = 16
+four    = 4
+sixteen = 16
+four    = 0
+sixteen = 0
+four    = 1
+sixteen = 1
+four    = 0
+sixteen = 0
+four    = 4
+sixteen = 1
+four    = 4
+sixteen = 4
+four    = 4
+sixteen = 2
+four    = 4
+sixteen = 0
+four    = 4
+sixteen = 7
+four    = 4
+sixteen = 6
+four    = 4
+sixteen = 5

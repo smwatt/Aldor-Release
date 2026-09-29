@@ -1,0 +1,51 @@
+v0.17 CP11 generated-code benchmark
+=====================================
+
+Comparison design
+-----------------
+Baseline compiler: v0.01 (commit 772b6a7, rebuilt on this host)
+Baseline support:  CP11 high-level library sources rebuilt with v0.15
+                   historical-hash bridge compiler (cb8e35c)
+Current compiler:  v0.17 CP11
+Current support:   v0.17 CP11 clean corrected-hash support root
+Aldor options:     -O -Qall
+Generated C:       GCC with effective -O3
+Compile pairs:     5, alternating order
+Execution warmups: 2 per executable
+Execution pairs:   7, alternating order
+CPU affinity:      CPU 0
+Primary metric:    median paired process CPU-time ratio
+
+Output identity
+---------------
+Both variants produced byte-identical output SHA-256:
+e39d0470a682e8b05192d5e7cccb8178ee6142bb867ec11c72cb1831e87628aa
+
+Compiler + generated-C compilation
+----------------------------------
+compile CPU baseline median: 2.900000 s
+compile CPU current median:  2.730000 s
+compile CPU median paired ratio: 0.917241
+compile CPU paired change: -8.276%
+compile wall baseline median: 2.920000 s
+compile wall current median:  2.760000 s
+compile wall median paired ratio: 0.920792
+compile wall paired change: -7.921%
+
+Generated-program execution
+---------------------------
+CPU baseline median: 2.467004 s
+CPU current median:  2.429211 s
+CPU median paired ratio: 0.984681
+CPU paired change: -1.532%
+wall baseline median: 2.467369 s
+wall current median:  2.429590 s
+wall median paired ratio: 0.984689
+wall paired change: -1.531%
+
+Interpretation
+--------------
+The primary paired CPU metric shows CP11 1.532% faster than v0.01 on this
+host.  Compilation is 8.276% faster by paired CPU time.  The v0.16 sealed
+benchmark had shown a +21.470% execution slowdown versus v0.01; that slowdown
+is not present in CP11's source-matched ABI-boundary comparison.

@@ -1,0 +1,20 @@
+== Compiling triv*.as into triv*.ao and triv*.o
+
+triv0.as:
+
+triv1.as:
+
+triv3.as:
+
+triv4.as:
+
+triv5.as:
+
+triv6.as:
+== Building an archive containing triv*.ao
+== Building an archive containing triv*.o
+== Creating a client for the archive
+== Testing that the client imports from the archive
+42 Skidoo
+42 Skidoo
+== Done

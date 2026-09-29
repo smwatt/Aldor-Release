@@ -1,0 +1,56 @@
+
+sel0.ao:
+
+segx0.ao:
+
+segx1.ao:
+-5: negative and odd
+-4: negative and even
+-3: negative and odd
+-2: negative and even
+-1: negative and odd
+0: zero
+1: small
+2: small
+3: small
+4: small
+5: small
+6: small
+7: small
+8: small
+9: small
+10: big and even
+11: big and odd
+12: big and even
+13: big and odd
+14: big and even
+15: big and odd
+
+
+-5: negative and odd
+-4: negative and even
+-3: negative and odd
+-2: negative and even
+-1: negative and odd
+0: zero
+1: small
+2: small
+3: small
+4: small
+5: small
+6: small
+7: small
+8: small
+9: small
+10: big and even
+11: big and odd
+12: big and even
+13: big and odd
+14: big and even
+15: big and odd
+
+sel0.ao:
+
+segx0.ao:
+
+segx1.ao:

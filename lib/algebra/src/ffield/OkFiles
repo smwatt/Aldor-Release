@@ -1,0 +1,9 @@
+build.sh 
+
+alg_pf2.as
+sit_prfcat.as
+sit_spf.as
+sit_sprfcat.as
+sit_sprfgcd.as
+sit_sprfmat.as
+sit_zpf.as

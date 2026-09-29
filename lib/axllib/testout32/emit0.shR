@@ -1,0 +1,234 @@
+== Compiling test1.as, generating all output files, and running it.
+22
+-- The files are:
+test1 test1.ai test1.ao test1.ap test1.asy test1.c test1.fm test1.lsp test1.o
+== Compiling test1.as to test1.lsp with all other files around.
+#1 (Warning) The file `test1.ai' will now be out of date.
+#2 (Warning) The file `test1.ap' will now be out of date.
+#3 (Warning) The file `test1.asy' will now be out of date.
+#4 (Warning) The file `test1.ao' will now be out of date.
+#5 (Warning) The file `test1.fm' will now be out of date.
+#6 (Warning) The file `test1.c' will now be out of date.
+#7 (Warning) The file `test1.o' will now be out of date.
+#1 (Warning) The file `test1' will now be out of date.
+-- The files are:
+test1 test1.ai test1.ao test1.ap test1.asy test1.c test1.fm test1.lsp test1.o
+== Compiling test1.as to test1.c with all other files around.
+#1 (Warning) The file `test1.ai' will now be out of date.
+#2 (Warning) The file `test1.ap' will now be out of date.
+#3 (Warning) The file `test1.asy' will now be out of date.
+#4 (Warning) The file `test1.ao' will now be out of date.
+#5 (Warning) The file `test1.fm' will now be out of date.
+#6 (Warning) The file `test1.lsp' will now be out of date.
+#7 (Warning) The file `test1.o' will now be out of date.
+#1 (Warning) The file `test1' will now be out of date.
+-- The files are:
+test1 test1.ai test1.ao test1.ap test1.asy test1.c test1.fm test1.lsp test1.o
+== Compiling test1.as to test1.lsp with a non-aldor .c file around.
+#1 (Warning) The file `test1.ai' will now be out of date.
+#2 (Warning) The file `test1.ap' will now be out of date.
+#3 (Warning) The file `test1.asy' will now be out of date.
+#4 (Warning) The file `test1.ao' will now be out of date.
+#5 (Warning) The file `test1.fm' will now be out of date.
+#6 (Warning) The file `test1.o' will now be out of date.
+#1 (Warning) The file `test1' will now be out of date.
+-- The files are:
+test1 test1.ai test1.ao test1.ap test1.asy test1.c test1.fm test1.lsp test1.o
+== Compiling test1.as to test1.c with a non-aldor .lsp file around.
+#1 (Warning) The file `test1.ai' will now be out of date.
+#2 (Warning) The file `test1.ap' will now be out of date.
+#3 (Warning) The file `test1.asy' will now be out of date.
+#4 (Warning) The file `test1.ao' will now be out of date.
+#5 (Warning) The file `test1.fm' will now be out of date.
+#6 (Warning) The file `test1.o' will now be out of date.
+#1 (Warning) The file `test1' will now be out of date.
+-- The files are:
+test1 test1.ai test1.ao test1.ap test1.asy test1.c test1.fm test1.lsp test1.o
+== Compiling test1.as to test1.lsp, trying to overwrite non-aldor file.
+#1 (Warning) The file `test1.ai' will now be out of date.
+#2 (Warning) The file `test1.ap' will now be out of date.
+#3 (Warning) The file `test1.asy' will now be out of date.
+#4 (Warning) The file `test1.ao' will now be out of date.
+#5 (Warning) The file `test1.fm' will now be out of date.
+#6 (Fatal Error) Output would clobber the source file `test1.lsp'.
+-- The files are:
+test1 test1.ai test1.ao test1.ap test1.asy test1.c test1.fm test1.lsp test1.o
+== Compiling test1.as to test1.c, trying to overwrite non-aldor file.
+#1 (Warning) The file `test1.ai' will now be out of date.
+#2 (Warning) The file `test1.ap' will now be out of date.
+#3 (Warning) The file `test1.asy' will now be out of date.
+#4 (Warning) The file `test1.ao' will now be out of date.
+#5 (Warning) The file `test1.fm' will now be out of date.
+#6 (Fatal Error) Output would clobber the source file `test1.c'.
+-- The files are:
+test1 test1.ai test1.ao test1.ap test1.asy test1.c test1.fm test1.lsp test1.o
+== Compiling test1.as to test1.lsp and test1.c.
+#1 (Warning) The file `test1.ai' will now be out of date.
+#2 (Warning) The file `test1.ap' will now be out of date.
+#3 (Warning) The file `test1.asy' will now be out of date.
+#4 (Warning) The file `test1.ao' will now be out of date.
+#5 (Warning) The file `test1.fm' will now be out of date.
+#6 (Warning) The file `test1.o' will now be out of date.
+#1 (Warning) The file `test1' will now be out of date.
+-- The files are:
+test1 test1.ai test1.ao test1.ap test1.asy test1.c test1.fm test1.lsp test1.o
+== Compiling test1.as, generating all output files, and running it.
+22
+-- The files are:
+test1 test1.ai test1.ao test1.ap test1.asy test1.c test1.fm test1.lsp test1.o
+-- Newly generated files are:
+.
+./emit0.shR
+./test1
+./test1.ai
+./test1.ao
+./test1.ap
+./test1.asy
+./test1.c
+./test1.fm
+./test1.lsp
+./test1.o
+== Compiling test1.as and running it, not generating output files.
+22
+#1 (Warning) The file `test1.ai' will now be out of date.
+#2 (Warning) The file `test1.ap' will now be out of date.
+#3 (Warning) The file `test1.asy' will now be out of date.
+#4 (Warning) The file `test1.ao' will now be out of date.
+#5 (Warning) The file `test1.fm' will now be out of date.
+#6 (Warning) The file `test1.lsp' will now be out of date.
+#7 (Warning) The file `test1.c' will now be out of date.
+#8 (Warning) The file `test1.o' will now be out of date.
+#1 (Warning) The file `test1' will now be out of date.
+-- The files are:
+test1 test1.ai test1.ao test1.ap test1.asy test1.c test1.fm test1.lsp test1.o
+-- Newly generated files are:
+.
+./emit0.shR
+== Ditto, with non-aldor .lsp and .c files around.
+22
+#1 (Warning) The file `test1.ai' will now be out of date.
+#2 (Warning) The file `test1.ap' will now be out of date.
+#3 (Warning) The file `test1.asy' will now be out of date.
+#4 (Warning) The file `test1.ao' will now be out of date.
+#5 (Warning) The file `test1.fm' will now be out of date.
+#6 (Warning) The file `test1.o' will now be out of date.
+#1 (Warning) The file `test1' will now be out of date.
+-- The files are:
+test1 test1.ai test1.ao test1.ap test1.asy test1.c test1.fm test1.lsp test1.o
+-- Newly generated files are:
+.
+./emit0.shR
+== Removing all output files.
+== Compiling test1.as to test1.c.
+-- Compiling test1.as to test1.c and running it.
+22
+-- Comparing the two generated .c files.
+== Compiling test1.as to test1.lsp.
+-- Compiling test1.as to test1.lsp and running it.
+22
+-- Comparing the two generated .lsp files.
+== Compiling test1.as and running it with test1.c around.
+22
+#1 (Warning) The file `test1.c' will now be out of date.
+-- The files are:
+test1.c
+== Compiling test1.as to test1.o with test1.c around.
+#1 (Warning) The file `test1.c' will now be out of date.
+-- The files are:
+test1.c test1.o
+== Compiling test1.as and running it with test1.o around.
+22
+#1 (Warning) The file `test1.o' will now be out of date.
+-- The files are:
+test1.o
+== Compiling test1.as to test1.c with test1.o around.
+#1 (Warning) The file `test1.o' will now be out of date.
+-- The files are:
+test1.c test1.o
+== Removing all output files.
+== Compiling test1.as to test1.ao.
+-- Compiling test1.ao and running it.
+22
+== Compiling test1.as to test1.fm.
+-- Compiling test1.fm and running it.
+22
+== Compiling test1.as to test1.o.
+-- Compiling test1.o and running it.
+22
+== Compiling test1 to test1.
+#1 (Fatal Error) Output would clobber input file `test1'.
+#1 (Warning) Removing file `test1.o'.
+#2 (Warning) Removing file `aldormain.o'.
+-- The files are:
+test1
+== Ditto, with -e option given.
+#1 (Fatal Error) Output would clobber input file `test1'.
+#1 (Warning) Removing file `test1.o'.
+#2 (Warning) Removing file `aldormain.o'.
+-- The files are:
+test1
+== Compiling test1.as to test1.as.
+#1 (Fatal Error) Output would clobber the source file `test1.as'.
+#1 (Warning) Removing file `test1.o'.
+#2 (Warning) Removing file `aldormain.o'.
+-- The files are:
+test1.as
+== Compiling test1.as and foo.as to foo.as.
+
+test1.as:
+
+foo.as:
+#1 (Fatal Error) Output would clobber the source file `foo.as'.
+#1 (Warning) Removing file `test1.o'.
+#2 (Warning) Removing file `foo.o'.
+#3 (Warning) Removing file `aldormain.o'.
+-- The files are:
+test1.as foo.as
+== Compiling test1.as and foo.as to .c files with -e bar.
+
+test1.as:
+
+foo.as:
+#1 (Warning) Bogus main file name `bar' ignored.
+-- The files are:
+test1.as foo.as
+== Compiling test1.as and foo.as to executable with -e bar.
+
+test1.as:
+
+foo.as:
+#1 (Fatal Error) Could not use file `bar' as the main file.
+#1 (Warning) Removing file `test1.o'.
+#2 (Warning) Removing file `foo.o'.
+#3 (Warning) Removing file `aldormain.o'.
+-- The files are:
+test1.as foo.as
+== Cleaning up
+== Creating aldor script test1 and running it.
+22
+-- The files are:
+test1
+== Creating a broken C compiler.
+== Trying to compile and run test1.as without a C compiler.
+#1 (Warning) Removing file `test1.c'.
+-- The files are:
+test1*
+== Trying to compile and run test1.as with a broken C compiler.
+#1 (Warning) Removing file `test1.o'.
+#2 (Warning) Removing file `aldormain.c'.
+-- The files are:
+test1*
+== Compiling and running test1.as.
+22
+-- The files are:
+test1*
+== Interpreting an .as file - no .ao should remain
+22
+Test OK
+== Interpreting an .as file with -Fao
+22
+Test OK
+== Interpreting an .ao file
+22
+Test OK
+== Cleaning up

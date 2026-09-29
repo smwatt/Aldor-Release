@@ -1,0 +1,27 @@
+-- Copyright (c) 1990-2007 Aldor Software Organization Ltd (Aldor.org).
+--> testgen i
+#line 1 "triv1.as"
+-- Copyright (c) 1990-2007 Aldor Software Organization Ltd (Aldor.org).
+--  Triv1      -- A minimal program, independent of any other code.
+#pile
+
+--> testcomp
+--> testgen c
+--> testgen l
+--> testrun -l axllib
+
+export
+        Type:	      	Type
+        Tuple:		Type -> Type
+        ->:  	      	(Tuple Type, Tuple Type) -> Type
+        Literal:	Type
+        Arr:		Type
+        SInt:		Type
+
+import
+        puts:     	(Arr) -> SInt
+from Foreign C "<stdio.h>"
+
+string (s: Literal): Arr             == s pretend Arr
+
+puts "42 Skidoo"

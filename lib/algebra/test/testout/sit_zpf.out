@@ -1,0 +1,5 @@
+Testing sit_zpf...
+    testing sum...                OK
+    testing inverse...                OK
+    testing exponentiate...                OK
+

@@ -1,0 +1,19 @@
+build.sh
+
+aldoc2html.c aldorbug atinlay.c axiomxl badzeros.c
+buildarg cenum.h cenum.c
+cprt.awk cscan.h cscan.c cwords.c dirname.c
+doaldor doar docc testcmp dog++ dolatex doranlib dosfile.c dosify
+echon.c ensureExecutable exclude.c extract.c fixbug fixreply flags.h flags.c
+getbug lnorcp macify
+memlay.c mkasys mklib.sh
+mksrctex msgcat.c skimenum.c strarray.c
+txt2txt.c undent unixify
+zacc.h zacc.c zcport.h zaccgram.y zaccscan.l
+
+# Files in case platform does not have usable lex/yacc
+preserve-lex.yy.c preserve-y.tab.c preserve-y.tab.h
+
+# We are not sure we need these
+doas doaxiomxl dopdflatex includes.c
+maxiomxl.c maxiomxl.sh memclean.c older24h.c realuser.c suru.c

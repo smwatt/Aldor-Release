@@ -1,0 +1,2 @@
+Unhandled Exception: RuntimeError(??)
+Assert failed in sinteger, at line:122: j >= 0 and j < n

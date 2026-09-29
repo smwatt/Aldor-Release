@@ -1,0 +1,581 @@
+== No files -- gives hint.
+#1 (Warning) No files!  Type `aldor -help' for help.
+== Bad option -- gives hint.
+`-.' is not an option.  Type `aldor -help' for help.
+== Bad use of option -- gives hint.
+Improper use of `-R' option.  Type `aldor -help' for help.
+== Bad developer option -- gives hint.
+Improper use of `-W' option.  Type `aldor -help' for help.
+== Message file.
+Improperay useay ofay `-F' optionay.  Etypay `aldor -elphay' orfay elphay.
+== Message on line no newline at end.
+"nonl.as", line 1: 3 + 3
+                   ^.^.^
+[L1 C1] #2 (Error) No meaning for integer-style literal `3'.
+[L1 C3] #1 (Error) There are no suitable meanings for the operator `+'.
+[L1 C5] #3 (Error) No meaning for integer-style literal `3'.
+
+== Turn on message normally off.
+
+#1 (Remark) Importing AxlLib.
+#2 (Remark) Importing Boolean.
+#3 (Remark) Importing String.
+#4 (Remark) Importing Character.
+#5 (Remark) Importing TextWriter.
+#6 (Remark) Importing FormattedOutput.
+#7 (Remark) Importing Integer.
+#8 (Remark) Importing Segment(Integer).
+
+== Turn off message normally on.
+== Test remarks ==
+== Turn on all remarks.
+
+#12 (Remark) Importing AxlLib.
+#13 (Remark) Importing Boolean.
+#14 (Remark) Importing String.
+#15 (Remark) The import was restricted to: 
+	 with 
+string: Literal -> %
+<<: (TextWriter, %) -> TextWriter
+<<: % -> TextWriter -> TextWriter.
+#16 (Remark) Importing Character.
+#17 (Remark) The import was restricted to: 
+	 with 
+newline: %
+<<: (TextWriter, %) -> TextWriter
+<<: % -> TextWriter -> TextWriter.
+#18 (Remark) Importing TextWriter.
+#19 (Remark) The import was restricted to: 
+	 with 
+print: %
+error: %.
+#20 (Remark) Importing FormattedOutput.
+#21 (Remark) Importing Integer.
+#22 (Remark) Importing Segment(Integer).
+
+                string: Literal -> %;
+................^
+[L156 C17] #1 (Remark) Introducing export meaning for string with type Literal -> %.
+
+                <<:     (TextWriter, %) -> TextWriter;
+................^
+[L157 C17] #2 (Remark) Introducing export meaning for << with type (TextWriter, %) -> TextWriter.
+
+                <<:     % -> TextWriter -> TextWriter;
+................^
+[L158 C17] #3 (Remark) Introducing export meaning for << with type % -> TextWriter -> TextWriter.
+
+                newline: %;
+................^
+[L166 C17] #4 (Remark) Introducing export meaning for newline with type %.
+
+                <<:     (TextWriter, %) -> TextWriter;
+................^
+[L167 C17] #5 (Remark) Introducing export meaning for << with type (TextWriter, %) -> TextWriter.
+
+                <<:     % -> TextWriter -> TextWriter;
+................^
+[L168 C17] #6 (Remark) Introducing export meaning for << with type % -> TextWriter -> TextWriter.
+
+                print:  %;
+................^
+[L176 C17] #7 (Remark) Introducing export meaning for print with type %.
+
+                error:  %;
+................^
+[L177 C17] #8 (Remark) Introducing export meaning for error with type %.
+
+"test0.as", line 12: f(n: Integer): Integer == (n + 1) * n
+                     ^.^
+[L12 C1] #11 (Remark) Introducing export meaning for f with type (n: Integer) -> Integer.
+[L12 C3] #9 (Remark) Introducing parameter meaning for n with type Integer.
+
+
+#23 (Remark) This file had 0 errors, 0 warnings and 24 remarks.
+
+
+#24 (Remark) Congratulations, your file compiled!!
+
+== Turn on all remarks but one.
+
+#12 (Remark) The import was restricted to: 
+	 with 
+string: Literal -> %
+<<: (TextWriter, %) -> TextWriter
+<<: % -> TextWriter -> TextWriter.
+#13 (Remark) The import was restricted to: 
+	 with 
+newline: %
+<<: (TextWriter, %) -> TextWriter
+<<: % -> TextWriter -> TextWriter.
+#14 (Remark) The import was restricted to: 
+	 with 
+print: %
+error: %.
+
+                string: Literal -> %;
+................^
+[L156 C17] #1 (Remark) Introducing export meaning for string with type Literal -> %.
+
+                <<:     (TextWriter, %) -> TextWriter;
+................^
+[L157 C17] #2 (Remark) Introducing export meaning for << with type (TextWriter, %) -> TextWriter.
+
+                <<:     % -> TextWriter -> TextWriter;
+................^
+[L158 C17] #3 (Remark) Introducing export meaning for << with type % -> TextWriter -> TextWriter.
+
+                newline: %;
+................^
+[L166 C17] #4 (Remark) Introducing export meaning for newline with type %.
+
+                <<:     (TextWriter, %) -> TextWriter;
+................^
+[L167 C17] #5 (Remark) Introducing export meaning for << with type (TextWriter, %) -> TextWriter.
+
+                <<:     % -> TextWriter -> TextWriter;
+................^
+[L168 C17] #6 (Remark) Introducing export meaning for << with type % -> TextWriter -> TextWriter.
+
+                print:  %;
+................^
+[L176 C17] #7 (Remark) Introducing export meaning for print with type %.
+
+                error:  %;
+................^
+[L177 C17] #8 (Remark) Introducing export meaning for error with type %.
+
+"test0.as", line 12: f(n: Integer): Integer == (n + 1) * n
+                     ^.^
+[L12 C1] #11 (Remark) Introducing export meaning for f with type (n: Integer) -> Integer.
+[L12 C3] #9 (Remark) Introducing parameter meaning for n with type Integer.
+
+
+#15 (Remark) This file had 0 errors, 0 warnings and 16 remarks.
+
+
+#16 (Remark) Congratulations, your file compiled!!
+
+== Test warnings ==
+== Turn off all warnings (1).
+== Turn off all warnings (2).
+== Turn off all warnings but one.
+"scan0.as", line 7: #NowIs the time
+                    ^
+[L7 C1] #1 (Warning) Unknown system command.
+
+== Do not turn off errors.
+"test0.as", line 17: f f
+                     ..^
+[L17 C3] #1 (Error) Argument 1 of `f' did not match any possible parameter type.
+    The rejected type is (n: Integer) -> Integer.
+    Expected type Integer.
+
+== Complain about non-existent messages.
+Improper use of `-M' option.  Type `aldor -help' for help.
+== Too many messages
+"junk.as", line 2:   a b c d e f g h i j k l m n o p q r
+                   ..^.^.^.^.^.^.^.^.^.^
+[L2 C3] #2 (Error) There are no suitable meanings for the operator `a'.
+[L2 C5] #3 (Error) There are no suitable meanings for the operator `b'.
+[L2 C7] #4 (Error) There are no suitable meanings for the operator `c'.
+[L2 C9] #5 (Error) There are no suitable meanings for the operator `d'.
+[L2 C11] #6 (Error) There are no suitable meanings for the operator `e'.
+[L2 C13] #7 (Error) There are no suitable meanings for the operator `f'.
+[L2 C15] #8 (Error) There are no suitable meanings for the operator `g'.
+[L2 C17] #9 (Error) There are no suitable meanings for the operator `h'.
+[L2 C19] #10 (Error) There are no suitable meanings for the operator `i'.
+[L2 C21] #11 (Error) There are no suitable meanings for the operator `j'.
+
+"junk.as", line 3:   s t u v w x y z 0 1 2 3 4 5 6 7 8 9
+                   ..^
+[L3 C3] #1 (Warning) Suspicious juxtaposition.  Check for missing `;'.
+Check indentation if you are using `#pile'.
+[L3 C3] #12 (Fatal Error) Too many errors (use `-M emax=n' or `-M no-emax' to change the limit).
+
+== Limit number of messages
+"junk.as", line 2:   a b c d e f g h i j k l m n o p q r
+                   ..^.^.^
+[L2 C3] #2 (Error) There are no suitable meanings for the operator `a'.
+[L2 C5] #3 (Error) There are no suitable meanings for the operator `b'.
+[L2 C7] #4 (Error) There are no suitable meanings for the operator `c'.
+
+"junk.as", line 3:   s t u v w x y z 0 1 2 3 4 5 6 7 8 9
+                   ..^
+[L3 C3] #1 (Warning) Suspicious juxtaposition.  Check for missing `;'.
+Check indentation if you are using `#pile'.
+[L3 C3] #5 (Fatal Error) Too many errors (use `-M emax=n' or `-M no-emax' to change the limit).
+
+== Not too many messages
+"junk.as", line 2:   a b c d e f g h i j k l m n o p q r
+                   ..^.^.^.^.^.^.^.^.^.^.^.^.^.^.^.^.^.^
+[L2 C3] #2 (Error) There are no suitable meanings for the operator `a'.
+[L2 C5] #3 (Error) There are no suitable meanings for the operator `b'.
+[L2 C7] #4 (Error) There are no suitable meanings for the operator `c'.
+[L2 C9] #5 (Error) There are no suitable meanings for the operator `d'.
+[L2 C11] #6 (Error) There are no suitable meanings for the operator `e'.
+[L2 C13] #7 (Error) There are no suitable meanings for the operator `f'.
+[L2 C15] #8 (Error) There are no suitable meanings for the operator `g'.
+[L2 C17] #9 (Error) There are no suitable meanings for the operator `h'.
+[L2 C19] #10 (Error) There are no suitable meanings for the operator `i'.
+[L2 C21] #11 (Error) There are no suitable meanings for the operator `j'.
+[L2 C23] #12 (Error) There are no suitable meanings for the operator `k'.
+[L2 C25] #13 (Error) There are no suitable meanings for the operator `l'.
+[L2 C27] #14 (Error) There are no suitable meanings for the operator `m'.
+[L2 C29] #15 (Error) There are no suitable meanings for the operator `n'.
+[L2 C31] #16 (Error) There are no suitable meanings for the operator `o'.
+[L2 C33] #17 (Error) There are no suitable meanings for the operator `p'.
+[L2 C35] #18 (Error) There are no suitable meanings for the operator `q'.
+[L2 C37] #19 (Error) There are no suitable meanings for the operator `r'.
+
+"junk.as", line 3:   s t u v w x y z 0 1 2 3 4 5 6 7 8 9
+                   ..^.^.^.^.^.^.^.^.^.^.^.^.^.^.^.^.^.^
+[L3 C3] #1 (Warning) Suspicious juxtaposition.  Check for missing `;'.
+Check indentation if you are using `#pile'.
+[L3 C3] #20 (Error) There are no suitable meanings for the operator `s'.
+[L3 C5] #21 (Error) There are no suitable meanings for the operator `t'.
+[L3 C7] #22 (Error) There are no suitable meanings for the operator `u'.
+[L3 C9] #23 (Error) There are no suitable meanings for the operator `v'.
+[L3 C11] #24 (Error) There are no suitable meanings for the operator `w'.
+[L3 C13] #25 (Error) There are no suitable meanings for the operator `x'.
+[L3 C15] #26 (Error) There are no suitable meanings for the operator `y'.
+[L3 C17] #27 (Error) There are no suitable meanings for the operator `z'.
+[L3 C19] #28 (Error) There are no suitable meanings for the operator `0'.
+[L3 C21] #29 (Error) There are no suitable meanings for the operator `1'.
+[L3 C23] #30 (Error) There are no suitable meanings for the operator `2'.
+[L3 C25] #31 (Error) There are no suitable meanings for the operator `3'.
+[L3 C27] #32 (Error) There are no suitable meanings for the operator `4'.
+[L3 C29] #33 (Error) There are no suitable meanings for the operator `5'.
+[L3 C31] #34 (Error) There are no suitable meanings for the operator `6'.
+[L3 C33] #35 (Error) There are no suitable meanings for the operator `7'.
+[L3 C35] #36 (Error) There are no suitable meanings for the operator `8'.
+[L3 C37] #37 (Error) No meaning for integer-style literal `9'.
+
+== Help message.
+Usage:            aldor [options] files ...
+
+                  aldor -help       Basic help.
+                  aldor -hfiles     Input file types.
+                  aldor -hoptions   Summary of options.
+                  aldor -hhelp      Help on help.
+                  aldor -hall       All help.
+
+File types accepted:
+  .as             Aldor source
+
+  .ai            Included Aldor source
+  .ap            Parsed Aldor source
+  .fm             Foam source
+  .ao            Machine-independent object file (interface, code, ...)
+  .al            Archive of machine-independent object files
+  .o              Object file
+  .a              Archive of object files
+
+                  Files with no type extension are taken as Aldor source.
+
+Option summary:
+  -V              Run verbosely, giving compilation information.
+  -D <id>         Add global assertion as `#assert <id>'.
+  -U <id>         Remove global assertion as `#unassert <id>'.
+  -A <fn>         Read command line options from response file <fn>.
+  -K <n>          Compile only the first <n> files (0-9).
+  --              Treat remaining arguments as input files.
+  -H ...          Help.
+  -B <dir>        Use <dir> as the base directory for aldor system files.
+  -I <dir>        Search <dir> for additional include files.
+  -Y <dir>        Search <dir> for additional libraries.
+  -R <dir>        Put the resulting files in directory <dir>.
+  -L <name>       Use the given library.
+  -F ...          Indicate which output files are to be generated.
+  -E <fn>         Specify the main entry point.
+  -G ...          Run the program.
+  -O              Standard optimizations.
+  -Q ...          Select code optimizations.
+  -Z ...          Debug and profiling options.
+  -C ...          Control C generation.
+  -P ...          Control C++ generation.
+  -S ...          Control Lisp generation.
+  -M ...          Control compiler messages.
+  -N ...          Configuration file options.
+  -W ...          Developer options.
+
+                  Options are case-insensitive so `-F ap' and `-f AP'
+                  are equivalent.
+                  `...' indicates that more help is available via
+                  `aldor -h <option>'.
+
+Help options:
+  -H elp          Brief, general help.
+  -H all          Help about ... ALL options.
+  -H files                   ... input file types.
+  -H options                 ... summary of options.
+  -H info                    ... product information.
+  -H {A|args}                ... argument gathering options.
+  -H {H|help}                ... help options.
+  -H dir                     ... directory and library options.
+  -H {F|fout}                ... output file options.
+  -H {G|go}                  ... execution options.
+  -H {O|Q|optimize}          ... optimization options.
+  -H {Z|debug}               ... debugging options.
+  -H C                       ... C code generation options.
+  -H {S|lisp}                ... Lisp code generation options.
+  -H {M|message}             ... message options.
+  -H {W|dev}                 ... developer options.
+
+Argument gathering options:
+  -A <fn>         Read command line options from response file <fn>.
+
+  -K <n>          Compile only the first <n> files (0-9).  The remaining
+                  arguments are given to the Aldor program, if run with `-G'.
+  --              Treat remaining arguments as input files, even if they begin
+                  with `-'.
+                  If the environment variable `ALDORARGS' is defined, its
+                  contents are handled as options before the command line.
+
+Directory and library options:
+  -I <dir>        Search <dir> for additional include files.
+                  The environment variable `INCPATH' is tried for defaults.
+  -Y <dir>        Search <dir> for additional libraries.
+                  The environment variable `LIBPATH' is tried for defaults.
+  -R <dir>        Put the resulting files in directory <dir>.
+                  The default is the current directory.
+  -B <dir>        Use <dir> as the base directory for aldor system files.
+                  Without `-B', the environment variable `ALDORROOT' is tried.
+
+  -L <fn>         Use the library given by file name <fn>.
+                  An alphanumeric <fn> is a short form for `lib<fn>.a'.
+  -L <id>=<fn>    Same as `-L <fn>' but the source name <id> is 
+                  associated with the library.
+
+File options:
+  -F <ft>[=<fn>]  Indicate which output files are to be generated.
+                  The parameter <ft> is one of:
+                    ai      (*) Source after inclusion      (from .as)
+                    ap      (*) Macro-expanded parse tree   (from .as)
+                    asy     (*) Symbol information
+                    ao      (*) Machine-independent object
+                    fm      (*) Foam code
+                    lsp     (*) Lisp code
+                    c       (*) C code
+                    c++     (2) C++ code and Aldor stubs
+                    o       (*) Object file
+                    x       (1) Executable file
+                    main    (1) Generate `aldormain.c' with function `main'.
+
+                  If no `-F' or `-G' option is given, then `-Fao' is assumed.
+
+                  Cases marked `(*)', above, cause one file of the given
+                  type to be generated for each input file.
+                  Cases marked `(1)' cause only one file to be generated for
+                  the entire compilation.
+                  Cases marked `(2)' cause two files of the given type
+                  to be generated for each input file.
+
+                  If the parameter <fn> is given, it is used as the name of
+                  the corresponding output file.
+
+                  The compiler will not overwrite a C or Lisp file
+                  it did not generate.
+
+Execution options:
+  -G run          Run the program, as compiled to machine code.
+                  The executable file is removed when finished unless
+                  the `-Fx' option is present.
+  -G interp       Interpret the program, as translated to intermediate Foam code.
+  -G loop         Run interactively, interpreting each expression as it is
+                  given.  With this option, the file `aldorinit.as' is used for
+                  initialization.
+
+  -E <fn>         Use the input file `<fn>.*' as the main entry point.
+                  The default is the first file.
+                  `-e' is useful only with `-Fx', `-Grun' or `-Ginterp'.
+
+Optimization options:
+  -O              Optimize.  This is equivalent to `-Q2'.
+
+  -Q <n>          Select a level of code optimization. (default `-Q1')
+
+  -Q <opt>        Turn on optimization <opt>.
+  -Q no-<opt>     Turn off optimization <opt>.
+                                                           Q0  Q1  Q2  Q3  Q4
+  -Q all          All supported optimizations.                          X   X
+  -Q inline       Allow open coding of functions.                   X   X   X
+  -Q inline-all   Allow open coding of any functions.                   X   X
+  -Q inline-limit=<n> Set max inline code factor to <n>.   1   1   5   6   8
+  -Q inline-size=<n>  Set max inline code size to <n>.     1   1  10  20  40
+  -Q cfold        Evaluate constants at compile time.           X   X   X   X
+  -Q ffold        Evaluate floating point constants.                X   X   X
+  -Q hfold        Evaluate type code computations.              X   X   X   X
+  -Q deadvar      Eliminate unused variables and values.        X   X   X   X
+  -Q dassign      Eliminate assignments to dead variables.          X   X   X
+  -Q peep         Local ``peep-hole'' optimizations.            X   X   X   X
+  -Q cprop        Copy propagation.                                 X   X   X
+  -Q cse          Common sub-expression elimination.                X   X   X
+  -Q env          Various environment optimisations.                X   X   X
+  -Q emerge       Eliminate lexical levels and records.             X   X   X
+  -Q emerge-rr    Eliminate raw records.                            X   X   X
+  -Q flow         Simplify computed tests and jumps.                X   X   X
+  -Q cast         Reduce the number of casts.                       X   X   X
+  -Q cc           Use the C compiler's optimizer.                   X   X   X
+  -Q del-assert   Do not check 'assert' statements.                 X   X   X
+  -Q cc-fnonstd   Possibly faster but not IEEE compliant                    X
+
+                  Combinations can be used, e.g. `-Q3 -Qno-ffold'.
+                  The option `-Qcc' may exclude `-Z' on some platforms.
+
+Debug options:
+  -Z db           Generate debugging information in object files.
+  -Z prof         Generate profiling code in object files.
+
+Configuration options:
+  -N file=<file>       Specify name of config file.
+  -N sys=<name>        Specify system name.
+
+C generation options:  Control the behaviour of `-Fc' `-Fo' and `-Fx'.
+  -C standard     `-Fc' generates ANSI/ISO standard C.
+  -C old          `-Fc' generates old C (the default).
+                  The options `-Cstandard' and `-Cold' are mutually exclusive.
+
+  -C comp=<name>  Use <name> instead of the default C compiler.
+  -C link=<name>  Use <name> instead of the default linker.
+  -C cc=<name>    Use <name> instead of the default C compiler and linker.
+                  Without `-Ccc=', the environment variable `CC' is tried.
+  -C go=<name>    Use <name> to run the output of the linker.
+                  Without `-Cgo=', the environment variable `CGO' is tried.
+
+  -C args=<opts>  Pass <opts> as options to the C compiler.
+  -C smax=<n>     Try to put no more than <n> statements per file, 
+                  if necessary splitting the generated file into:
+                  <name>.h, <name>.c, <name>001.c, <name>002.c, etc.
+                  Using -C smax=0 turns off file splitting.
+                  (default: smax=0)
+  -C idlen=<n>    Set the maximum length of C identifiers to be <n>. 
+                  Using -C idlen=0 turns off identifier truncation.
+                  (default: idlen=30)
+  -C {no-}idhash  Use hash codes in global C identifiers.
+                  (default: idhash)
+  -C {no-}lines   Preserve Aldor source line numbers in generated C.
+                  (default: no-lines).
+
+  -C sys=<name>   Pass '-W sys=<name> to the C compiler and linker.
+                  The unicl driver understands this option.
+  -C runtime=<name1>,<name2>  
+                  Link in lib<name1>.a lib<name2>.a as the runtime library
+                  (default: foam).
+  -C fortran      Pass '-Wfortran' to link driver which adds fortran options
+                  such as fortran runtime libraries.
+  -C lib=<name>   Link with the library lib<name>.a
+
+
+C++ generation options:  Control the behaviour of `-Fc++'.
+  -P basicfile=<bf>
+                  if the filename <bf> (absolute filename) is provided, the
+                  standard basic types correspondence between C++ and Aldor
+                  will be overridden.  If this option is not provided, the
+                  compiler uses 'basic.typ' located in $ALDORROOT/include.
+
+  -P discrim-return
+                  Will distinguish  functions on return type by changing
+                  the name of the function to 'fnname_return-type'.
+
+  -P no-discrim-return
+                  Won't discriminate functions on the return type.  Names of
+                  the functions will be as the original, however the code
+                  generated for overloaded functions on the return type only
+                  won't always compile.  This option is the default.
+
+Lisp generation options:  Control the behaviour of `-Flsp'.
+  -S common       `-Flsp' produces Common Lisp code   (the default).
+                  The options `-Scommon', `-Sstandard' and `-Sscheme'
+                  are mutually exclusive.
+
+  -S ftype=<ft>   Use <ft> as the file type for the generated lisp file
+                  (default: `-Sftype=lsp').
+
+Message options:  Use `-M no-<word>' to negate `-M <word>'.
+  -M <n>          Control how much detail is given.       (default: `-M2')
+
+  -M no-<opt>     Turn off `-M <opt>'.
+                                                          M0  M1  M2  M3
+  -M warnings     Display warnings.                        N   Y   Y   Y
+  -M number       Display the order of discovery number.   N   Y   Y   Y
+  -M source       Display the program lines for messages.  N   N   Y   Y
+  -M details      Display details.                         N   N   Y   Y
+  -M notes        Display cross reference notess.          N   N   Y   Y
+  -M remarks      Display remarks.                         N   N   N   Y
+
+  -M sort         Sort messages by source position.        Y   Y   Y   Y
+  -M mactext      Point to macro text, rather than use.    Y   Y   Y   Y
+  -M abbrev       Abbreviate types in messages.            Y   Y   Y   Y
+  -M human        Human-oriented format.                   Y   Y   Y   Y
+  -M release      Display release version with -gloop.     Y   Y   Y   Y
+  -M name         Show the name of each message.           N   N   N   N
+  -M antiques     Display warnings for old-style code.     N   N   N   N
+  -M preview      Display messages as they occur.          N   N   N   N
+  -M inspect      Use interactive inspector for errors.    N   N   N   N
+
+  -M emax=<n>     Stop after <n> error messages.          (default: 10)
+  -M db=<fn>      Use <fn> as the message database.       (default: no-db)
+
+  -M <msgname>    Turn on warning or remark named <msgname>
+  -M no-<msgname> Turn off warning or remark named <msgname>
+                  Use `-Mname' to find the names of messages.
+
+                  These can be combined, e.g. `-M2 -Mno-source -Mpreview'
+  -M base=<dir>   Strip <dir> from pathnames in error messages
+  -M no-base      Disable -M base=<dir>
+
+Developer options (subject to change):
+
+  -W debug        Turn on experimental debugging code generation.
+  -W depend       Print compile-time dependencies for this file.
+  -W small-hcodes Turn on experimental short hashcode generation.
+  -W emerge-noalias Work around for an optimizer bug.
+  -W check        Turn on internal safety checks.
+  -W nhash        Assume all exported types have constant hashcodes.
+  -W trace-cfuns  Runtime announcements of entry to generated C functions.
+  -W no-keyword=<name>
+                  The symbol <name> will not be treated as a keyword. This
+                  may only be used to compile old files containing symbols
+                  that were later made into reserved words (e.g. ref)
+  -W name=<name>  Compile file as if it was called <name>.as.
+  -W prefix=<prefix> Compile file as if it had <prefix> at the start of its name.
+  -W runtime      Produce code suitable for the runtime system.
+  -W loops        Always inline generators when possible.
+  -W missing-ok   Do not stop compilation if some exports are missing.
+  -W audit        Set maximum foam auditing level.
+  -W dumb-import  Do not trace imported domains for their base value.
+  -W rtcache=N    Set the runtime cache size for domain constructors to N.
+                  (the default is N=15; use N=0 for the libfoam default)
+  -W trap         Trap failure exits (for debugging Aldor).
+
+  -W gc           Garbage collect as needed (if gc is available; default).
+  -W gcfile       Garbage collect after each file (if gc is available).
+
+  -W no-where     Don't rewrite `where' expressions.
+  -W no-negated-tests
+                  Don't optimise `if (!x) T else E' to `if (x) E else T'.
+  -W sexpr        Run a read-print loop.
+  -W seval        Run a read-eval-print loop.
+
+  -W test=<name>  Run compiler self-test <name>.
+                  Use `-W test=show' to see a list of self-tests.
+  -W D+<name>     Turn on debug hook <name>.
+                  Use `-W D+show' to see a list of debug hooks.
+  -W D-<name>     Turn off debug hook <name>.
+                  Use `-W D+show' to see a list of debug hooks.
+  -W T[apdrgst0]+<ph>
+                  Phase tracing:
+                    -WTa+<ph>       Announce entry to <ph>
+                    -WTp+<ph>       Pretty print result of <ph>
+                    -WTd+<ph>       Print debug information for <ph>
+                    -WTr+<ph>       Show result of <ph>
+                    -WTg+<ph>       Garbage collect after <ph>
+                    -WTs+<ph>       Storage audit after <ph>
+                    -WTt+<ph>       Terminate after <ph>
+                    -WT0+<ph>       Ignore earlier `-WT' option for <ph>
+                  Several phases can be given as `ph1+ph2+ph3' or `all'.
+                  Several options can be given at once, e.g. `-WTags+all'.
+                  Compile a file with `-v' to see the phase abbreviations.
+
+== Cleaning up.

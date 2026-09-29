@@ -1,0 +1,5 @@
+build.sh OkFiles
+
+
+bin doc src test tutorial
+include lib

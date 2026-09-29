@@ -1,0 +1,81 @@
+#!/bin/bash
+
+#
+# Extract tests embedded in the ../src files and run them with both 
+# the regular aldor library and the debug aldor library.
+#
+
+PATH="$ALDORROOT/bin:$ALDORROOT/toolbin:$PATH"
+
+opts=(-Fx -Y"$ALDORROOT/lib" -Clib=gmp -Q1)
+
+regularAldor() { aldor "${opts[@]}" -laldor  -Q inline-all "$1" ; }
+debugAldor()   { aldor "${opts[@]}" -laldord -D DEBUG      "$1" ; }
+
+testWith() {
+    local compiler="$1"
+    local fbase="$2"
+
+    echon "Testing $compiler $bname.test.as ... " 
+
+    # Compile
+    "$compiler" "$TestTmp/$fbase.test.as"
+
+    # Set any test-specific arguments
+    local testargs=()
+    if [ "$bname" = "sal_cmdline" ] ; then testargs=(-v -b -Lfoo -abar) ; fi
+
+    # Run compiled test
+    local NewOut="$TestTmp/$bname.out"
+    local RefOut="$TestDir/testout/$bname.out"
+
+    ./"$bname.test" "${testargs[@]}" > "$NewOut" 2>&1
+
+    # Check for differences
+    if diff "$NewOut" "$RefOut" >/dev/null 2>&1
+    then
+        echo "OK! "
+    else
+        echo "DIFFERENT! "
+        failCount=$(($failCount + 1))
+    fi
+}
+
+doTest() { (
+    local  SrcDir="`pwd`/../src"
+    export TestDir="`pwd`"
+
+    export TestTmp="$ALDORTMP/test-aldor"
+    mkdir -p "$TestTmp"
+    cd "$TestTmp"
+
+    local failCount=0
+
+    local f
+    for f in `find "$SrcDir" -name '*.as' -print | xargs grep -l ALDORTEST`
+    do
+        local bname=`basename "$f" .as`
+        extract -mALDORTEST -o"$bname.test.as" "$f"
+
+        testWith regularAldor "$bname"
+        testWith debugAldor   "$bname"
+
+        # Clean up
+        if [ ! "$KeepFiles" ] ; then
+            rm "$bname.test.as" "$bname.test" "$TestTmp/$bname.out"
+        fi
+    done
+
+    if [ $failCount != 0 ] ; then
+        echo "******************************************************"
+        echo "***                                                ***"
+        echo "***  Error: $failCount test failures                        ***"
+        echo "***                                                ***"
+        echo "******************************************************"
+    fi
+
+    cd "$TestDir"
+    rm -rf "$TestTmp"
+) }
+
+source "$ALDORROOT"/toolbin/build-fns.sh ; doMain "$@"

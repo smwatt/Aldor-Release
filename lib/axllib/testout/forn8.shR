@@ -1,0 +1,162 @@
+== Compiling forn8.as
+-- The files are: forn8_as.as forn8_cc.h
+************************** forn8_as.as
+#include "forn8.as"
+export {
+	ALDOR__display__ItemComplex0: (ItemComplex) -> ();
+	ALDOR__bracket__ItemComplex1: (SingleInteger,SingleInteger) -> ItemComplex;
+	ALDOR__plus__ItemComplex2: (ItemComplex,ItemComplex) -> ItemComplex;
+	ALDOR__givetype__ItemComplex(): BasicItem with {
+ 		bracket: (SingleInteger,SingleInteger) -> %;
+		plus: (%,%) -> %;
+	} == ItemComplex;
+	ALDOR__display__ItemPrettyComplex0: (ItemPrettyComplex) -> ();
+	ALDOR__bracket__ItemPrettyComplex1: (SingleInteger,SingleInteger,String) -> ItemPrettyComplex;
+	ALDOR__plus__ItemPrettyComplex2: (ItemPrettyComplex,ItemPrettyComplex) -> ItemPrettyComplex;
+	ALDOR__getName__ItemPrettyComplex3: (ItemPrettyComplex) -> String;
+	ALDOR__givetype__ItemPrettyComplex(): BasicItem with {
+ 		bracket: (SingleInteger,SingleInteger,String) -> %;
+		plus: (%,%) -> %;
+		getName: (%) -> String;
+	} == ItemPrettyComplex;
+	ALDOR__bracket__DBComplex0: () -> DBComplex;
+	ALDOR__insert__DBComplex1: (DBComplex,ItemComplex) -> ();
+	ALDOR__display__DBComplex2: (DBComplex) -> ();
+	ALDOR__givetype__DBComplex(): DBComplexCat with {
+ 	} == DBComplex;
+	ALDOR__f__Global0: () -> ();
+} to Foreign C;
+ALDOR__display__ItemComplex0(parm0: ItemComplex): () == { 
+	import from ItemComplex;
+	display(parm0);
+}
+ALDOR__bracket__ItemComplex1(parm0: SingleInteger,parm1: SingleInteger): ItemComplex == { 
+	import from ItemComplex;
+	bracket(parm0,parm1);
+}
+ALDOR__plus__ItemComplex2(parm0: ItemComplex,parm1: ItemComplex): ItemComplex == { 
+	import from ItemComplex;
+	plus(parm0,parm1);
+}
+ALDOR__display__ItemPrettyComplex0(parm0: ItemPrettyComplex): () == { 
+	import from ItemPrettyComplex;
+	display(parm0);
+}
+ALDOR__bracket__ItemPrettyComplex1(parm0: SingleInteger,parm1: SingleInteger,parm2: String): ItemPrettyComplex == { 
+	import from ItemPrettyComplex;
+	bracket(parm0,parm1,parm2);
+}
+ALDOR__plus__ItemPrettyComplex2(parm0: ItemPrettyComplex,parm1: ItemPrettyComplex): ItemPrettyComplex == { 
+	import from ItemPrettyComplex;
+	plus(parm0,parm1);
+}
+ALDOR__getName__ItemPrettyComplex3(parm0: ItemPrettyComplex): String == { 
+	import from ItemPrettyComplex;
+	getName(parm0);
+}
+ALDOR__bracket__DBComplex0(): DBComplex == { 
+	import from DBComplex;
+	bracket();
+}
+ALDOR__insert__DBComplex1(parm0: DBComplex,parm1: ItemComplex): () == { 
+	import from DBComplex;
+	insert(parm0,parm1);
+}
+ALDOR__display__DBComplex2(parm0: DBComplex): () == { 
+	import from DBComplex;
+	display(parm0);
+}
+ALDOR__f__Global0(): () == { 
+	f();
+}
+************************** forn8_cc.h
+#include <foam_c.h>
+extern "C" {
+	void ALDOR_display_ItemComplex0(void *);
+	void * ALDOR_bracket_ItemComplex1(int,int);
+	void * ALDOR_plus_ItemComplex2(void *,void *);
+	void *ALDOR_givetype_ItemComplex();
+	void ALDOR_display_ItemPrettyComplex0(void *);
+	void * ALDOR_bracket_ItemPrettyComplex1(int,int,char*);
+	void * ALDOR_plus_ItemPrettyComplex2(void *,void *);
+	char* ALDOR_getName_ItemPrettyComplex3(void *);
+	void *ALDOR_givetype_ItemPrettyComplex();
+	void * ALDOR_bracket_DBComplex0();
+	void ALDOR_insert_DBComplex1(void *,void *);
+	void ALDOR_display_DBComplex2(void *);
+	void *ALDOR_givetype_DBComplex();
+	void ALDOR_f_Global0();
+}
+template <class PercentType>
+class BasicItem {
+public:
+	virtual ~BasicItem() {}
+	virtual void  display() = 0;
+};
+template <class PercentType>
+class ALDORCategoryItemComplex0:  virtual public BasicItem<PercentType> {
+public:
+	virtual ~ALDORCategoryItemComplex0() {}
+	virtual PercentType * plus(PercentType *) = 0;
+};
+class ItemComplex:  virtual public ALDORCategoryItemComplex0<ItemComplex> {
+	ItemComplex *ptr;
+public:
+	ItemComplex() { ptr = 0; }
+	ItemComplex(ItemComplex *orig) { ptr = orig; }
+	ItemComplex(void *orig) { ptr = reinterpret_cast<ItemComplex *>(orig); }
+	virtual ~ItemComplex() {}
+	friend ItemComplex *realObject(ItemComplex *ob) { return ob->ptr; }
+	static void *givetype() { return ALDOR_givetype_ItemComplex(); }
+	virtual void  display() { ALDOR_display_ItemComplex0(ptr); 	}
+	static ItemComplex * bracket(int parm0,int parm1) { return new ItemComplex(ALDOR_bracket_ItemComplex1(parm0,parm1)); 	}
+	virtual ItemComplex * plus(ItemComplex * parm0) { return new ItemComplex(ALDOR_plus_ItemComplex2(ptr,realObject(parm0))); 	}
+};
+template <class PercentType>
+class ALDORCategoryItemPrettyComplex0:  virtual public BasicItem<PercentType> {
+public:
+	virtual ~ALDORCategoryItemPrettyComplex0() {}
+	virtual PercentType * plus(PercentType *) = 0;
+	virtual char*  getName() = 0;
+};
+class ItemPrettyComplex:  virtual public ALDORCategoryItemPrettyComplex0<ItemPrettyComplex> {
+	ItemPrettyComplex *ptr;
+public:
+	ItemPrettyComplex() { ptr = 0; }
+	ItemPrettyComplex(ItemPrettyComplex *orig) { ptr = orig; }
+	ItemPrettyComplex(void *orig) { ptr = reinterpret_cast<ItemPrettyComplex *>(orig); }
+	virtual ~ItemPrettyComplex() {}
+	friend ItemPrettyComplex *realObject(ItemPrettyComplex *ob) { return ob->ptr; }
+	static void *givetype() { return ALDOR_givetype_ItemPrettyComplex(); }
+	virtual void  display() { ALDOR_display_ItemPrettyComplex0(ptr); 	}
+	static ItemPrettyComplex * bracket(int parm0,int parm1,char* parm2) { return new ItemPrettyComplex(ALDOR_bracket_ItemPrettyComplex1(parm0,parm1,parm2)); 	}
+	virtual ItemPrettyComplex * plus(ItemPrettyComplex * parm0) { return new ItemPrettyComplex(ALDOR_plus_ItemPrettyComplex2(ptr,realObject(parm0))); 	}
+	virtual char*  getName() { return ALDOR_getName_ItemPrettyComplex3(ptr); 	}
+};
+template <class PercentType>
+class DBComplexCat {
+public:
+	virtual ~DBComplexCat() {}
+	virtual void  insert(ItemComplex *) = 0;
+	virtual void  display() = 0;
+};
+template <class PercentType>
+class ALDORCategoryDBComplex0:  virtual public DBComplexCat<PercentType> {
+public:
+	virtual ~ALDORCategoryDBComplex0() {}
+};
+class DBComplex:  virtual public ALDORCategoryDBComplex0<DBComplex> {
+	DBComplex *ptr;
+public:
+	DBComplex() { ptr = 0; }
+	DBComplex(DBComplex *orig) { ptr = orig; }
+	DBComplex(void *orig) { ptr = reinterpret_cast<DBComplex *>(orig); }
+	virtual ~DBComplex() {}
+	friend DBComplex *realObject(DBComplex *ob) { return ob->ptr; }
+	static void *givetype() { return ALDOR_givetype_DBComplex(); }
+	static DBComplex * bracket() { return new DBComplex(ALDOR_bracket_DBComplex0()); 	}
+	virtual void  insert(ItemComplex * parm0) { ALDOR_insert_DBComplex1(ptr,realObject(parm0)); 	}
+	virtual void  display() { ALDOR_display_DBComplex2(ptr); 	}
+};
+void f() { ALDOR_f_Global0(); 	}
+== Removing all output files.

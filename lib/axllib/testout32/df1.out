@@ -1,0 +1,21 @@
+
+df1 := -33213.4542545345434998
+unformatted output:
+df1 = -33213.454254534547
+formatted output:
+ s  = -33213.454254534547 i = 20
+
+
+df2 :=  6.7000000000000002
+unformatted output:
+df2 = 6.7000000000000002
+formatted output:
+ s  = 6.7000000000000002 i = 19
+
+
+df1 := scan "-33213.4542545345434998"
+unformatted output:
+df1 = -33213.454254534547
+scanned string:
+ s  = -33213.4542545345434998 i = 24
+

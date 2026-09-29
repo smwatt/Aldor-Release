@@ -1,0 +1,8 @@
+#!/bin/sh
+
+#
+# lnorcp src dest
+#
+# Makes a symbolic link if possible, otherwise copies.
+
+ln -sf "$@" 2> /dev/null || cp -p "$@"

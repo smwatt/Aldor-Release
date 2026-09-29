@@ -1,0 +1,5 @@
+== Building an archive containing triv*.ao
+== Creating a client for the archive
+== Testing that the client imports from the archive
+#1 (Fatal Error) Could not open file `triv4.ao'.
+== Done

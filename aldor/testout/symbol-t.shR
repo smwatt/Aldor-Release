@@ -1,0 +1,9 @@
+===========================================================
+===  Test "symbol"
+===========================================================
+symbol string: "-- failed --" with option: SYM_LOOK
+symbol string: "internal symbol constant" with option: SYM_ALLOC
+symbol string: "-- failed --" with option: SYM_STRCOPY
+symbol string: "internal symbol" with options: SYM_ALLOC and ,SYM_STRCOPY
+
+Test "symbol" completed.

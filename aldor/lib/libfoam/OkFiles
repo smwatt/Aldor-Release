@@ -1,0 +1,7 @@
+build.sh 
+
+runtime.as foam_l.lsp
+
+sample-runtime.c hashax.boot
+
+axllib.scm foam_s.scm

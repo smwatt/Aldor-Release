@@ -1,0 +1,7 @@
+===========================================================
+===  Test "show"
+===========================================================
+
+The tests are: "show" "cport" "opsys" "store1a" "store1b" "store1c" "store1d" "store2" "store3" "util" "float" "fluid" "format" "bigint" "bitv" "btree" "buffer" "dnf" "fname" "list" "priq" "string" "symbol" "table" "xfloat" "ccode" "msg" "file" "link"
+
+Test "show" completed.

@@ -1,0 +1,8 @@
+build.sh 
+
+operators parser
+
+alg_leaf.as
+alg_op.as
+sit_extree.as
+sit_optools.as

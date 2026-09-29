@@ -1,0 +1,10 @@
+Aldor modernization test suite
+==============================
+
+This directory is part of Aldor and is covered by the licensing terms in
+../../legal/LICENSE.
+
+Copyright (C) 2026 Stephen M. Watt.
+
+Individual test files are intentionally left with their existing notices.
+References in those notices to COPYRIGHT mean ../../legal/COPYRIGHT.

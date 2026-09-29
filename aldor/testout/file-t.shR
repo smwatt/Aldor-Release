@@ -1,0 +1,11 @@
+===========================================================
+===  Test "file"
+===========================================================
+fileSetHandler:
+pathInit:
+fileRdFind: yabba -- Not found
+fileRdFind: cat -- found name "cat", type ""
+fileRdOpen: Opened "cat"
+DONE.
+
+Test "file" completed.

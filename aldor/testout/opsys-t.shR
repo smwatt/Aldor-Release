@@ -1,0 +1,10 @@
+===========================================================
+===  Test "opsys"
+===========================================================
+Full memory map query: OK
+Stack memory map query: OK
+osAlloc/osFree ascending: OK
+osAlloc/osFree descending: OK
+osAlloc/osFree interleaved: OK
+
+Test "opsys" completed.

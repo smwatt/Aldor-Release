@@ -1,0 +1,25 @@
+== Missing response files
+#1 (Fatal Error) Improper use of `-a' option.  Type `aldor -help' for help.
+#1 (Fatal Error) Improper use of `-a' option.  Type `aldor -help' for help.
+== Empty response files
+#1 (Warning) No files!  Type `aldor -help' for help.
+#1 (Warning) No files!  Type `aldor -help' for help.
+Exec: aldor -laxllib -K9 -vO empty.as
+== Non-empty response files
+Exec: aldor -laxllib -v triv1.as
+Exec: aldor -lm -laxllib -Grun -v triv1.as
+== Multiple response files
+Exec: aldor -laxllib -v -lm -G run -D HiSteve -U HowdySam triv1.as
+== Nested response files
+Exec: aldor -laxllib -v -lm -Grun -D HiSteve -U HowdySam triv1.as
+== "a" inside a bad argument does not imply a response file
+`-T' is not an option.  Type `aldor -help' for help.
+== ALDORARGS environment variable
+Exec: aldor -v -Fc -laxllib zippo.as
+zippo.as
+zippo.c
+Exec: aldor -laxllib -v -Fc -Flsp zippo.as
+zippo.arf
+zippo.as
+zippo.c
+zippo.lsp

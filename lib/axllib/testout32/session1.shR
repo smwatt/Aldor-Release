@@ -1,0 +1,55 @@
+Aldor
+
+Copyright (c) 1990-2007 Aldor Software Organization Ltd (Aldor.org).
+
+Type "#int help" for more details.
+timing is off.
+list(natascia, I, love, you) @ List(String)
+10 @ SingleInteger
+7 @ SingleInteger
+true @ Boolean
+10 @ SingleInteger
+7 @ SingleInteger
+natascia @ String
+I @ String
+Unrecognized option. Type:
+#int help
+for help.
+
+Available options:
+
+#int verbose [on|off]  print the value of an evaluated expression.
+#int history [on|off]  try to wrap an assignment around the current line.
+#int confirm [on|off]  ask for confirmation before redefining something.
+#int timing [on|off]  display timings after every input.
+#int msg-limit [num]  set the limit size of some messages; 0 for no-limit.
+#int options ...  reset command line options.
+#int gc     perform garbage collection.
+#int shell "<command>"  execute a shell command.
+#int cd <directory>  change current directory.
+#int exntrace [0|1|2]  display backtrace when an exception occurs.
+     0: never, 1: only when not caught, 2: always.
+#int help     display this message.
+
+#quit       quit the interactive loop.
+msg-limit is 20.
+ @ Join(
+ with 
+    ...
+msg-limit is none.
+ @ Join(
+ with 
+        integer: Literal -> %
+        coerce: SingleInteger -> %
+        coerce: % -> (BInt$Machine)
+        coerce: (BInt$Machine) -> %
+    ==  add ()
+, 
+Join(Steppable, IntegerNumberSystem) with export to Segment(%)
+    ==  add ()
+)
+array(1, 2, 3, 4) @ Array(SingleInteger)
+1
+2
+3
+4

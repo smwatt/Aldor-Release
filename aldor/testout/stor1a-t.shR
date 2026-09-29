@@ -1,0 +1,48 @@
+===========================================================
+===  Test "store1a"
+===========================================================
+Test working of alloc/free.
+Hi mark: audit
+Lo mark: audit
+Hi mark: audit
+Lo mark: audit
+Hi mark: audit
+Lo mark: audit
+Hi mark: audit
+Lo mark: audit
+Hi mark: audit
+Lo mark: audit
+Hi mark: audit
+Lo mark: audit
+Hi mark: audit
+Lo mark: audit
+Hi mark: audit
+Lo mark: audit
+Hi mark: audit
+Lo mark: audit
+Hi mark: audit
+Lo mark: audit
+Hi mark: audit
+Lo mark: audit
+Hi mark: audit
+Lo mark: audit
+Hi mark: audit
+Lo mark: audit
+Hi mark: audit
+Lo mark: audit
+Hi mark: audit
+Lo mark: audit
+Hi mark: audit
+Lo mark: audit
+Hi mark: audit
+Lo mark: audit
+Hi mark: audit
+Lo mark: audit
+Hi mark: audit
+Lo mark: audit
+Hi mark: audit
+Lo mark: audit
+Lo mark: audit
+Storage workload: OK
+
+Test "store1a" completed.

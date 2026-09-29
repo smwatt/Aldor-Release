@@ -1,0 +1,407 @@
+(Unit
+  (DFmt
+    (DDecl
+      Globals
+      (GDecl Clos "bug1200" -1 4 0 Init)
+      (GDecl Clos "noOperation" -1 4 1 Foam)
+      (GDecl Word "bug1200_ChildDomain_1058225938" -1 4 0 Foam)
+      (GDecl Word "bug1200_BaseDomain_1025965062" -1 4 0 Foam)
+      (GDecl Clos "runtime" -1 4 1 Init)
+      (GDecl Clos "rtConstNameFn" -1 4 1 Foam)
+      (GDecl Clos "domainAddNameFn!" -1 4 1 Foam)
+      (GDecl Clos "domainAddHash!" -1 4 1 Foam)
+      (GDecl Clos "domainAddExports!" -1 4 1 Foam)
+      (GDecl Clos "domainMakeDispatch" -1 4 1 Foam)
+      (GDecl Clos "domainMakeDummy" -1 4 1 Foam)
+      (GDecl Word "boolean_Boolean_545813426" -1 4 1 Foam)
+      (GDecl Clos "rtLazyDomFrInit" -1 4 1 Foam)
+      (GDecl Clos "domainResolve!" -1 4 1 Foam)
+      (GDecl Clos "domainMake" -1 4 1 Foam)
+      (GDecl Clos "domainAddParents!" -1 4 1 Foam)
+      (GDecl Clos "rtDelayedGetExport!" -1 4 1 Foam)
+      (GDecl Clos "stdGetWordRetWord0" -1 4 1 Foam)
+      (GDecl Clos "rtAddStrings" -1 4 1 Foam)
+      (GDecl Clos "boolean" -1 4 1 Init))
+    (DDecl
+      Consts
+      (Decl Prog "bug1200" -1 4)
+      (Decl Prog "addLevel0" -1 4)
+      (Decl Prog "addLevel1" -1 4)
+      (Decl Prog "negate" -1 4)
+      (Decl Prog "addLevel0" -1 4)
+      (Decl Prog "addLevel1" -1 4)
+      (Decl Prog "Negate" -1 4)
+      (Decl Prog "boolean-init" -1 4))
+    (DDecl LocalEnv)
+    (DDecl Fluids)
+    (DDecl Locals)
+    (DDecl
+      Records
+      (Decl SInt "size" -1 4)
+      (Decl SInt "nsize" -1 4)
+      (Decl Word "values" -1 4))
+    (DDecl
+      LocalEnv
+      (Decl Clos "negate" -1 4)
+      (Decl Word "Rep" -1 4)
+      (Decl SInt "" -1 4))
+    (DDecl
+      LocalEnv
+      (Decl Clos "Negate" -1 4)
+      (Decl Clos "negate" -1 4)
+      (Decl SInt "" -1 4))
+    (DDecl LocalEnv (Decl Word "Boolean" -1 4) (Decl Bool "" -1 4)))
+  (DDef
+    (Def
+      (Const 0 bug1200)
+      (Prog
+        0
+        1
+        NOp
+        0
+        8192
+        0
+        0
+        0
+        (DDecl Params)
+        (DDecl
+          Locals
+          (Decl Clos "" -1 4)
+          (Decl Arr "" -1 5)
+          (Decl Arr "" -1 8)
+          (Decl Rec "" -1 5)
+          (Decl Rec "" -1 5))
+        (DFluid)
+        (DEnv 8)
+        (Seq
+          (CCall NOp (Glo 4 runtime))
+          (Set (Glo 0 bug1200) (Glo 1 noOperation))
+          (Def (Loc 0) (Clos (Env 0) (Const 7 boolean-init)))
+          (Def
+            (Glo 3 bug1200_BaseDomain_1025965062)
+            (CCall
+              Word
+              (Glo 14 domainMake)
+              (Clos (Env 0) (Const 1 addLevel0))))
+          (Def
+            (Glo 2 bug1200_ChildDomain_1058225938)
+            (CCall
+              Word
+              (Glo 14 domainMake)
+              (Clos (Env 0) (Const 4 addLevel0))))
+          (Set (Lex 0 1) (Bool 0))
+          (Set (Loc 1) (ANew Word (SInt 3)))
+          (Set (Loc 2) (ANew Word (SInt 3)))
+          (Set (AElt SInt (SInt 0) (Loc 1)) (SInt 495655658))
+          (Set
+            (AElt Word (SInt 0) (Loc 2))
+            (Arr Char 110 101 103 97 116 101))
+          (Set (AElt SInt (SInt 1) (Loc 1)) (SInt 316169058))
+          (Set (AElt Word (SInt 1) (Loc 2)) (Arr Char 82 101 112))
+          (Set (AElt SInt (SInt 2) (Loc 1)) (SInt 495778506))
+          (Set
+            (AElt Word (SInt 2) (Loc 2))
+            (Arr Char 78 101 103 97 116 101))
+          (Set (Loc 3) (RNew 5))
+          (Set (RElt 5 (Loc 3) 0) (SInt 3))
+          (Set (RElt 5 (Loc 3) 1) (SInt 3))
+          (Set (RElt 5 (Loc 3) 2) (Cast Word (Loc 1)))
+          (Set (Loc 4) (RNew 5))
+          (Set (RElt 5 (Loc 4) 0) (SInt 3))
+          (Set (RElt 5 (Loc 4) 1) (SInt 3))
+          (Set (RElt 5 (Loc 4) 2) (Cast Word (Loc 2)))
+          (CCall
+            NOp
+            (Glo 18 rtAddStrings)
+            (Cast Word (Loc 3))
+            (Cast Word (Loc 4)))
+          (Def
+            (Lex 0 0 Boolean)
+            (CCall Word (Glo 12 rtLazyDomFrInit) (Loc 0) (SInt 0)))
+          (Return (Values)))))
+    (Def
+      (Const 1 addLevel0)
+      (Prog
+        0
+        0
+        Clos
+        0
+        9
+        0
+        0
+        0
+        (DDecl Params (Decl Word "domain" -1 4))
+        (DDecl Locals)
+        (DFluid)
+        (DEnv 0 8)
+        (Seq
+          (CCall
+            Word
+            (Glo 6 domainAddNameFn!)
+            (Par 0 domain)
+            (CCall
+              Word
+              (Glo 5 rtConstNameFn)
+              (Arr Char 66 97 115 101 68 111 109 97 105 110)))
+          (CCall
+            Word
+            (Glo 7 domainAddHash!)
+            (Par 0 domain)
+            (SInt 194291181))
+          (Return (Clos (Env 0) (Const 2 addLevel1))))))
+    (Def
+      (Const 2 addLevel1)
+      (Prog
+        0
+        1
+        Word
+        0
+        9
+        0
+        0
+        0
+        (DDecl
+          Params
+          (Decl Word "domain" -1 4)
+          (Decl Word "hashcode" -1 4))
+        (DDecl
+          Locals
+          (Decl Arr "" -1 8)
+          (Decl Arr "" -1 5)
+          (Decl Arr "" -1 5)
+          (Decl Rec "" -1 5)
+          (Decl Rec "" -1 5)
+          (Decl Rec "" -1 5)
+          (Decl Word "" -1 4)
+          (Decl SInt "" -1 4))
+        (DFluid)
+        (DEnv 6 4 8)
+        (Seq
+          (Set (Loc 0) (ANew SInt (SInt 2)))
+          (Set (Loc 1) (ANew SInt (SInt 2)))
+          (Set (Loc 2) (ANew Word (SInt 2)))
+          (Def (Lex 0 2) (Par 1 hashcode))
+          (Set (Lex 0 1 Rep) (CCall Word (Glo 10 domainMakeDummy)))
+          (Def (Lex 0 0 negate) (Clos (Env 0) (Const 3 negate)))
+          (Def
+            (Loc 7)
+            (BCall
+              AldorHash32Combine
+              (Lex 0 2)
+              (BCall
+                AldorHash32Combine
+                (SInt 32236)
+                (BCall AldorHash32Combine (Lex 0 2) (SInt 51489085)))))
+          (Set (Loc 3) (RNew 5))
+          (Set (RElt 5 (Loc 3) 0) (SInt 2))
+          (Set (RElt 5 (Loc 3) 1) (SInt 2))
+          (Set (RElt 5 (Loc 3) 2) (Cast Word (Loc 0)))
+          (Set (Loc 4) (RNew 5))
+          (Set (RElt 5 (Loc 4) 0) (SInt 2))
+          (Set (RElt 5 (Loc 4) 1) (SInt 2))
+          (Set (RElt 5 (Loc 4) 2) (Cast Word (Loc 1)))
+          (Set (Loc 5) (RNew 5))
+          (Set (RElt 5 (Loc 5) 0) (SInt 2))
+          (Set (RElt 5 (Loc 5) 1) (SInt 2))
+          (Set (RElt 5 (Loc 5) 2) (Cast Word (Loc 2)))
+          (CCall
+            NOp
+            (Glo 8 domainAddExports!)
+            (Par 0 domain)
+            (Loc 3)
+            (Loc 4)
+            (Loc 5))
+          (Def (Loc 6) (Lex 2 0 Boolean))
+          (CCall NOp (Glo 13 domainResolve!) (Lex 0 1 Rep) (Loc 6))
+          (Set (AElt SInt (SInt 0) (Loc 0)) (SInt 316169058))
+          (Set (AElt SInt (SInt 0) (Loc 1)) (SInt 850925108))
+          (Set (AElt Word (SInt 0) (Loc 2)) (Lex 0 1 Rep))
+          (Set (AElt SInt (SInt 1) (Loc 0)) (SInt 495655658))
+          (Set (AElt SInt (SInt 1) (Loc 1)) (Loc 7))
+          (Set
+            (AElt Word (SInt 1) (Loc 2))
+            (Cast Word (Lex 0 0 negate)))
+          (Return (Par 0 domain)))))
+    (Def
+      (Const 3 negate)
+      (Prog
+        0
+        0
+        Word
+        4
+        8195
+        0
+        0
+        0
+        (DDecl Params (Decl Word "x" -1 4))
+        (DDecl Locals)
+        (DFluid)
+        (DEnv 4 4 4 4)
+        (Seq (Return (Cast Word (BCall BoolNot (Cast Bool (Par 0 x))))))))
+    (Def
+      (Const 4 addLevel0)
+      (Prog
+        0
+        0
+        Clos
+        0
+        8201
+        0
+        0
+        0
+        (DDecl Params (Decl Word "domain" -1 4))
+        (DDecl Locals)
+        (DFluid)
+        (DEnv 0 4)
+        (Seq
+          (CCall
+            Word
+            (Glo 6 domainAddNameFn!)
+            (Par 0 domain)
+            (CCall
+              Word
+              (Glo 5 rtConstNameFn)
+              (Arr Char 67 104 105 108 100 68 111 109 97 105 110)))
+          (CCall
+            Word
+            (Glo 7 domainAddHash!)
+            (Par 0 domain)
+            (SInt 285154495))
+          (Return (Clos (Env 0) (Const 5 addLevel1))))))
+    (Def
+      (Const 5 addLevel1)
+      (Prog
+        0
+        1
+        Word
+        0
+        8201
+        0
+        0
+        0
+        (DDecl
+          Params
+          (Decl Word "domain" -1 4)
+          (Decl Word "hashcode" -1 4))
+        (DDecl
+          Locals
+          (Decl Arr "" -1 8)
+          (Decl Arr "" -1 5)
+          (Decl Arr "" -1 5)
+          (Decl Rec "" -1 5)
+          (Decl Rec "" -1 5)
+          (Decl Rec "" -1 5)
+          (Decl Word "" -1 4)
+          (Decl Word "" -1 4)
+          (Decl Rec "" -1 5)
+          (Decl SInt "" -1 4))
+        (DFluid)
+        (DEnv 7 4 4)
+        (Seq
+          (Set (Loc 0) (ANew SInt (SInt 1)))
+          (Set (Loc 1) (ANew SInt (SInt 1)))
+          (Set (Loc 2) (ANew Word (SInt 1)))
+          (Set
+            (Loc 6)
+            (CCall Word (Glo 9 domainMakeDispatch) (Par 0 domain)))
+          (Def (Lex 0 2) (Par 1 hashcode))
+          (Def (Lex 0 0 Negate) (Clos (Env 0) (Const 6 Negate)))
+          (Def
+            (Loc 9)
+            (BCall
+              AldorHash32Combine
+              (Lex 0 2)
+              (BCall
+                AldorHash32Combine
+                (SInt 32236)
+                (BCall AldorHash32Combine (Lex 0 2) (SInt 51489085)))))
+          (Set (Loc 3) (RNew 5))
+          (Set (RElt 5 (Loc 3) 0) (SInt 1))
+          (Set (RElt 5 (Loc 3) 1) (SInt 1))
+          (Set (RElt 5 (Loc 3) 2) (Cast Word (Loc 0)))
+          (Set (Loc 4) (RNew 5))
+          (Set (RElt 5 (Loc 4) 0) (SInt 1))
+          (Set (RElt 5 (Loc 4) 1) (SInt 1))
+          (Set (RElt 5 (Loc 4) 2) (Cast Word (Loc 1)))
+          (Set (Loc 5) (RNew 5))
+          (Set (RElt 5 (Loc 5) 0) (SInt 1))
+          (Set (RElt 5 (Loc 5) 1) (SInt 1))
+          (Set (RElt 5 (Loc 5) 2) (Cast Word (Loc 2)))
+          (CCall
+            NOp
+            (Glo 8 domainAddExports!)
+            (Par 0 domain)
+            (Loc 3)
+            (Loc 4)
+            (Loc 5))
+          (Set (Loc 7) (ANew Word (SInt 1)))
+          (Set
+            (AElt Word (SInt 0) (Loc 7))
+            (Glo 3 bug1200_BaseDomain_1025965062))
+          (Set (Loc 8) (RNew 5))
+          (Set (RElt 5 (Loc 8) 0) (SInt 1))
+          (Set (RElt 5 (Loc 8) 1) (SInt 1))
+          (Set (RElt 5 (Loc 8) 2) (Loc 7))
+          (CCall
+            Word
+            (Glo 15 domainAddParents!)
+            (Par 0 domain)
+            (Loc 8)
+            (Loc 6))
+          (Set (AElt SInt (SInt 0) (Loc 0)) (SInt 495778506))
+          (Set (AElt SInt (SInt 0) (Loc 1)) (Loc 9))
+          (Set
+            (AElt Word (SInt 0) (Loc 2))
+            (Cast Word (Lex 0 0 Negate)))
+          (Set
+            (Lex 0 1 negate)
+            (CCall
+              Clos
+              (Glo 17 stdGetWordRetWord0)
+              (CCall
+                Word
+                (Glo 16 rtDelayedGetExport!)
+                (Loc 6)
+                (SInt 495655658)
+                (Loc 9))))
+          (Return (Par 0 domain)))))
+    (Def
+      (Const 6 Negate)
+      (Prog
+        0
+        0
+        Word
+        4
+        3
+        0
+        0
+        0
+        (DDecl Params (Decl Word "x" -1 4))
+        (DDecl Locals)
+        (DFluid)
+        (DEnv 4 7 4 4)
+        (Seq (Return (CCall Word (Lex 1 1 negate) (Par 0 x))))))
+    (Def
+      (Const 7 boolean-init)
+      (Prog
+        0
+        1
+        Word
+        0
+        2
+        0
+        0
+        0
+        (DDecl Params (Decl SInt "idx" -1 4))
+        (DDecl Locals)
+        (DFluid)
+        (DEnv 4 8)
+        (Seq
+          (If (Lex 1 1) 0)
+          (Set (Lex 1 1) (Bool 1))
+          (CCall NOp (Glo 19 boolean))
+          (Label 0)
+          (Return (Glo 11 boolean_Boolean_545813426)))))
+    (Def (Glo 0 bug1200) (Clos (Env 0) (Const 0 bug1200)))
+    (Def (Glo 2 bug1200_ChildDomain_1058225938) (Cast Word (Nil)))
+    (Def (Glo 3 bug1200_BaseDomain_1025965062) (Cast Word (Nil)))))

@@ -1,0 +1,6 @@
+"depend8.as", line 12: Foo(R:Ring, r:R):Ring == R;
+                       ....^
+[L12 C5] #1 (Warning) Function returns a domain that might not be constant (which may cause problems if it is used in a dependent type).
+
+Unhandled Exception: RuntimeError(??)
+(Aldor error) Bad use of a dependent type

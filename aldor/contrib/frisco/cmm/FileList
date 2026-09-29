@@ -1,0 +1,34 @@
+### List of registred files/subdirectories for the current directory.
+### Please keep this file updated so that `make junk' can work properly.
+
+ChangeLog
+CmmUpgrade
+Copyright
+FileList
+Makefile
+Makefile.d
+Makefile.dist
+Makefile.schema
+README
+README.MSW
+cmm.cc
+cmm.h
+doc
+machine.h
+memory.c
+memory.h
+tempheap.cc
+tempheap.h
+test2.cc
+test3.cc
+test4.cc
+test5.cc
+test6.cc
+test7.cc
+test8.cc
+testp2.c
+testp3.c
+testp5.cc
+utils.cc
+msw.c
+msw.h

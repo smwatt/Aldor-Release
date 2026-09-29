@@ -1,0 +1,33 @@
+    testing GCD in Z[w,x,y,z]...                OK
+test alg_defgcd.as .... 
+ ok 
+ ok 
+ ok 
+ ok 
+result is correct
+ ok 
+ ok 
+ ok 
+ ok 
+result is correct
+ ok 
+ ok 
+ ok 
+ ok 
+result is correct
+ ok 
+ ok 
+ ok 
+ ok 
+result is correct
+ ok 
+ ok 
+ ok 
+ ok 
+result is correct
+ ok 
+ ok 
+ ok 
+ ok 
+result is correct
+

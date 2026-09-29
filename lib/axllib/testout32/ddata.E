@@ -1,0 +1,13 @@
+"ddata.as", line 94:     Rep ==> Array F
+                     ....^
+[L94 C5] #2 (Warning) Domains with implicit exports must define Rep (as a constant not a macro)
+
+"ddata.as", line 158: S ==> SingleInteger
+                      ......^
+[L158 C7] #1 (Warning) Macro `S' redefined in the same scope.
+
+"ddata.as", line 178: 
+    Rep ==> Record(p:NTuple(F,3),sigp:NTuple(F,3),tag:Boolean,leptype:Lepton)
+....^
+[L178 C5] #8 (Warning) Domains with implicit exports must define Rep (as a constant not a macro)
+

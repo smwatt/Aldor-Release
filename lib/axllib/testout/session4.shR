@@ -1,0 +1,19 @@
+Aldor
+
+Copyright (c) 1990-2007 Aldor Software Organization Ltd (Aldor.org).
+
+Type "#int help" for more details.
+timing is off.
+Defined myfile @ String
+Defined mylove @ String
+Defined write @ () -> ()
+  () @ TextReader
+list(Natascia 4everNatascia 4everNatascia 4everNatascia 4everNatascia 4everNatascia 4everNatascia 4everNatascia 4everNatascia 4everNatascia 4ever) @ List(String)
+Defined foo @ () -> ()
+foo()
+  () @ TextWriter
+NATASCIA 4EVERNATASCIA 4EVERNATASCIA 4EVERNATASCIA 4EVERNATASCIA 4EVERNATASCIA 4EVERNATASCIA 4EVERNATASCIA 4EVERNATASCIA 4EVERNATASCIA 4EVERlist(Natascia 4everNatascia 4everNatascia 4everNatascia 4everNatascia 4everNatascia 4everNatascia 4everNatascia 4everNatascia 4everNatascia 4ever) @ List(String)
+ln := [[upper c for c in s] for s in ls]
+  () @ TextWriter
+list(list(N, A, T, A, S, C, I, A,  , 4, E, V, E, R, N, A, T, A, S, C, I, A,  , 4, E, V, E, R, N, A, T, A, S, C, I, A,  , 4, E, V, E, R, N, A, T, A, S, C, I, A,  , 4, E, V, E, R, N, A, T, A, S, C, I, A,  , 4, E, V, E, R, N, A, T, A, S, C, I, A,  , 4, E, V, E, R, N, A, T, A, S, C, I, A,  , 4, E, V, E, R, N, A, T, A, S, C, I, A,  , 4, E, V, E, R, N, A, T, A, S, C, I, A,  , 4, E, V, E, R, N, A, T, A, S, C, I, A,  , 4, E, V, E, R)) @ List(List(Character))
+0 @ SingleInteger

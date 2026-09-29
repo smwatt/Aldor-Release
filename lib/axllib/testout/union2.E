@@ -1,0 +1,6 @@
+"union2.as", line 15:         [3];
+                      ........^
+[L15 C9] #1 (Error) There are 2 meanings for the operator `bracket'.
+	Meaning 1: (x: Integer, !x: Enumeration(x: Type) == x) -> Union(x: Intege...
+	Meaning 2: (y: Integer, !y: Enumeration(y: Type) == y) -> Union(x: Intege...
+

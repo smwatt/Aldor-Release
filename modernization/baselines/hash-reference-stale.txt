@@ -1,0 +1,4 @@
+# No currently known expected-OK hash-reference outputs remain stale.
+# CP9.1 promoted the ten remaining active 64-bit references after verifying
+# that old and new generated token streams were identical and differed only
+# in whitespace/indentation.

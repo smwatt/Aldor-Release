@@ -1,0 +1,6 @@
+Testing alg_sup...
+    testing degree...                OK
+    testing exactQuotient...                OK
+    testing diff...                OK
+    testing heugcd...                OK
+    testing modgcd...                OK

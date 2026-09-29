@@ -1,0 +1,89 @@
+===========================================================
+===  Test "priq"
+===========================================================
+priqNew: priority-queue(argc = 0, size = 1):
+priqFree: done
+priqNew: priority-queue(argc = 0, size = 2):
+priqFree: done
+priqNew: priority-queue(argc = 0, size = 4):
+priqFree: done
+priqNew: priority-queue(argc = 0, size = 4):
+priqFree: done
+priqNew: priority-queue(argc = 0, size = 8):
+priqFree: done
+priqNew: priority-queue(argc = 0, size = 8):
+priqFree: done
+priqInsert:
+... inserting 100.000000
+... inserting 98.000000
+... inserting 7.000000
+... inserting 2.000000
+... inserting 33.000000
+... inserting 4.000000
+... inserting 5.000000
+... inserting 56.000000
+... inserting 78.000000
+... inserting 7.000000
+... inserting 1.000000
+... inserting 7.000000
+... inserting 4.000000
+... inserting 200.000000
+... inserting 150.000000
+... inserting 175.000000
+... inserting 125.000000
+... inserting 3.000000
+... inserting 8.000000
+... inserting 2.000000
+... inserting 23.000000
+... inserting 100.000000
+... inserting 100.000000
+priority-queue(argc = 23, size = 32):
+  * 1.000000
+    L 2.000000
+      L 3.000000
+        L 100.000000
+          L 175.000000
+          R 125.000000
+        R 8.000000
+          L 78.000000
+          R 56.000000
+      R 2.000000
+        L 7.000000
+          L 33.000000
+          R 23.000000
+        R 7.000000
+          L 100.000000
+          R 100.000000
+    R 4.000000
+      L 4.000000
+        L 98.000000
+        R 7.000000
+      R 5.000000
+        L 200.000000
+        R 150.000000
+priqExtractMin:
+... extracted 1.000000
+... extracted 2.000000
+... extracted 2.000000
+... extracted 3.000000
+... extracted 4.000000
+... extracted 4.000000
+... extracted 5.000000
+... extracted 7.000000
+... extracted 7.000000
+... extracted 7.000000
+... extracted 8.000000
+... extracted 23.000000
+... extracted 33.000000
+... extracted 56.000000
+... extracted 78.000000
+... extracted 98.000000
+... extracted 100.000000
+... extracted 100.000000
+... extracted 100.000000
+... extracted 125.000000
+... extracted 150.000000
+... extracted 175.000000
+... extracted 200.000000
+
+Test "priq" completed.

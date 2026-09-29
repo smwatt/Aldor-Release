@@ -1,0 +1,19 @@
+build.sh 
+
+axldem.as
+	debug.sh
+dirprod.as
+gb.as
+ibits.as
+lmdict.as
+matopdom.as
+matrix.as
+nni.as
+	poly3.as
+poly.as
+polycat.as
+prime.as
+quanc8.as
+random.as
+spf.as
+vector.as

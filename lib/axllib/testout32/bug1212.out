@@ -1,0 +1,5 @@
+"bug1212.as", line 20:     add {
+                       ........^
+[L20 C9] #1 (Warning) Domains with implicit exports must define Rep (as a constant not a macro)
+
+((SOMETHING))

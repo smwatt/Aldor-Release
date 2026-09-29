@@ -1,0 +1,17 @@
+a - /dev/null
+a - /dev/null
+aldor -Q3 -Qinline-all -Fao -Fo  arrepl1a.as
+a - arrepl1a.ao
+a - arrepl1a.o
+aldor -Q3 -Qinline-all -Fao -Fo  arrepl1b.as
+a - arrepl1b.ao
+a - arrepl1b.o
+aldor -Q3 -Qinline-all -Fao -Fo  arrepl1c.as
+a - arrepl1c.ao
+a - arrepl1c.o
+aldor -Q3 -Qinline-all -Fao -Fo -Mno-warnings -D AddExport arrepl1a.as
+r - arrepl1a.ao
+r - arrepl1a.o
+aldor -Q3 -Qinline-all -Fao -Fo -Mno-warnings arrepl1c.as
+r - arrepl1c.ao
+r - arrepl1c.o

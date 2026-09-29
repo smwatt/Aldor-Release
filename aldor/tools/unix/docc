@@ -1,0 +1,23 @@
+#!/bin/sh
+#
+# Invoke the host C compiler, retaining only the buildarg substitutions that
+# are part of the current Aldor build interface.  Historical per-machine
+# compiler command lines were retired in modernization v0.02.
+
+export PATH="$ALDORROOT/toolbin:$PATH"
+compiler=${CC:-cc}
+args="$(buildarg docc-extra)"
+
+for i in "$@"
+do
+    case "$i" in
+        -motif-ld) args="$args $(buildarg docc-motif-ld)" ;;
+        -motif-cc) args="$args $(buildarg docc-motif-cc)" ;;
+        -src)      args="$args $(buildarg docc-src)" ;;
+        *)         args="$args $i" ;;
+    esac
+done
+
+# buildarg values are intentionally shell-style option lists.
+# shellcheck disable=SC2086
+exec "$compiler" $args

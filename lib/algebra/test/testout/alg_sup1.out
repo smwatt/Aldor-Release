@@ -1,0 +1,10 @@
+Testing alg_sup1...
+    testing primitiveType...                OK
+    testing additiveType...                OK
+    testing linearCombinationType...                OK
+    testing freeLinearCombinationType...                OK
+    testing indexedFreeLinearCombinationType...                OK
+    testing indexedFreeModule...                OK
+    testing univariatePolynomialAlgebra...                OK
+    testing arithmeticType...                OK
+

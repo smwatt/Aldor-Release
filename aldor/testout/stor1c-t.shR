@@ -1,0 +1,48 @@
+===========================================================
+===  Test "store1c"
+===========================================================
+Test working of GC.
+Hi mark: audit gc audit
+Lo mark: audit gc audit
+Hi mark: audit gc audit
+Lo mark: audit gc audit
+Hi mark: audit gc audit
+Lo mark: audit gc audit
+Hi mark: audit gc audit
+Lo mark: audit gc audit
+Hi mark: audit gc audit
+Lo mark: audit gc audit
+Hi mark: audit gc audit
+Lo mark: audit gc audit
+Hi mark: audit gc audit
+Lo mark: audit gc audit
+Hi mark: audit gc audit
+Lo mark: audit gc audit
+Hi mark: audit gc audit
+Lo mark: audit gc audit
+Hi mark: audit gc audit
+Lo mark: audit gc audit
+Hi mark: audit gc audit
+Lo mark: audit gc audit
+Hi mark: audit gc audit
+Lo mark: audit gc audit
+Hi mark: audit gc audit
+Lo mark: audit gc audit
+Hi mark: audit gc audit
+Lo mark: audit gc audit
+Hi mark: audit gc audit
+Lo mark: audit gc audit
+Hi mark: audit gc audit
+Lo mark: audit gc audit
+Hi mark: audit gc audit
+Lo mark: audit gc audit
+Hi mark: audit gc audit
+Lo mark: audit gc audit
+Hi mark: audit gc audit
+Lo mark: audit gc audit
+Hi mark: audit gc audit
+Lo mark: audit gc audit
+Lo mark: audit gc audit
+Storage workload: OK
+
+Test "store1c" completed.

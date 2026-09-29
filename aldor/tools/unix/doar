@@ -1,0 +1,113 @@
+#!/bin/sh
+#
+# Native object-archive wrapper.  `uniar` is reserved for Aldor .al archives.
+# Platform-specific native archive policy belongs here.
+
+system=$(uname -s 2>/dev/null || echo unknown)
+
+if [ -n "${HOST_AR:-}" ]; then
+    archiver=$HOST_AR
+elif [ -n "${ALDOR_AR:-}" ]; then
+    archiver=$ALDOR_AR
+elif [ -n "${AR:-}" ]; then
+    archiver=$AR
+elif [ "$system" = Darwin ] && [ -x /usr/bin/ar ]; then
+    archiver=/usr/bin/ar
+else
+    archiver=ar
+fi
+
+if [ -n "${ALDOR_LIBTOOL:-}" ]; then
+    static_libtool=$ALDOR_LIBTOOL
+elif [ "$system" = Darwin ] && [ -x /usr/bin/libtool ]; then
+    static_libtool=/usr/bin/libtool
+else
+    static_libtool=
+fi
+
+if [ "$#" -lt 2 ]; then
+    echo "usage: doar ar-options archive [members ...]" >&2
+    exit 2
+fi
+
+modifier=$1
+shift
+case "$modifier" in
+    -*) modifier=${modifier#-} ;;
+esac
+archive=$1
+shift
+
+# Darwin native libraries are ordinary Mach-O static archives.  Have Apple's
+# static-library builder write the final archive so every update is repacked
+# with the layout/alignment expected by Apple's linker.  `ar` remains useful
+# for archive-member operations, but does not write the final r/q/d result.
+if [ "$system" = Darwin ] && [ -n "$static_libtool" ]; then
+    case "$modifier" in
+        *r*|*q*)
+            out="${archive}.aldor-new.$$.a"
+            old="${archive}.aldor-old.$$.a"
+            trap 'rm -f "$out" "$old"' 0 1 2 3 15
+
+            inputs=
+            if [ -f "$archive" ]; then
+                cp "$archive" "$old" || exit 1
+                # ar r replaces an existing member of the same basename.
+                # Remove those members from the temporary old archive before
+                # asking libtool to merge it with the replacements.
+                case "$modifier" in
+                    *r*)
+                        for member in "$@"; do
+                            base=${member##*/}
+                            "$archiver" d "$old" "$base" >/dev/null 2>&1 || true
+                        done
+                        ;;
+                esac
+                if "$archiver" t "$old" 2>/dev/null | grep -q .; then
+                    inputs=$old
+                fi
+            fi
+
+            if [ -n "$inputs" ]; then
+                "$static_libtool" -static ${ALDOR_LIBTOOL_FLAGS:-} -o "$out" "$inputs" "$@" || exit 1
+            elif [ "$#" -gt 0 ]; then
+                "$static_libtool" -static ${ALDOR_LIBTOOL_FLAGS:-} -o "$out" "$@" || exit 1
+            else
+                # Preserve ar's ability to create an empty archive.
+                printf '!<arch>\n' > "$out" || exit 1
+            fi
+            mv -f "$out" "$archive" || exit 1
+            trap - 0 1 2 3 15
+            rm -f "$old"
+            exit 0
+            ;;
+        *d*)
+            [ -f "$archive" ] || exit 0
+            out="${archive}.aldor-new.$$.a"
+            old="${archive}.aldor-old.$$.a"
+            trap 'rm -f "$out" "$old"' 0 1 2 3 15
+            cp "$archive" "$old" || exit 1
+            "$archiver" d "$old" "$@" || exit 1
+            if "$archiver" t "$old" 2>/dev/null | grep -q .; then
+                "$static_libtool" -static ${ALDOR_LIBTOOL_FLAGS:-} -o "$out" "$old" || exit 1
+            else
+                printf '!<arch>\n' > "$out" || exit 1
+            fi
+            mv -f "$out" "$archive" || exit 1
+            trap - 0 1 2 3 15
+            rm -f "$old"
+            exit 0
+            ;;
+    esac
+fi
+
+# Non-Darwin, and read-only archive operations on Darwin, retain the normal
+# ar interface.  ALDOR_AR_FLAGS contains optional modifier letters.
+prefix=
+for f in ${ALDOR_AR_FLAGS:-}; do
+    case "$modifier" in
+        *"$f"*) ;;
+        *) modifier="${modifier}${f}" ;;
+    esac
+done
+exec "$archiver" "${prefix}${modifier}" "$archive" "$@"

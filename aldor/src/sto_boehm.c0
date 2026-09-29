@@ -1,0 +1,47 @@
+/*****************************************************************************
+ * sto_boehm.c0: Boehm StoreManager.
+ *
+ * Boehm historically bypasses the LayeredStore object header for allocation
+ * and deallocation.  Preserve that topology while sharing the compile-time
+ * StoreManager interface for the primitive operations.
+ ****************************************************************************/
+#if !defined(_STO_BOEHM_C0_) && defined(STO_USE) && STO_USE == STO_USE_BOEHM
+#define _STO_BOEHM_C0_
+
+#undef NDEBUG
+#include <gc.h>
+
+class BoehmStoreManager {
+public:
+        static inline void *allocate(Length size)
+        {
+                return GC_debug_malloc(size);
+        }
+        static inline void deallocate(void *p)
+        {
+                GC_debug_free(p);
+        }
+        static inline void *resize(void *p, Length, Length newSize)
+        {
+                return GC_debug_realloc(p, newSize);
+        }
+};
+
+using SelectedStoreManager = BoehmStoreManager;
+
+#define STO_Has_stoAlloc
+ALDOR_C MostAlignedType *
+__stoAlloc(unsigned, ULong size)
+{
+        return (MostAlignedType *) BoehmStoreManager::allocate(size);
+}
+
+#define STO_Has_stoFree
+ALDOR_C void
+__stoFree(void *p)
+{
+        BoehmStoreManager::deallocate(p);
+}
+
+#include "sto_layer.c0"
+#endif

@@ -1,0 +1,16 @@
+===========================================================
+===  Test "msg"
+===========================================================
+msgDefaults:
+This is the second default message of set 1. B.
+This is the first  default message of set 2. C.
+[Message not found]
+[Message not found]
+This message is not there: [Message not found]
+msgOpen:
+The seventh message of the first set is: Ethay ecifiedspay outputay irectoryday oesday otnay existay.
+msgClear:
+The seventh message of the first set is: Ethay ecifiedspay outputay irectoryday oesday otnay existay.
+msgClose:
+
+Test "msg" completed.

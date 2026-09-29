@@ -1,0 +1,9 @@
+build.sh 
+
+ap ax nap nax
+
+axiom.lst
+
+axext_l.lsp mkax.lsp
+
+attrib.as ax0.as axextend.as axiom.as axlit.as ax.lst minimach.as stub.as

@@ -1,0 +1,20 @@
+a - /dev/null
+a - /dev/null
+aldor -Q3 -Qinline-all -Fao -Fo  -M no-ALDOR_W_OverRideLibraryFile arrepla.as
+a - arrepla.ao
+a - arrepla.o
+aldor -Q3 -Qinline-all -Fao -Fo  -M no-ALDOR_W_OverRideLibraryFile arreplb.as
+a - arreplb.ao
+a - arreplb.o
+aldor -Q3 -Qinline-all -Fao -Fo  -M no-ALDOR_W_OverRideLibraryFile arreplc.as
+a - arreplc.ao
+a - arreplc.o
+aldor -Q3 -Qinline-all -Fao -Fo -Mno-warnings -M no-ALDOR_W_OverRideLibraryFile arrepla.as
+r - arrepla.ao
+r - arrepla.o
+aldor -Q3 -Qinline-all -Fao -Fo -Mno-warnings -M no-ALDOR_W_OverRideLibraryFile arreplb.as
+r - arreplb.ao
+r - arreplb.o
+aldor -Q3 -Qinline-all -Fao -Fo -Mno-warnings -M no-ALDOR_W_OverRideLibraryFile arreplc.as
+r - arreplc.ao
+r - arreplc.o

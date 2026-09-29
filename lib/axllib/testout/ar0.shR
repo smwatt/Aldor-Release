@@ -1,0 +1,5 @@
+== Creating a client for the archive
+== Testing that the client imports from the archive
+#1 (Warning) Could not use archive file `libtriv.al'.
+#2 (Fatal Error) Could not open file `triv4.ao'.
+== Done

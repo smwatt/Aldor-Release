@@ -1,0 +1,13 @@
+== Compiling triv*.as into triv*.ao and triv*.o
+
+triv0.as:
+
+triv1.as:
+
+triv3.as:
+== Building an archive containing triv*.ao
+== Building an archive containing triv*.o
+== Creating a client for the archive
+== Testing that the client imports from the archive
+#1 (Fatal Error) Could not open file `triv4.ao'.
+== Done

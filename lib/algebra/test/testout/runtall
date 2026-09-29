@@ -1,0 +1,35 @@
+runt1() {
+    echo ">> == $1 std ==============================="
+    diff $1.out $newdir/$1.aldorStd.out
+    echo ">> == $1 debug ==============================="
+    diff $1.out $newdir/$1.aldorDebug.out
+    echo ">> == $1 gmp ==============================="
+    diff $1.out $newdir/$1.aldorGmp.out
+}
+runt() {
+    runt1 $* 2>&1
+}
+runt alg_bivarpk
+runt alg_defgcd
+runt alg_ezgcd
+runt alg_mhensel
+runt alg_modgcdp
+runt alg_mresbiv
+runt alg_sup
+runt alg_sup0
+runt alg_sup1
+runt sit_chrem
+runt sit_dnsemat
+runt sit_dup
+runt sit_extree
+runt sit_modgcd
+runt sit_qotient
+runt sit_spf
+runt sit_sqfree
+runt sit_umonom
+runt sit_vector
+runt sit_zfactor
+runt sit_zpf
+runt sm_dmp0
+runt sm_expocat
+runt sm_polring0

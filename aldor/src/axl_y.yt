@@ -1,0 +1,1299 @@
+/*
+ * "zacc" output from "axl.y" on Thu Mar 11 11:11:13 2021
+ */
+
+
+
+%{
+# include "axlphase.h"
+
+# define yyerror(s)     yyerrorfn(s)
+
+#ifdef NDEBUG
+#  undef  YYDEBUG
+#else
+#  define YYDEBUG 1
+#endif
+int yydebug;
+
+# define TPOS(t)((t).position())
+# define TEND(t)((t).end().offset(-1))
+# define APOS(a) abPos(a)
+# define TEST(a) abNewTest(abPos(a),(a))
+# define abZip   abNewNothing(SrcPos::none)
+%}
+
+
+/*
+ * Included token declarations (with default type):
+ */
+%token <tok> _YY_TK_Id 1
+%token <tok> _YY_TK_Blank 2
+%token <tok> _YY_TK_Int 3
+%token <tok> _YY_TK_Float 4
+%token <tok> _YY_TK_String 5
+%token <tok> _YY_TK_PreDoc 6
+%token <tok> _YY_TK_PostDoc 7
+%token <tok> _YY_TK_Comment 8
+%token <tok> _YY_TK_SysCmd 9
+%token <tok> _YY_TK_Error 10
+%token <tok> _YY_KW_Add 11
+%token <tok> _YY_KW_And 12
+%token <tok> _YY_KW_Always 13
+%token <tok> _YY_KW_Assert 14
+%token <tok> _YY_KW_Break 15
+%token <tok> _YY_KW_But 16
+%token <tok> _YY_KW_By 17
+%token <tok> _YY_KW_Case 18
+%token <tok> _YY_KW_Catch 19
+%token <tok> _YY_KW_Default 20
+%token <tok> _YY_KW_Define 21
+%token <tok> _YY_KW_Delay 22
+%token <tok> _YY_KW_Do 23
+%token <tok> _YY_KW_Else 24
+%token <tok> _YY_KW_Except 25
+%token <tok> _YY_KW_Export 26
+%token <tok> _YY_KW_Extend 27
+%token <tok> _YY_KW_Finally 28
+%token <tok> _YY_KW_Fix 29
+%token <tok> _YY_KW_For 30
+%token <tok> _YY_KW_Fluid 31
+%token <tok> _YY_KW_Free 32
+%token <tok> _YY_KW_From 33
+%token <tok> _YY_KW_Generate 34
+%token <tok> _YY_KW_Goto 35
+%token <tok> _YY_KW_Has 36
+%token <tok> _YY_KW_If 37
+%token <tok> _YY_KW_Import 38
+%token <tok> _YY_KW_In 39
+%token <tok> _YY_KW_Inline 40
+%token <tok> _YY_KW_Is 41
+%token <tok> _YY_KW_Isnt 42
+%token <tok> _YY_KW_Iterate 43
+%token <tok> _YY_KW_Let 44
+%token <tok> _YY_KW_Local 45
+%token <tok> _YY_KW_Macro 46
+%token <tok> _YY_KW_Mod 47
+%token <tok> _YY_KW_Never 48
+%token <tok> _YY_KW_Not 49
+%token <tok> _YY_KW_Of 50
+%token <tok> _YY_KW_Or 51
+%token <tok> _YY_KW_Pretend 52
+%token <tok> _YY_KW_Quo 53
+%token <tok> _YY_KW_Reference 54
+%token <tok> _YY_KW_Rem 55
+%token <tok> _YY_KW_Repeat 56
+%token <tok> _YY_KW_Return 57
+%token <tok> _YY_KW_Rule 58
+%token <tok> _YY_KW_Select 59
+%token <tok> _YY_KW_Then 60
+%token <tok> _YY_KW_Throw 61
+%token <tok> _YY_KW_To 62
+%token <tok> _YY_KW_Try 63
+%token <tok> _YY_KW_Where 64
+%token <tok> _YY_KW_While 65
+%token <tok> _YY_KW_With 66
+%token <tok> _YY_KW_Yield 67
+%token <tok> _YY_KW_Quote 68
+%token <tok> _YY_KW_Grave 69
+%token <tok> _YY_KW_Ampersand 70
+%token <tok> _YY_KW_Comma 71
+%token <tok> _YY_KW_Semicolon 72
+%token <tok> _YY_KW_Dollar 73
+%token <tok> _YY_KW_Sharp 74
+%token <tok> _YY_KW_At 75
+%token <tok> _YY_KW_Assign 76
+%token <tok> _YY_KW_Colon 77
+%token <tok> _YY_KW_ColonStar 78
+%token <tok> _YY_KW_2Colon 79
+%token <tok> _YY_KW_Star 80
+%token <tok> _YY_KW_2Star 81
+%token <tok> _YY_KW_Dot 82
+%token <tok> _YY_KW_2Dot 83
+%token <tok> _YY_KW_EQ 84
+%token <tok> _YY_KW_2EQ 85
+%token <tok> _YY_KW_MArrow 86
+%token <tok> _YY_KW_Implies 87
+%token <tok> _YY_KW_GT 88
+%token <tok> _YY_KW_2GT 89
+%token <tok> _YY_KW_GE 90
+%token <tok> _YY_KW_LT 91
+%token <tok> _YY_KW_2LT 92
+%token <tok> _YY_KW_LE 93
+%token <tok> _YY_KW_LArrow 94
+%token <tok> _YY_KW_Hat 95
+%token <tok> _YY_KW_HatE 96
+%token <tok> _YY_KW_Tilde 97
+%token <tok> _YY_KW_TildeE 98
+%token <tok> _YY_KW_Plus 99
+%token <tok> _YY_KW_PlusMinus 100
+%token <tok> _YY_KW_MapsTo 101
+%token <tok> _YY_KW_MapsToStar 102
+%token <tok> _YY_KW_Minus 103
+%token <tok> _YY_KW_RArrow 104
+%token <tok> _YY_KW_MapStar 105
+%token <tok> _YY_KW_Slash 106
+%token <tok> _YY_KW_Wedge 107
+%token <tok> _YY_KW_Backslash 108
+%token <tok> _YY_KW_Vee 109
+%token <tok> _YY_KW_OBrack 110
+%token <tok> _YY_KW_OBBrack 111
+%token <tok> _YY_KW_OCurly 112
+%token <tok> _YY_KW_OBCurly 113
+%token <tok> _YY_KW_OParen 114
+%token <tok> _YY_KW_OBParen 115
+%token <tok> _YY_KW_CBrack 116
+%token <tok> _YY_KW_CCurly 117
+%token <tok> _YY_KW_CParen 118
+%token <tok> _YY_KW_Bar 119
+%token <tok> _YY_KW_CBBrack 120
+%token <tok> _YY_KW_CBCurly 121
+%token <tok> _YY_KW_CBParen 122
+%token <tok> _YY_KW_2Bar 123
+%token <tok> _YY_KW_NewLine 124
+%token <tok> _YY_KW_StartPile 125
+%token <tok> _YY_KW_EndPile 126
+%token <tok> _YY_KW_SetTab 127
+%token <tok> _YY_KW_BackSet 128
+%token <tok> _YY_KW_BackTab 129
+%token <tok> _YY_KW_Juxtapose 130
+
+
+
+
+
+%union {
+        Token           tok ;
+        TokenList       toklist ;
+        AbSyn           ab ;
+        AbSynList       ablist ;
+}
+
+%start Goal
+
+
+/*
+ * Generated type declarations:
+ */
+%type <ab> Goal
+%type <ab> Expression
+%type <ab> Labeled
+%type <ab> Declaration
+%type <ab> ExportDecl
+%type <ab> ToPart
+%type <ab> FromPart
+%type <ab> MacroBody
+%type <ab> Sig
+%type <ab> DeclPart
+%type <ab> Comma
+%type <ab> CommaItem
+%type <ab> DeclBinding
+%type <ab> InfixedExprsDecl
+%type <ab> InfixedExprs
+%type <ab> Binding_Collection_
+%type <ab> Binding_BalStatement_
+%type <ab> Binding_AnyStatement_
+%type <ab> BindingL_Infixed_Collection_
+%type <ab> BindingL_Infixed_BalStatement_
+%type <ab> BindingL_Infixed_AnyStatement_
+%type <ab> BindingR_InfixedExprsDecl_AnyStatement_
+%type <ab> AnyStatement
+%type <ab> BalStatement
+%type <ab> Flow_BalStatement_
+%type <ab> Flow_AnyStatement_
+%type <ab> GenBound
+%type <ab> ButExpr
+%type <ab> Cases
+%type <ab> AlwaysPart_BalStatement_
+%type <ab> AlwaysPart_AnyStatement_
+%type <ab> Collection
+%type <ablist> Iterators
+%type <ablist> Iterators1
+%type <ab> Iterator
+%type <ab> ForLhs
+%type <ab> SuchthatPart
+%type <ab> Infixed
+%type <ab> InfixedExpr
+%type <ab> E3
+%type <ab> E4
+%type <ab> E5
+%type <ab> E6
+%type <ab> E7
+%type <ab> E8
+%type <ab> E9
+%type <ab> E11_E12_
+%type <ab> E11_Op_
+%type <ab> Type
+%type <ab> E12
+%type <ab> E13
+%type <ab> QualTail
+%type <ab> OpQualTail
+%type <ab> E14
+%type <ab> E15
+%type <ab> Op
+%type <ab> NakedOp
+%type <ab> ArrowOp
+%type <ab> LatticeOp
+%type <ab> RelationOp
+%type <ab> SegOp
+%type <ab> PlusOp
+%type <ab> QuotientOp
+%type <ab> TimesOp
+%type <ab> PowerOp
+%type <tok> ArrowTok
+%type <tok> LatticeTok
+%type <tok> RelationTok
+%type <tok> SegTok
+%type <tok> PlusTok
+%type <tok> QuotientTok
+%type <tok> TimesTok
+%type <tok> PowerTok
+%type <ab> Application
+%type <ab> RightJuxtaposed
+%type <ab> LeftJuxtaposed
+%type <ab> Jright_Atom_
+%type <ab> Jright_Molecule_
+%type <ab> Jleft_Atom_
+%type <ab> Jleft_Molecule_
+%type <ab> Molecule
+%type <ab> Enclosure
+%type <ab> DeclMolecule
+%type <ab> BlockMolecule
+%type <ab> BlockEnclosure
+%type <ab> Block
+%type <ab> Parened
+%type <ab> Bracketed
+%type <ab> QuotedIds
+%type <ab> Names
+%type <ab> Atom
+%type <ab> Name
+%type <ab> Id
+%type <ab> Literal
+%type <ab> Nothing
+%type <ab> UnqualOp_PowerTok_
+%type <ab> UnqualOp_TimesTok_
+%type <ab> UnqualOp_QuotientTok_
+%type <ab> UnqualOp_PlusTok_
+%type <ab> UnqualOp_SegTok_
+%type <ab> UnqualOp_RelationTok_
+%type <ab> UnqualOp_LatticeTok_
+%type <ab> UnqualOp_ArrowTok_
+%type <ab> QualOp_PowerTok_
+%type <ab> QualOp_TimesTok_
+%type <ab> QualOp_QuotientTok_
+%type <ab> QualOp_PlusTok_
+%type <ab> QualOp_SegTok_
+%type <ab> QualOp_RelationTok_
+%type <ab> QualOp_LatticeTok_
+%type <ab> QualOp_ArrowTok_
+%type <ab> opt_Application_
+%type <ab> opt_E14_
+%type <ab> opt_SuchthatPart_
+%type <ab> opt_Collection_
+%type <ab> opt_Name_
+%type <ab> opt_FromPart_
+%type <ab> opt_Sig_
+%type <ab> opt_Labeled_
+%type <ab> Doc_Expression_
+%type <ab> PreDocument
+%type <ab> PostDocument
+%type <toklist> PreDocumentList
+%type <toklist> PostDocumentList
+%type <ab> enlist1_Name__YY_KW_Comma_AB_Comma_
+%type <ab> enlist1_InfixedExpr__YY_KW_Comma_AB_Comma_
+%type <ab> enlist1_CommaItem__YY_KW_Comma_AB_Comma_
+%type <ab> enlist1_Infixed__YY_KW_Comma_AB_Comma_
+%type <ablist> enlister1_Name__YY_KW_Comma_
+%type <ablist> enlister1_InfixedExpr__YY_KW_Comma_
+%type <ablist> enlister1_CommaItem__YY_KW_Comma_
+%type <ablist> enlister1_Infixed__YY_KW_Comma_
+%type <ab> enlist1a_Labeled__YY_KW_Semicolon_AB_Sequence_
+%type <ablist> enlister1a_Labeled__YY_KW_Semicolon_
+%type <ab> Piled_Expression_
+%type <ab> Curly_Labeled_
+%type <ablist> PileContents_Expression_
+%type <ab> CurlyContents_Labeled_
+%type <ablist> CurlyContentsList_Labeled_
+%type <ablist> CurlyContent1_Labeled_
+%type <ab> CurlyContentA_Labeled_
+%type <ab> CurlyContentB_Labeled_
+
+%%
+
+Goal
+: CurlyContents_Labeled_
+        { yypval = $$ = $1; }
+;
+
+Expression
+: enlist1a_Labeled__YY_KW_Semicolon_AB_Sequence_
+;
+
+Labeled
+: Comma
+| Declaration
+| _YY_KW_At Atom opt_Labeled_
+        { $$ = abNewLabel(TPOS($1),$2,$3); }
+;
+
+Declaration
+: _YY_KW_Macro MacroBody
+        { $$ = abNewMacro(TPOS($1),$2); }
+| _YY_KW_Extend Sig
+        { $$ = abNewExtend(TPOS($1),$2); }
+| _YY_KW_Local Sig
+        { $$ = abNewLocal(TPOS($1),$2); }
+| _YY_KW_Free Sig
+        { $$ = abNewFree(TPOS($1),$2); }
+| _YY_KW_Fluid Sig
+        { $$ = abNewFluid(TPOS($1),$2); }
+| _YY_KW_Default Sig
+        { $$ = abNewDefault(TPOS($1),$2); }
+| _YY_KW_Define Sig
+        { $$ = abNewDDefine(TPOS($1),$2); }
+| _YY_KW_Fix Sig
+        { $$ = abNewFix(TPOS($1),$2); }
+| _YY_KW_Inline opt_Sig_ opt_FromPart_
+        { $$ = abNewInline(TPOS($1),$2,$3); }
+| _YY_KW_Import opt_Sig_ opt_FromPart_
+        { $$ = abNewImport(TPOS($1),$2,$3); }
+| ExportDecl
+;
+
+ExportDecl
+: _YY_KW_Export opt_Sig_
+        { $$ = abNewExport(TPOS($1),$2, abZip,abZip); }
+| _YY_KW_Export opt_Sig_ ToPart
+        { $$ = abNewExport(TPOS($1),$2,abZip,$3); }
+| _YY_KW_Export opt_Sig_ FromPart
+        { $$ = abNewExport(TPOS($1),$2,$3,abZip); }
+;
+
+ToPart
+: _YY_KW_To Infixed
+        { $$ = $2; }
+;
+
+FromPart
+: _YY_KW_From enlist1_Infixed__YY_KW_Comma_AB_Comma_
+        { $$ = $2; }
+;
+
+MacroBody
+: Sig
+| ExportDecl
+| _YY_KW_Import Sig opt_FromPart_
+        { $$ = abNewImport(TPOS($1),$2,$3); }
+;
+
+Sig
+: DeclBinding
+| Block
+;
+
+DeclPart
+: _YY_KW_Colon Type
+        { $$ = $2; }
+| _YY_KW_ColonStar Type
+        { $$ = abNewHide(TPOS($1), $2); }
+;
+
+
+Comma
+: enlist1_CommaItem__YY_KW_Comma_AB_Comma_
+;
+
+CommaItem
+: Binding_AnyStatement_
+| Binding_AnyStatement_ _YY_KW_Where CommaItem
+        { $$ = abNewWhere(TPOS($2),$3,$1); }
+;
+
+
+DeclBinding
+: BindingR_InfixedExprsDecl_AnyStatement_
+;
+
+InfixedExprsDecl
+: InfixedExprs
+| InfixedExprs DeclPart
+        { $$ = abNewDeclare(APOS($1),$1,$2); }
+;
+
+InfixedExprs
+: enlist1_InfixedExpr__YY_KW_Comma_AB_Comma_
+;
+
+
+
+
+Binding_Collection_
+: BindingL_Infixed_Collection_
+;
+Binding_BalStatement_
+: BindingL_Infixed_BalStatement_
+;
+Binding_AnyStatement_
+: BindingL_Infixed_AnyStatement_
+;
+
+
+BindingL_Infixed_Collection_
+: Collection
+| Infixed _YY_KW_Assign BindingL_Infixed_Collection_
+        { $$ = abNewAssign(APOS($1),$1,$3); }
+| Infixed _YY_KW_2EQ BindingL_Infixed_Collection_
+        { $$ = abNewDefine(APOS($1),$1,$3); }
+| Infixed _YY_KW_MArrow BindingL_Infixed_Collection_
+        { $$ = abNewMDefine(APOS($1),$1,$3); }
+| Infixed _YY_KW_MapsTo BindingL_Infixed_Collection_
+        { $$ = abNewLambda(APOS($1),$1,abZip,$3); }
+| Infixed _YY_KW_MapsToStar BindingL_Infixed_Collection_
+        { $$ = abNewPLambda(APOS($1),$1,abZip,$3); }
+;
+BindingL_Infixed_BalStatement_
+: BalStatement
+| Infixed _YY_KW_Assign BindingL_Infixed_BalStatement_
+        { $$ = abNewAssign(APOS($1),$1,$3); }
+| Infixed _YY_KW_2EQ BindingL_Infixed_BalStatement_
+        { $$ = abNewDefine(APOS($1),$1,$3); }
+| Infixed _YY_KW_MArrow BindingL_Infixed_BalStatement_
+        { $$ = abNewMDefine(APOS($1),$1,$3); }
+| Infixed _YY_KW_MapsTo BindingL_Infixed_BalStatement_
+        { $$ = abNewLambda(APOS($1),$1,abZip,$3); }
+| Infixed _YY_KW_MapsToStar BindingL_Infixed_BalStatement_
+        { $$ = abNewPLambda(APOS($1),$1,abZip,$3); }
+;
+BindingL_Infixed_AnyStatement_
+: AnyStatement
+| Infixed _YY_KW_Assign BindingL_Infixed_AnyStatement_
+        { $$ = abNewAssign(APOS($1),$1,$3); }
+| Infixed _YY_KW_2EQ BindingL_Infixed_AnyStatement_
+        { $$ = abNewDefine(APOS($1),$1,$3); }
+| Infixed _YY_KW_MArrow BindingL_Infixed_AnyStatement_
+        { $$ = abNewMDefine(APOS($1),$1,$3); }
+| Infixed _YY_KW_MapsTo BindingL_Infixed_AnyStatement_
+        { $$ = abNewLambda(APOS($1),$1,abZip,$3); }
+| Infixed _YY_KW_MapsToStar BindingL_Infixed_AnyStatement_
+        { $$ = abNewPLambda(APOS($1),$1,abZip,$3); }
+;
+
+
+BindingR_InfixedExprsDecl_AnyStatement_
+: InfixedExprsDecl
+| InfixedExprsDecl _YY_KW_Assign Binding_AnyStatement_
+        { $$ = abNewAssign(APOS($1),$1,$3); }
+| InfixedExprsDecl _YY_KW_2EQ Binding_AnyStatement_
+        { $$ = abNewDefine(APOS($1),$1,$3); }
+| InfixedExprsDecl _YY_KW_MArrow Binding_AnyStatement_
+        { $$ = abNewMDefine(APOS($1),$1,$3); }
+| InfixedExprsDecl _YY_KW_MapsTo Binding_AnyStatement_
+        { $$ = abNewLambda(APOS($1),$1,abZip,$3); }
+| InfixedExprsDecl _YY_KW_MapsToStar Binding_AnyStatement_
+        { $$ = abNewPLambda(APOS($1),$1,abZip,$3); }
+;
+
+
+AnyStatement
+: _YY_KW_If CommaItem _YY_KW_Then Binding_AnyStatement_
+        { $$ = abNewIf(TPOS($1), TEST($2),$4,abZip); }
+| Flow_AnyStatement_
+;
+
+BalStatement
+: Flow_BalStatement_
+;
+
+
+Flow_BalStatement_
+: Collection
+| _YY_KW_If CommaItem _YY_KW_Then Binding_BalStatement_ _YY_KW_Else Binding_BalStatement_
+        { $$ = abNewIf(TPOS($1), TEST($2),$4,$6); }
+| Collection _YY_KW_Implies Binding_BalStatement_
+        { $$ = abNewExit(TPOS($2), TEST($1),$3); }
+| Iterators _YY_KW_Repeat Binding_BalStatement_
+        { $$ = abNewRepeatOL(TPOS($2),$3,$1); listFree(AbSyn)($1); }
+| _YY_KW_Repeat Binding_BalStatement_
+        { $$ = abNewRepeat0(TPOS($1),$2); }
+| _YY_KW_Try Binding_AnyStatement_ _YY_KW_But ButExpr AlwaysPart_BalStatement_
+        { (void)parseDeprecated((TokenTag)_YY_KW_But, abNewNothing(TPOS($3))); $$ = abNewTry(TPOS($1),$2,$4->abSequence.argv[0], $4->abSequence.argv[1],$5); }
+| _YY_KW_Try Binding_AnyStatement_ _YY_KW_Catch ButExpr AlwaysPart_BalStatement_
+        { $$ = abNewTry(TPOS($1),$2,$4->abSequence.argv[0], $4->abSequence.argv[1],$5); }
+| _YY_KW_Select Binding_AnyStatement_ _YY_KW_In Cases
+        { $$ = abNewSelect(TPOS($1),$2,$4); }
+| _YY_KW_Do Binding_BalStatement_
+        { $$ = abNewDo(TPOS($1),$2); }
+| _YY_KW_Delay Binding_BalStatement_
+        { $$ = abNewDelay(TPOS($1),$2); }
+| _YY_KW_Reference Binding_BalStatement_
+        { $$ = abNewReference(TPOS($1),$2); }
+| _YY_KW_Generate GenBound Binding_BalStatement_
+        { $$ = abNewGenerate(TPOS($1),$2,$3); }
+| _YY_KW_Assert Binding_BalStatement_
+        { $$ = abNewAssert(TPOS($1),TEST($2)); }
+| _YY_KW_Iterate opt_Name_
+        { $$ = abNewIterate(TPOS($1),$2); }
+| _YY_KW_Break opt_Name_
+        { $$ = abNewBreak(TPOS($1),$2); }
+| _YY_KW_Return opt_Collection_
+        { $$ = abNewReturn(TPOS($1),$2); }
+| _YY_KW_Yield Binding_BalStatement_
+        { $$ = abNewYield(TPOS($1),$2); }
+| _YY_KW_Except Binding_BalStatement_
+        { $$ = parseDeprecated((TokenTag)_YY_KW_Except, abNewRaise(TPOS($1),$2)); }
+| _YY_KW_Throw Binding_BalStatement_
+        { $$ = abNewRaise(TPOS($1),$2); }
+| _YY_KW_Goto Id
+        { $$ = abNewGoto(TPOS($1),$2); }
+| _YY_KW_Never
+        { $$ = abNewNever(TPOS($1)); }
+;
+Flow_AnyStatement_
+: Collection
+| _YY_KW_If CommaItem _YY_KW_Then Binding_BalStatement_ _YY_KW_Else Binding_AnyStatement_
+        { $$ = abNewIf(TPOS($1), TEST($2),$4,$6); }
+| Collection _YY_KW_Implies Binding_AnyStatement_
+        { $$ = abNewExit(TPOS($2), TEST($1),$3); }
+| Iterators _YY_KW_Repeat Binding_AnyStatement_
+        { $$ = abNewRepeatOL(TPOS($2),$3,$1); listFree(AbSyn)($1); }
+| _YY_KW_Repeat Binding_AnyStatement_
+        { $$ = abNewRepeat0(TPOS($1),$2); }
+| _YY_KW_Try Binding_AnyStatement_ _YY_KW_But ButExpr AlwaysPart_AnyStatement_
+        { (void)parseDeprecated((TokenTag)_YY_KW_But, abNewNothing(TPOS($3))); $$ = abNewTry(TPOS($1),$2,$4->abSequence.argv[0], $4->abSequence.argv[1],$5); }
+| _YY_KW_Try Binding_AnyStatement_ _YY_KW_Catch ButExpr AlwaysPart_AnyStatement_
+        { $$ = abNewTry(TPOS($1),$2,$4->abSequence.argv[0], $4->abSequence.argv[1],$5); }
+| _YY_KW_Select Binding_AnyStatement_ _YY_KW_In Cases
+        { $$ = abNewSelect(TPOS($1),$2,$4); }
+| _YY_KW_Do Binding_AnyStatement_
+        { $$ = abNewDo(TPOS($1),$2); }
+| _YY_KW_Delay Binding_AnyStatement_
+        { $$ = abNewDelay(TPOS($1),$2); }
+| _YY_KW_Reference Binding_AnyStatement_
+        { $$ = abNewReference(TPOS($1),$2); }
+| _YY_KW_Generate GenBound Binding_AnyStatement_
+        { $$ = abNewGenerate(TPOS($1),$2,$3); }
+| _YY_KW_Assert Binding_AnyStatement_
+        { $$ = abNewAssert(TPOS($1),TEST($2)); }
+| _YY_KW_Iterate opt_Name_
+        { $$ = abNewIterate(TPOS($1),$2); }
+| _YY_KW_Break opt_Name_
+        { $$ = abNewBreak(TPOS($1),$2); }
+| _YY_KW_Return opt_Collection_
+        { $$ = abNewReturn(TPOS($1),$2); }
+| _YY_KW_Yield Binding_AnyStatement_
+        { $$ = abNewYield(TPOS($1),$2); }
+| _YY_KW_Except Binding_AnyStatement_
+        { $$ = parseDeprecated((TokenTag)_YY_KW_Except, abNewRaise(TPOS($1),$2)); }
+| _YY_KW_Throw Binding_AnyStatement_
+        { $$ = abNewRaise(TPOS($1),$2); }
+| _YY_KW_Goto Id
+        { $$ = abNewGoto(TPOS($1),$2); }
+| _YY_KW_Never
+        { $$ = abNewNever(TPOS($1)); }
+;
+
+GenBound
+: Nothing
+| _YY_KW_To CommaItem _YY_KW_Of
+        { $$ = $2; }
+;
+
+ButExpr
+: Nothing
+        { $$ = abNew(AB_Sequence, APOS($1), 2, abZip, abZip); }
+| DeclBinding _YY_KW_In Cases
+        { $$ = abNew(AB_Sequence, APOS($1), 2, $1, $3); }
+;
+
+Cases
+: Binding_Collection_
+;
+
+
+AlwaysPart_BalStatement_
+: _YY_KW_Always Binding_BalStatement_
+        { (void)parseDeprecated((TokenTag)_YY_KW_Always, abNewNothing(TPOS($1))); $$ = $2; }
+| _YY_KW_Finally Binding_BalStatement_
+        { $$ = $2; }
+| Nothing
+;
+AlwaysPart_AnyStatement_
+: _YY_KW_Always Binding_AnyStatement_
+        { (void)parseDeprecated((TokenTag)_YY_KW_Always, abNewNothing(TPOS($1))); $$ = $2; }
+| _YY_KW_Finally Binding_AnyStatement_
+        { $$ = $2; }
+| Nothing
+;
+
+
+Collection
+: Infixed
+| Infixed Iterators
+        { $$ = abNewCollectOL(APOS($1),$1,$2); listFree(AbSyn)($2); }
+;
+
+Iterators
+: Iterators1
+        { $$ = listNReverse(AbSyn)($1); }
+;
+
+Iterators1
+: Iterator
+        { $$ = listCons(AbSyn)($1, NULL); }
+| Iterators1 Iterator
+        { $$ = listCons(AbSyn)($2, $1); }
+;
+
+Iterator
+: _YY_KW_For ForLhs _YY_KW_In Infixed opt_SuchthatPart_
+        { $$ = abNewFor(TPOS($1),$2,$4,$5); }
+| _YY_KW_While Infixed
+        { $$ = abNewWhile(TPOS($1),TEST($2)); }
+;
+
+ForLhs
+: Infixed
+| _YY_KW_Free Infixed
+        { $$ = abNewFree(TPOS($1), $2); }
+| _YY_KW_Local Infixed
+        { $$ = abNewLocal(TPOS($1), $2); }
+| _YY_KW_Fluid Infixed
+        { $$ = abNewFluid(TPOS($1), $2); }
+;
+
+SuchthatPart
+: _YY_KW_Bar Infixed
+        { $$ = TEST($2); }
+;
+
+
+
+Infixed
+: InfixedExpr
+| InfixedExpr DeclPart
+        { $$ = abNewDeclare(APOS($1),$1,$2); }
+| Block
+;
+
+InfixedExpr
+: E11_Op_
+| E3
+;
+
+
+E3
+: E4
+| E3 _YY_KW_And E4
+        { $$ = abNewAnd(TPOS($2), TEST($1),TEST($3)); }
+| E3 _YY_KW_Or E4
+        { $$ = abNewOr(TPOS($2), TEST($1),TEST($3)); }
+| E3 LatticeOp E4
+        { $$ = abNewInfix(APOS($2),$2,$1,$3); }
+;
+
+E4
+: E5
+| E4 _YY_KW_Has E5
+        { $$ = abNewHas(TPOS($2),$1,$3); }
+| E4 RelationOp E5
+        { $$ = abNewInfix(APOS($2),$2,$1,$3); }
+| RelationOp E5
+        { $$ = abNewPrefix(APOS($1),$1,$2); }
+;
+
+E5
+: E6
+| E5 SegOp
+        { $$ = abNewPostfix(APOS($2),$2,$1); }
+| E5 SegOp E6
+        { $$ = abNewInfix(APOS($2),$2,$1,$3); }
+;
+
+E6
+: E7
+| E6 PlusOp E7
+        { $$ = abNewInfix(APOS($2),$2,$1,$3); }
+| PlusOp E7
+        { $$ = abNewPrefix(APOS($1),$1,$2); }
+;
+
+E7
+: E8
+| E7 QuotientOp E8
+        { $$ = abNewInfix(APOS($2),$2,$1,$3); }
+;
+
+E8
+: E9
+| E8 TimesOp E9
+        { $$ = abNewInfix(APOS($2),$2,$1,$3); }
+;
+
+E9
+: E11_E12_
+| E11_E12_ PowerOp E9
+        { $$ = abNewInfix(APOS($2),$2,$1,$3); }
+;
+
+
+E11_E12_
+: E12
+| E11_E12_ _YY_KW_2Colon E12
+        { $$ = abNewCoerceTo(TPOS($2),$1,$3); }
+| E11_E12_ _YY_KW_At E12
+        { $$ = abNewRestrictTo(TPOS($2),$1,$3); }
+| E11_E12_ _YY_KW_Pretend E12
+        { $$ = abNewPretendTo(TPOS($2),$1,$3); }
+;
+E11_Op_
+: Op
+| E11_Op_ _YY_KW_2Colon E12
+        { $$ = abNewCoerceTo(TPOS($2),$1,$3); }
+| E11_Op_ _YY_KW_At E12
+        { $$ = abNewRestrictTo(TPOS($2),$1,$3); }
+| E11_Op_ _YY_KW_Pretend E12
+        { $$ = abNewPretendTo(TPOS($2),$1,$3); }
+;
+
+Type
+: E11_E12_
+;
+
+E12
+: E13
+| E13 ArrowOp E12
+        { $$ = abNewInfix(APOS($2),$2,$1,$3); }
+;
+
+E13
+: E14
+| E14 _YY_KW_Dollar QualTail
+        { $$ = abNewQualify(TPOS($2),$1,$3); }
+;
+
+QualTail
+: LeftJuxtaposed
+| LeftJuxtaposed _YY_KW_Dollar QualTail
+        { $$ = abNewQualify(TPOS($2),$1,$3); }
+;
+
+OpQualTail
+: Molecule
+| Molecule _YY_KW_Dollar OpQualTail
+        { $$ = abNewQualify(TPOS($2),$1,$3); }
+;
+
+E14
+: E15
+| opt_E14_ _YY_KW_With DeclMolecule
+        { $$ = abNewWith(TPOS($2),$1,$3); }
+| opt_E14_ _YY_KW_Add DeclMolecule
+        { $$ = abNewAdd(TPOS($2),$1,$3); }
+| E14 _YY_KW_Except E15
+        { $$ = parseDeprecated((TokenTag)_YY_KW_Except, abNewExcept(TPOS($2),$1,$3)); }
+| E14 _YY_KW_Throw E15
+        { $$ = abNewExcept(TPOS($2),$1,$3); }
+;
+
+E15
+: Application
+;
+
+
+
+Op
+: ArrowOp
+| LatticeOp
+| RelationOp
+| SegOp
+| PlusOp
+| QuotientOp
+| TimesOp
+| PowerOp
+;
+
+NakedOp
+: UnqualOp_ArrowTok_
+| UnqualOp_LatticeTok_
+| UnqualOp_RelationTok_
+| UnqualOp_SegTok_
+| UnqualOp_PlusTok_
+| UnqualOp_QuotientTok_
+| UnqualOp_TimesTok_
+| UnqualOp_PowerTok_
+;
+
+
+ArrowOp:         QualOp_ArrowTok_;
+LatticeOp:       QualOp_LatticeTok_;
+RelationOp:      QualOp_RelationTok_;
+SegOp:           QualOp_SegTok_;
+PlusOp:          QualOp_PlusTok_;
+QuotientOp:      QualOp_QuotientTok_;
+TimesOp:         QualOp_TimesTok_;
+PowerOp:         QualOp_PowerTok_;
+
+ArrowTok:   _YY_KW_RArrow | _YY_KW_LArrow | _YY_KW_MapStar ;
+LatticeTok: _YY_KW_Vee    | _YY_KW_Wedge ;
+RelationTok:_YY_KW_EQ     | _YY_KW_TildeE | _YY_KW_HatE |
+                 _YY_KW_GE     | _YY_KW_GT     | _YY_KW_2GT  |
+                 _YY_KW_LE     | _YY_KW_LT     | _YY_KW_2LT  |
+                 _YY_KW_Is     | _YY_KW_Isnt   | _YY_KW_Case ;
+SegTok:     _YY_KW_2Dot   | _YY_KW_By ;
+PlusTok:    _YY_KW_Plus   | _YY_KW_Minus  | _YY_KW_PlusMinus ;
+QuotientTok:_YY_KW_Mod    | _YY_KW_Quo    | _YY_KW_Rem ;
+TimesTok:   _YY_KW_Star   | _YY_KW_Slash  | _YY_KW_Backslash ;
+PowerTok:   _YY_KW_2Star  | _YY_KW_Hat ;
+
+
+
+Application
+: RightJuxtaposed
+;
+
+RightJuxtaposed
+: Jright_Molecule_
+;
+
+LeftJuxtaposed
+: Jleft_Molecule_
+;
+
+
+Jright_Atom_
+: Jleft_Atom_
+| Jleft_Atom_ Jright_Atom_
+        { $$ = parseMakeJuxtapose($1,$2); }
+| _YY_KW_Not Jright_Atom_
+        { $$ = abNewNot(TPOS($1),TEST($2)); }
+;
+Jright_Molecule_
+: Jleft_Molecule_
+| Jleft_Molecule_ Jright_Atom_
+        { $$ = parseMakeJuxtapose($1,$2); }
+| _YY_KW_Not Jright_Atom_
+        { $$ = abNewNot(TPOS($1),TEST($2)); }
+;
+
+
+Jleft_Atom_
+: Atom
+| _YY_KW_Not BlockEnclosure
+        { $$ = abNewNot(TPOS($1),TEST($2)); }
+| Jleft_Atom_ BlockEnclosure
+        { $$ = parseMakeJuxtapose($1,$2); }
+| Jleft_Atom_ _YY_KW_Dot BlockMolecule
+        { $$ = abNewPrefix(TPOS($2),$1,$3); }
+;
+Jleft_Molecule_
+: Molecule
+| _YY_KW_Not BlockEnclosure
+        { $$ = abNewNot(TPOS($1),TEST($2)); }
+| Jleft_Molecule_ BlockEnclosure
+        { $$ = parseMakeJuxtapose($1,$2); }
+| Jleft_Molecule_ _YY_KW_Dot BlockMolecule
+        { $$ = abNewPrefix(TPOS($2),$1,$3); }
+;
+
+
+Molecule
+: Atom
+| Enclosure
+;
+
+Enclosure
+: Parened
+| Bracketed
+| QuotedIds
+;
+
+DeclMolecule
+: opt_Application_
+| Block
+;
+
+BlockMolecule
+: Atom
+| Enclosure
+| Block
+;
+
+BlockEnclosure
+: Enclosure
+| Block
+;
+
+Block
+: Piled_Expression_
+| Curly_Labeled_
+;
+
+Parened
+: _YY_KW_OParen _YY_KW_CParen
+        {
+          $$ = abNewParen(TPOS($1), abNewComma0(TPOS($1)));
+          abSetEnd($$, TEND($2));
+        }
+| _YY_KW_OParen Expression _YY_KW_CParen
+        { $$ = abNewParen(TPOS($1), $2); abSetEnd($$, TEND($3)); }
+;
+
+Bracketed
+: _YY_KW_OBrack _YY_KW_CBrack
+        {
+          $$ = abNewMatchfix(TPOS($1),
+                             abNewId(TPOS($1),ssymBracket),
+                             abNewComma0(TPOS($1)));
+          abSetEnd($$, TEND($2));
+        }
+| _YY_KW_OBrack Expression _YY_KW_CBrack
+        {
+          $$ = abNewMatchfix(TPOS($1),
+                             abNewId(TPOS($1),ssymBracket),
+                             $2);
+          abSetEnd($$, TEND($3));
+        }
+;
+
+QuotedIds
+: _YY_KW_Quote _YY_KW_Quote
+        {
+          $$ = abNewMatchfix(TPOS($1),
+                             abNewId(TPOS($1),ssymEnum),
+                             abNewComma0(TPOS($1)));
+          abSetEnd($$, TEND($2));
+        }
+| _YY_KW_Quote Names _YY_KW_Quote
+        {
+          $$ = abNewMatchfix(TPOS($1),
+                             abNewId(TPOS($1),ssymEnum),
+                             $2);
+          abSetEnd($$, TEND($3));
+        }
+;
+Names
+: enlist1_Name__YY_KW_Comma_AB_Comma_
+;
+
+
+Atom
+: Id
+| Literal
+;
+
+Name
+: Id
+| NakedOp
+;
+
+Id
+: _YY_TK_Id
+        { $$ = abNewOfToken(AB_Id,    $1); }
+| _YY_KW_Sharp
+        { $$ = abNewOfToken(AB_Id,    $1); }
+| _YY_KW_Tilde
+        { $$ = abNewOfToken(AB_Id,    $1); }
+;
+
+
+Literal
+: _YY_TK_Int
+        { $$ = abNewOfToken(AB_LitInteger, $1); }
+| _YY_TK_Float
+        { $$ = abNewOfToken(AB_LitFloat,   $1); }
+| _YY_TK_String
+        { $$ = abNewOfToken(AB_LitString,  $1); }
+;
+
+
+
+Nothing
+:
+        { $$ = abZip; }
+;
+
+
+UnqualOp_PowerTok_
+: PowerTok
+        { $$ = abNewOfToken(AB_Id, $1); }
+;
+UnqualOp_TimesTok_
+: TimesTok
+        { $$ = abNewOfToken(AB_Id, $1); }
+;
+UnqualOp_QuotientTok_
+: QuotientTok
+        { $$ = abNewOfToken(AB_Id, $1); }
+;
+UnqualOp_PlusTok_
+: PlusTok
+        { $$ = abNewOfToken(AB_Id, $1); }
+;
+UnqualOp_SegTok_
+: SegTok
+        { $$ = abNewOfToken(AB_Id, $1); }
+;
+UnqualOp_RelationTok_
+: RelationTok
+        { $$ = abNewOfToken(AB_Id, $1); }
+;
+UnqualOp_LatticeTok_
+: LatticeTok
+        { $$ = abNewOfToken(AB_Id, $1); }
+;
+UnqualOp_ArrowTok_
+: ArrowTok
+        { $$ = abNewOfToken(AB_Id, $1); }
+;
+
+
+QualOp_PowerTok_
+: PowerTok
+        { $$ = abNewOfToken(AB_Id, $1); }
+| PowerTok _YY_KW_Dollar OpQualTail
+        { $$ = abNewQualify(TPOS($1), abNewOfToken(AB_Id, $1), $3); }
+;
+QualOp_TimesTok_
+: TimesTok
+        { $$ = abNewOfToken(AB_Id, $1); }
+| TimesTok _YY_KW_Dollar OpQualTail
+        { $$ = abNewQualify(TPOS($1), abNewOfToken(AB_Id, $1), $3); }
+;
+QualOp_QuotientTok_
+: QuotientTok
+        { $$ = abNewOfToken(AB_Id, $1); }
+| QuotientTok _YY_KW_Dollar OpQualTail
+        { $$ = abNewQualify(TPOS($1), abNewOfToken(AB_Id, $1), $3); }
+;
+QualOp_PlusTok_
+: PlusTok
+        { $$ = abNewOfToken(AB_Id, $1); }
+| PlusTok _YY_KW_Dollar OpQualTail
+        { $$ = abNewQualify(TPOS($1), abNewOfToken(AB_Id, $1), $3); }
+;
+QualOp_SegTok_
+: SegTok
+        { $$ = abNewOfToken(AB_Id, $1); }
+| SegTok _YY_KW_Dollar OpQualTail
+        { $$ = abNewQualify(TPOS($1), abNewOfToken(AB_Id, $1), $3); }
+;
+QualOp_RelationTok_
+: RelationTok
+        { $$ = abNewOfToken(AB_Id, $1); }
+| RelationTok _YY_KW_Dollar OpQualTail
+        { $$ = abNewQualify(TPOS($1), abNewOfToken(AB_Id, $1), $3); }
+;
+QualOp_LatticeTok_
+: LatticeTok
+        { $$ = abNewOfToken(AB_Id, $1); }
+| LatticeTok _YY_KW_Dollar OpQualTail
+        { $$ = abNewQualify(TPOS($1), abNewOfToken(AB_Id, $1), $3); }
+;
+QualOp_ArrowTok_
+: ArrowTok
+        { $$ = abNewOfToken(AB_Id, $1); }
+| ArrowTok _YY_KW_Dollar OpQualTail
+        { $$ = abNewQualify(TPOS($1), abNewOfToken(AB_Id, $1), $3); }
+;
+
+
+opt_Application_
+: Nothing
+| Application
+;
+opt_E14_
+: Nothing
+| E14
+;
+opt_SuchthatPart_
+: Nothing
+| SuchthatPart
+;
+opt_Collection_
+: Nothing
+| Collection
+;
+opt_Name_
+: Nothing
+| Name
+;
+opt_FromPart_
+: Nothing
+| FromPart
+;
+opt_Sig_
+: Nothing
+| Sig
+;
+opt_Labeled_
+: Nothing
+| Labeled
+;
+
+
+
+
+Doc_Expression_
+: PreDocument Expression PostDocument
+        {
+          $$ = $2;
+          if($3) $$ = abNewDocumented(APOS($3),$$,$3);
+          if($1) $$ = abNewDocumented(APOS($$),$$,$1);
+        }
+;
+
+PreDocument
+: PreDocumentList
+        { $$ = abNewDocTextOfList($1); listFree(Token)($1); }
+;
+
+PostDocument
+: PostDocumentList
+        { $$ = abNewDocTextOfList($1); listFree(Token)($1); }
+;
+
+PreDocumentList
+: Nothing
+        { $$ = listNil(Token); }
+| _YY_TK_PreDoc PreDocumentList
+        { $$ = listCons(Token)($1, $2); }
+;
+
+PostDocumentList
+: Nothing
+        { $$ = listNil(Token); }
+| _YY_TK_PostDoc PostDocumentList
+        { $$ = listCons(Token)($1, $2); }
+;
+
+
+
+enlist1_Name__YY_KW_Comma_AB_Comma_
+: enlister1_Name__YY_KW_Comma_
+
+        { $$ = abOneOrNewOfList(AB_Comma, $1); listFree(AbSyn)($1); }
+;
+enlist1_InfixedExpr__YY_KW_Comma_AB_Comma_
+: enlister1_InfixedExpr__YY_KW_Comma_
+
+        { $$ = abOneOrNewOfList(AB_Comma, $1); listFree(AbSyn)($1); }
+;
+enlist1_CommaItem__YY_KW_Comma_AB_Comma_
+: enlister1_CommaItem__YY_KW_Comma_
+
+        { $$ = abOneOrNewOfList(AB_Comma, $1); listFree(AbSyn)($1); }
+;
+enlist1_Infixed__YY_KW_Comma_AB_Comma_
+: enlister1_Infixed__YY_KW_Comma_
+
+        { $$ = abOneOrNewOfList(AB_Comma, $1); listFree(AbSyn)($1); }
+;
+
+
+
+
+enlister1_Name__YY_KW_Comma_
+: Name
+        { $$ = listCons(AbSyn)($1, listNil(AbSyn) ); }
+| enlister1_Name__YY_KW_Comma_ _YY_KW_Comma Name
+        { $$ = listCons(AbSyn)($3, $1); }
+;
+enlister1_InfixedExpr__YY_KW_Comma_
+: InfixedExpr
+        { $$ = listCons(AbSyn)($1, listNil(AbSyn) ); }
+| enlister1_InfixedExpr__YY_KW_Comma_ _YY_KW_Comma InfixedExpr
+        { $$ = listCons(AbSyn)($3, $1); }
+;
+enlister1_CommaItem__YY_KW_Comma_
+: CommaItem
+        { $$ = listCons(AbSyn)($1, listNil(AbSyn) ); }
+| enlister1_CommaItem__YY_KW_Comma_ _YY_KW_Comma CommaItem
+        { $$ = listCons(AbSyn)($3, $1); }
+;
+enlister1_Infixed__YY_KW_Comma_
+: Infixed
+        { $$ = listCons(AbSyn)($1, listNil(AbSyn) ); }
+| enlister1_Infixed__YY_KW_Comma_ _YY_KW_Comma Infixed
+        { $$ = listCons(AbSyn)($3, $1); }
+;
+
+
+
+
+enlist1a_Labeled__YY_KW_Semicolon_AB_Sequence_
+: enlister1a_Labeled__YY_KW_Semicolon_
+        { $$ = abOneOrNewOfList(AB_Sequence, $1); listFree(AbSyn)($1); }
+;
+
+
+enlister1a_Labeled__YY_KW_Semicolon_
+: Labeled
+        { $$ = listCons(AbSyn)($1, listNil(AbSyn) ); }
+| enlister1a_Labeled__YY_KW_Semicolon_ _YY_KW_Semicolon Labeled
+        { $$ = listCons(AbSyn)($3, $1); }
+| enlister1a_Labeled__YY_KW_Semicolon_ _YY_KW_Semicolon
+        { $$ = $1; }
+;
+
+
+
+Piled_Expression_
+: _YY_KW_SetTab PileContents_Expression_ _YY_KW_BackTab
+        { $$ = abOneOrNewOfList(AB_Sequence,$2); listFree(AbSyn)($2); }
+;
+
+
+Curly_Labeled_
+: _YY_KW_OCurly CurlyContents_Labeled_ _YY_KW_CCurly
+        { $$ = $2; abSetPos($$, TPOS($1)); abSetEnd($$, TEND($3)); }
+;
+
+
+PileContents_Expression_
+: Doc_Expression_
+        { $$ = listCons(AbSyn)($1, listNil(AbSyn)); }
+| PileContents_Expression_ _YY_KW_BackSet Doc_Expression_
+        { $$ = listCons(AbSyn)($3, $1); }
+| error _YY_KW_BackSet Doc_Expression_
+        { yyerrok; $$ = listCons(AbSyn)($3, listNil(AbSyn)); }
+;
+
+
+CurlyContents_Labeled_
+: CurlyContentsList_Labeled_
+        { $$ = abOneOrNewOfList(AB_Sequence,$1); listFree(AbSyn)($1); }
+;
+
+
+CurlyContentsList_Labeled_
+: CurlyContent1_Labeled_
+| CurlyContent1_Labeled_ CurlyContentB_Labeled_
+        { $$ = listCons(AbSyn)($2, $1); }
+;
+
+
+CurlyContent1_Labeled_
+: Nothing
+        { $$ = listNil(AbSyn); }
+| CurlyContent1_Labeled_ CurlyContentA_Labeled_
+        { $$ = listCons(AbSyn)($2, $1); }
+;
+
+
+CurlyContentA_Labeled_
+: CurlyContentB_Labeled_ _YY_KW_Semicolon PostDocument
+        { $$ = $1; if($3) $$ = abNewDocumented(APOS($3),$$,$3); }
+| error _YY_KW_Semicolon PostDocument
+        { yyerrok; $$ = abNewNothing(TPOS($2)); }
+;
+
+
+CurlyContentB_Labeled_
+: PreDocument Labeled PostDocument
+        {
+          $$ = $2;
+          if($1) $$ = abNewDocumented(APOS($1),$$,$1);
+          if($3) $$ = abNewDocumented(APOS($$),$$,$3);
+        }
+;
+%%

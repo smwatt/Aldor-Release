@@ -1,0 +1,14 @@
+#!/bin/bash
+# Compare textual test results portably.  The only generic canonicalization is
+# CRLF -> LF; all other bytes, including trailing blank lines, are significant.
+set -e
+if [ "$#" -ne 2 ]; then
+    echo "usage: testcmp reference actual" >&2
+    exit 2
+fi
+r=$(mktemp "${TMPDIR:-/tmp}/aldor-testcmp-r.XXXXXX")
+a=$(mktemp "${TMPDIR:-/tmp}/aldor-testcmp-a.XXXXXX")
+trap 'rm -f "$r" "$a"' EXIT HUP INT TERM
+tr -d '\r' < "$1" > "$r"
+tr -d '\r' < "$2" > "$a"
+cmp -s "$r" "$a"

@@ -1,0 +1,16 @@
+#!/bin/sh
+#
+# Portable archive-index wrapper for contemporary toolchains.
+
+if [ -n "${HOST_RANLIB:-}" ]; then
+    ranlib=$HOST_RANLIB
+elif [ -n "${ALDOR_RANLIB:-}" ]; then
+    ranlib=$ALDOR_RANLIB
+elif [ -n "${RANLIB:-}" ]; then
+    ranlib=$RANLIB
+elif [ "$(uname -s 2>/dev/null)" = Darwin ] && [ -x /usr/bin/ranlib ]; then
+    ranlib=/usr/bin/ranlib
+else
+    ranlib=ranlib
+fi
+exec "$ranlib" ${ALDOR_RANLIB_FLAGS:-} "$@"

@@ -1,0 +1,28 @@
+Aldor 1.5.0 Licensing
+=====================
+
+Except where stated otherwise, the Aldor 1.5.0 compiler, runtime, tools and
+core libraries are licensed under the Apache License, Version 2.0.
+
+The complete Apache License 2.0 text is in LICENSE-APACHE2.
+
+Using the Aldor compiler does not by itself impose a license on source
+programs or on code generated solely from those programs.  Aldor or
+third-party components incorporated into a resulting program remain subject
+to their applicable licenses.  In particular, the Aldor runtime is covered by
+the same Apache License 2.0 terms as the compiler; no separate runtime
+exception is required.
+
+Copyright and provenance information is in COPYRIGHT.
+
+Licensing of earlier Aldor versions is recorded in LICENSE-HISTORY.md.
+
+The following components have separate licensing terms:
+
+    ../lib/algebra/
+    ../aldor/contrib/frisco/
+
+Notices within those components apply.
+
+Individual files bearing separate licensing terms are governed by those
+terms.

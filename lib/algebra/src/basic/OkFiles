@@ -1,0 +1,10 @@
+build.sh 
+
+sit_complex.as
+sit_indvar.as
+sit_interp.as
+sit_mkpring.as
+sit_permut.as
+sit_pring.as
+sit_product.as
+sit_shell.as

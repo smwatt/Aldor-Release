@@ -1,0 +1,9 @@
+"bug1170.as", line 12: } == add {
+                       .........^
+[L12 C10] #7 (Warning) Domains with implicit exports must define Rep (as a constant not a macro)
+
+"bug1170.as", line 21:         if R has Monoid then {
+                       .............................^
+[L21 C30] #1 (Warning) Domains with implicit exports must define Rep (as a constant not a macro)
+
+bad bug!

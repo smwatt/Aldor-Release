@@ -1,0 +1,81 @@
+diff --git a/distro/aldor/src/gf_add.cpp b/distro/aldor/src/gf_add.cpp
+index 341f7d6..eb1b429 100755
+--- a/distro/aldor/src/gf_add.cpp
++++ b/distro/aldor/src/gf_add.cpp
+@@ -2513,23 +2513,23 @@ gen0RtIsProgInfoNull(Foam foam)
+ }
+ 
+ 
+-/*
+- * Canonical-word AldorHash32 type-code combine.
+- *
+- * String/syntax components are reduced to canonical words at compile time.
+- * Runtime-generated type codes combine those words with exact uint32
+- * xor/multiply semantics implemented by FOAM_BVal_AldorHash32Combine.
+- */
++/* Historical v0.01 export-type hash bridge for benchmark support roots. */
++#define HashModulus (gen0SmallHashCodes ? 0x07FFFFD9 : 0x3FFFFFDD)
++#define ShiftMask   0x00FFFFFF
++
+ local Foam
+ gen0CombineHash(Foam hash1, Foam hash0)
+ {
+-        return foamNew(FOAM_BCall, 3, FOAM_BVal_AldorHash32Combine,
+-                       hash1, hash0);
++        Foam bcall;
++        bcall = foamNew(FOAM_BCall, 3, FOAM_BVal_SIntAnd,
++                        hash0, foamNewSInt(ShiftMask));
++        bcall = foamNew(FOAM_BCall, 3, FOAM_BVal_SIntShiftUp,
++                        bcall, foamNewSInt(6));
++        bcall = foamNew(FOAM_BCall, 4, FOAM_BVal_SIntPlusMod,
++                        hash1, bcall, foamNewSInt(HashModulus));
++        return bcall;
+ }
+ 
+-/* Name and syntax words remain compile-time-only in this iteration. */
+-#define HashModulus (gen0SmallHashCodes ? 0x07FFFFD9 : 0x3FFFFFDD)
+-
+ int
+ gen0StrHash(String s)
+ {
+diff --git a/distro/aldor/src/lib.cpp b/distro/aldor/src/lib.cpp
+index 39d5f05..92cb61b 100755
+--- a/distro/aldor/src/lib.cpp
++++ b/distro/aldor/src/lib.cpp
+@@ -48,11 +48,18 @@ libExternalPayloadOffset(FILE *f, Offset pos)
+ {
+         unsigned char h[libExtHdrSize];
+         if (fseek(f, pos, SEEK_SET) != 0 ||
+-            fread(h, 1, libExtHdrSize, f) != libExtHdrSize ||
+-            memcmp(h, libExtMagic, 6) != 0 ||
+-            h[6] != libExtVersion || h[7] != libExtCompression)
++            fread(h, 1, libExtHdrSize, f) != libExtHdrSize)
+                 return (Offset) -1;
+-        return pos + libExtHdrSize;
++
++        /* Benchmark bridge compatibility: accept both the v0.18 external
++         * envelope and the historical raw .ao payload.  The bridge writes
++         * raw payloads so the original v0.01 compiler can read the generated
++         * support libraries. */
++        if (memcmp(h, libExtMagic, 6) == 0 &&
++            h[6] == libExtVersion && h[7] == libExtCompression)
++                return pos + libExtHdrSize;
++
++        return pos;
+ }
+ 
+ /*
+@@ -309,10 +316,9 @@ libRead(FileName fname)
+ Lib
+ libWrite(FileName fname)
+ {
+-        FILE *f = fileWubOpen(fname);
+-        if (!libWriteExternalHeader(f))
+-                comsgFatal(NULL, ALDOR_F_CantOpen, fname.unparseStaticWithout());
+-        return libNew(fname, false, f, (Offset) libExtHdrSize);
++        /* Benchmark bridge compatibility: emit the historical raw .ao
++         * payload, without the v0.18 external envelope. */
++        return libNew(fname, false, fileWubOpen(fname), (Offset) 0);
+ }
+ 
+ /*

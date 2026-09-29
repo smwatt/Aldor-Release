@@ -1,0 +1,64 @@
+Aldor
+
+Copyright (c) 1990-2007 Aldor Software Organization Ltd (Aldor.org).
+
+Type "#int help" for more details.
+timing is off.
+10 @ Integer
+^
+[L10 C1] #1 (Error) Variables cannot have different types in the same scope.
+
+10 @ Integer
+1 @ Integer
+^
+[L13 C1] #1 (Error) Variables cannot have different types in the same scope.
+
+.........^
+[L15 C10] #1 (Error) There is no suitable interpretation for the expression "fads"
+  The context requires an expression of type Integer.
+     The possible types of the right hand side (`"fads"') are:
+          -- String
+
+1 @ Integer
+................^
+[L18 C17] #1 (Error) No meaning for integer-style literal `2'.
+
+Defined foo @ (x: Boolean) -> Boolean
+false @ Boolean
+Defined foo @ (x: SingleInteger) -> SingleInteger
+32 @ SingleInteger
+true @ Boolean
+Redefine? (y/n): foo redefined.
+Defined foo @ (x: Boolean) -> Boolean
+false @ Boolean
+.........^
+[L30 C10] #1 (Error) There are 0 meanings for `false' in this context.
+The possible types were:
+	  false: Boolean from Boolean
+  The context requires an expression of type SingleFloat.
+
+.....^
+[L31 C6] #1 (Error) No meaning for float-style literal `1.0'.
+
+.........^
+[L32 C10] #1 (Error) There is no suitable interpretation for the expression false
+  The context requires an expression of type SingleFloat.
+     The possible types of the right hand side (`false') are:
+          -- Boolean
+
+.....^
+[L33 C6] #1 (Error) No meaning for float-style literal `1.0'.
+
+3 @ SingleFloat
+1 @ SingleFloat
+3 @ SingleFloat
+Defined gg @ (x: Integer) -> Integer
+10 @ Integer
+Redefine? (y/n): gg redefined.
+.............^
+[L40 C14] #1 (Error) There are 0 meanings for `false' in this context.
+The possible types were:
+	  false: Boolean from Boolean
+  The context requires an expression of type Integer.
+
+10 @ Integer

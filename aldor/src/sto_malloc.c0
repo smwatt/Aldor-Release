@@ -1,0 +1,27 @@
+/*****************************************************************************
+ * sto_malloc.c0: Malloc StoreManager.
+ ****************************************************************************/
+#if !defined(_STO_MALLOC_C0_) && defined(STO_USE) && STO_USE == STO_USE_MALLOC
+#define _STO_MALLOC_C0_
+
+#include <stdlib.h>
+
+class MallocStoreManager {
+public:
+        static inline void *allocate(Length size)
+        {
+                return malloc(size);
+        }
+        static inline void deallocate(void *p)
+        {
+                free(p);
+        }
+        static inline void *resize(void *p, Length, Length newSize)
+        {
+                return realloc(p, newSize);
+        }
+};
+
+using SelectedStoreManager = MallocStoreManager;
+#include "sto_layer.c0"
+#endif

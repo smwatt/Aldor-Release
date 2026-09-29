@@ -1,0 +1,79 @@
+#!/bin/sh
+#
+# doaldor $(FILE) $(LIB) [as/ax] [AXLFLAGS ...]
+#
+# example:  doaldor lang axllib
+
+# Command line arguments
+# -l: Set library directory
+
+export PATH="$ALDORROOT/bin:$PATH"
+
+# ${ALDORROOT} is retrieved from the environment.
+LibDir="${ALDORROOT}/lib"
+
+if [ $# -gt 0 ]; then
+    case "$1" in
+        -l) LibDir=$2; shift 2 ;;
+        *)  ;;
+    esac
+fi
+
+FILE=$1
+LIB=$2
+shift 2
+
+TYPE=as
+DOBJ=yes
+
+if [ $# -gt 0 ]; then
+    case "$1" in
+        as) TYPE=as; DOBJ=no; shift ;;
+        ax) TYPE=ax; DOBJ=no; shift ;;
+        *)  ;;
+    esac
+fi
+
+# Keep the remaining compiler flags in "$@".  Do not collapse them into a
+# string: library/build roots are allowed to contain whitespace.
+LAXL="${LibDir}/lib${LIB}.al"
+LOB="${LibDir}/lib${LIB}.a"
+
+ALDOR=aldor
+if [ "$MACHINE" = win32gcc ]; then
+    ALDOR=aldor.sh
+fi
+
+TMPDIR=/tmp/doaldor.$$
+mkdir -p "$TMPDIR"
+export TMPDIR
+
+# Remove the ao file from the library, compile the file, update the libraries.
+# The diagnostic deliberately omits the absolute -R path.  The replacement
+# archive tests have always canonicalized that path away, and omitting it here
+# keeps their output independent of whitespace in the build root.
+if [ "$DOBJ" = yes ]; then
+    echo "$ALDOR -Q3 -Qinline-all -Fao -Fo $* -M no-ALDOR_W_OverRideLibraryFile ${FILE}.${TYPE}"
+    "$ALDOR" "-R${LibDir}" -Q3 -Qinline-all -Fao -Fo "$@" \
+        -M no-ALDOR_W_OverRideLibraryFile "${FILE}.${TYPE}"
+else
+    echo "$ALDOR -Q3 -Qinline-all -Fao $* -M no-ALDOR_W_OverRideLibraryFile ${FILE}.${TYPE}"
+    "$ALDOR" "-R${LibDir}" -Q3 -Qinline-all -Fao "$@" \
+        -M no-ALDOR_W_OverRideLibraryFile "${FILE}.${TYPE}"
+fi
+status=$?
+
+if [ "$status" -eq 0 ]; then
+    cd "$LibDir" || exit 1
+    FILEPREF=$(printf '%s\n' "$FILE" | awk '{printf("%.5s", $0)}')
+
+    uniar rv "$LAXL" "${FILE}.ao"
+    if [ "$DOBJ" = yes ]; then
+        ar rv "$LOB" "${FILEPREF}"*.o
+    fi
+    rm -f "${FILE}.ao" "${FILEPREF}"*.o
+    rm -rf "$TMPDIR"
+else
+    rm -rf "$TMPDIR"
+    exit "$status"
+fi

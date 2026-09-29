@@ -1,0 +1,57 @@
+Aldor
+
+Copyright (c) 1990-2007 Aldor Software Organization Ltd (Aldor.org).
+
+Type "#int help" for more details.
+timing is off.
+block 1:
+list(Natascia
+, Natascia
+, Natascia
+, Natascia
+, Natascia
+, Natascia
+, Natascia
+, Natascia
+, Natascia
+, Natascia
+)
+done
+The tree is tree(*, tree(1, tree a, tree b), tree(2, tree c, tree d))
+Preorder: * 1 a b 2 c d 
+Inorder: a 1 b * c 2 d 
+Postorder: a b 1 c d 2 * 
+"tree.as", line 5: #pile
+                   ^
+[L5 C1] #1 (Warning) Unbalanced `#pile' -- missing `#endpile'.
+
+"tree.as", line 23:         add {
+                    ............^
+[L23 C13] #2 (Warning) Domains with implicit exports must define Rep (as a constant not a macro)
+
+#<d1:>
+#<d2:>
+hello
+there
+1
+#<d1: #<d2: hello> #<d2: there> #<d2: #<d2: 1>>>
+"tree1.as", line 3: #pile
+                    ^
+[L3 C1] #1 (Warning) Unbalanced `#pile' -- missing `#endpile'.
+
+"tree1.as", line 15: } ==  add {
+                     ..........^
+[L15 C11] #4 (Warning) Domains with implicit exports must define Rep (as a constant not a macro)
+
+"tree1.as", line 16:         Rep==> Union(x: SingleInteger, ol: List D2);
+                     ...............^
+[L16 C16] #2 (Warning) Definition of macro `Rep' hides an outer definition.
+
+"tree1.as", line 48: } ==  add {
+                     ..........^
+[L48 C11] #10 (Warning) Domains with implicit exports must define Rep (as a constant not a macro)
+
+"tree1.as", line 49:         Rep==> Union(x: String, ol: List D1);
+                     ...............^
+[L49 C16] #3 (Warning) Definition of macro `Rep' hides an outer definition.
+

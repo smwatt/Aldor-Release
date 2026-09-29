@@ -1,0 +1,20 @@
+build.sh OkFiles
+
+sal_arith.as
+sal_binpow.as
+sal_bool.as
+sal_bsearch.as
+sal_complex.as
+sal_dfloat.as
+sal_fltcat.as
+sal_ftools.as
+sal_int.as
+sal_intcat.as
+sal_itools.as
+sal_lincomb.as
+sal_mint.as
+sal_oarith.as
+sal_pointer.as
+sal_random.as
+sal_segment.as
+sal_sfloat.as

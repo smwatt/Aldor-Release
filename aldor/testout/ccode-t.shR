@@ -1,0 +1,307 @@
+===========================================================
+===  Test "ccode"
+===========================================================
+Parenthesization: 
+(d *= e) = f += g * (h + i + (j + k))
+
+Copy:
+(d *= e) = f += g * (h + i + (j + k))
+
+Original:
+(d *= e) = f += g * (h + i + (j + k))
+
+An entire program:
+
+extern int  main(int  , char  *[]);
+
+int 
+main(int  argc, char  *argv[])
+{
+        static int  i;
+        const char  *fmt = " %s";
+        for (i = 0L; i < argc; i++) 
+                switch (i) {
+                case 0L: printf("The arguments are:");
+                        break;
+                default: 
+                        printf(fmt, argv[i]);
+                }
+        printf("\n");
+        return 0L;
+}
+
+And now in K+R C:
+
+extern int  main();
+
+int 
+main(argc, argv)
+        int  argc;
+        char  *argv[];
+{
+        static int  i;
+        char  *fmt = " %s";
+        for (i = 0L; i < argc; i++) 
+                switch (i) {
+                case 0L: printf("The arguments are:");
+                        break;
+                default: 
+                        printf(fmt, argv[i]);
+                }
+        printf("\n");
+        return 0L;
+}
+
+An entire program:
+
+extern int  main(int  , char  *[]);
+typedef enum Object {
+        Obj_Name = OBJ_LIMIT,
+        Obj_Type,
+        Obj_Code,
+        LIMIT
+} 
+typedef union u_ref {
+        float  fval;
+        double  dval;
+} 
+typedef 
+struct symtab {
+        short  n;
+        unsigned int  bit : 1L;
+        union u_ref  u;
+} 
+typedef register long  Length;
+struct symtab  *sym[10L];
+enum Object  obj;
+
+void 
+error(char  *fmt, ...)
+{
+        va_list args;
+        
+        va_start(args, fmt);
+        fprintf(stderr, "error: ");
+        vprintf(stderr, fmt, args);
+        fprintf(stderr, "\n");
+        va_end(args);
+        exit(1L);
+}
+
+void 
+fxn(short  flag, char  c)
+{
+        auto unsigned  x;
+        signed  y;
+        Length length;
+        
+        flag |= sizeof(char );
+        length >>= +flag;
+        x -= x & (~1L);
+        y <<= (x | (y) ? x << -y : x >> y);
+        flag &= x ^ y;
+}
+
+int 
+calc(int  num, char  *vals[])
+{
+        float  f1, f2;
+        double  d;
+        volatile short  flag;
+        
+        fxn(&flag, vals[--num]);
+        f1 /= sym[num--]->(u.fval);
+        if (d > (double) 3.1415) {
+                d = sym[num - 1L]->(u.dval);
+                d = d / (double) f1;
+                continue;
+        }
+        else {
+                flag %= (short) f2;
+                flag ^= 1L;
+        }
+        return (int) flag;
+}
+
+int 
+main(int  argc, char  *argv[])
+{
+        static int  i, j, id;
+        const char  *fmt = " %s";
+        char  ll[] = {
+                'a',
+                'b'
+        };
+        
+here:	printf("Start here.\n");
+        id = calc(argc, argv);
+        while (i < argc) {
+                do {
+                        if (i >= OBJ_LIMIT) 
+                                printf("\t\t");
+                        else {
+                                ++i;
+                                printf("\t\n");
+                        }
+                        printf("\n\n");
+                } while (i < id);
+                if (i != 0L && !(i == i % 2L)) 
+                        goto here;
+                else 
+                        printf(fmt, argv[i]);
+                if (i == 1L || i != 0L) {
+                        for (j = 0L; j < id; j++) 
+                                if (i > id) printf("A nested if.");
+                }
+                else 
+                        printf("\n");
+                if (i > 2L) 
+                        printf("i is > 2");
+                else {
+                        printf("\n");
+                        printf(fmt, argv[i]);
+                }
+                if (i <= 3L) {
+                        printf("\n");
+                        printf("i is <= 3");
+                }
+                else {
+                        printf("\n");
+                        printf(fmt, argv[i]);
+                }
+        }
+        printf("\n");
+        return 0L;
+}
+
+And now in K+R C:
+
+extern int  main();
+typedef enum Object {
+        Obj_Name = OBJ_LIMIT,
+        Obj_Type,
+        Obj_Code,
+        LIMIT
+} 
+typedef union u_ref {
+        float  fval;
+        double  dval;
+} 
+typedef 
+struct symtab {
+        short  n;
+        unsigned int  bit : 1L;
+        union u_ref  u;
+} 
+typedef register long  Length;
+struct symtab  *sym[10L];
+enum Object  obj;
+
+void 
+error(fmt, )
+        char  *fmt;
+{
+        va_list args;
+        
+        va_start(args, fmt);
+        fprintf(stderr, "error: ");
+        vprintf(stderr, fmt, args);
+        fprintf(stderr, "\n");
+        va_end(args);
+        exit(1L);
+}
+
+void 
+fxn(flag, c)
+        short  flag;
+        char  c;
+{
+        auto unsigned  x;
+        signed  y;
+        Length length;
+        
+        flag |= sizeof(char );
+        length >>= +flag;
+        x -= x & (~1L);
+        y <<= (x | (y) ? x << -y : x >> y);
+        flag &= x ^ y;
+}
+
+int 
+calc(num, vals)
+        int  num;
+        char  *vals[];
+{
+        float  f1, f2;
+        double  d;
+        short  flag;
+        
+        fxn(&flag, vals[--num]);
+        f1 /= sym[num--]->(u.fval);
+        if (d > (double) 3.1415) {
+                d = sym[num - 1L]->(u.dval);
+                d = d / (double) f1;
+                continue;
+        }
+        else {
+                flag %= (short) f2;
+                flag ^= 1L;
+        }
+        return (int) flag;
+}
+
+int 
+main(argc, argv)
+        int  argc;
+        char  *argv[];
+{
+        static int  i, j, id;
+        char  *fmt = " %s";
+        char  ll[] = {
+                'a',
+                'b'
+        };
+        
+here:	printf("Start here.\n");
+        id = calc(argc, argv);
+        while (i < argc) {
+                do {
+                        if (i >= OBJ_LIMIT) 
+                                printf("\t\t");
+                        else {
+                                ++i;
+                                printf("\t\n");
+                        }
+                        printf("\n\n");
+                } while (i < id);
+                if (i != 0L && !(i == i % 2L)) 
+                        goto here;
+                else 
+                        printf(fmt, argv[i]);
+                if (i == 1L || i != 0L) {
+                        for (j = 0L; j < id; j++) 
+                                if (i > id) printf("A nested if.");
+                }
+                else 
+                        printf("\n");
+                if (i > 2L) 
+                        printf("i is > 2");
+                else {
+                        printf("\n");
+                        printf(fmt, argv[i]);
+                }
+                if (i <= 3L) {
+                        printf("\n");
+                        printf("i is <= 3");
+                }
+                else {
+                        printf("\n");
+                        printf(fmt, argv[i]);
+                }
+        }
+        printf("\n");
+        return 0L;
+}
+
+Now free it: DONE
+Test "ccode" completed.

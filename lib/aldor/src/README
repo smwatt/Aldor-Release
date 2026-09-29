@@ -1,0 +1,19 @@
+libaldor source tree
+===================
+
+This directory contains the source of the base Aldor library.  The former
+[g]make targets in this directory were retired in modernization v0.02.
+
+Build the library through the supported recursive build system.  Normally,
+from the distribution root:
+
+    bash build.sh build
+
+After the Aldor compiler and its prerequisites have already been built, the
+library may be rebuilt directly with:
+
+    (cd lib/aldor && bash build.sh build)
+
+Build products are placed under ALDORROOT; they are not built in this source
+directory.  Use the top-level `bash build.sh test` command for the supported
+distribution test sequence.

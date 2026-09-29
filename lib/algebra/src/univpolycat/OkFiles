@@ -1,0 +1,17 @@
+build.sh 
+
+alg_chrem2.as
+alg_modgcdp.as
+alg_polydio.as
+sit_fftring.as
+sit_fring.as
+sit_froot.as
+sit_resprs.as
+sit_sqfree.as
+sit_ufalg.as
+sit_uffalg.as
+sit_ugring.as
+sit_umonom.as
+sit_upolalg.as
+sit_upolc0.as
+sit_zring.as

@@ -1,0 +1,67 @@
+v0.14 generated-code benchmark
+==============================
+
+Benchmark
+---------
+Deterministic adaptation of Algebra sm_dmp0 ALDORTEST.
+RandomNumberGenerator is seeded with 1 before makeZoo.
+Both variants produced output SHA-256:
+e39d0470a682e8b05192d5e7cccb8178ee6142bb867ec11c72cb1831e87628aa
+
+Comparison design
+-----------------
+Baseline compiler: v0.01 (commit 772b6a7, rebuilt on this host)
+Current compiler:  v0.14 release candidate
+Support root:      held fixed for both variants
+Aldor options:     -O -Qall
+Generated C:       compiled by GCC with effective -O3
+Compile pairs:     5, alternating order
+Execution warmups: 2 per executable
+Execution pairs:   7, alternating order
+CPU affinity:      CPU 0
+Primary execution metric: median of paired current/baseline CPU-time ratios
+
+Compiler + generated-C compilation
+----------------------------------
+compile CPU baseline median: 3.230000 s
+compile CPU current median:  3.500000 s
+compile CPU median paired ratio: 1.065909
+compile CPU paired change: +6.591%
+
+compile wall baseline median: 3.240000 s
+compile wall current median:  3.540000 s
+compile wall median paired ratio: 1.074074
+compile wall paired change: +7.407%
+
+Generated-program execution
+---------------------------
+CPU baseline median: 3.165259 s
+CPU current median:  2.997409 s
+CPU ratio of medians: 0.946971
+CPU median paired ratio: 0.950528
+CPU paired change: -4.947%
+
+Wall baseline median: 3.166622 s
+Wall current median:  2.997740 s
+Wall ratio of medians: 0.946668
+Wall median paired ratio: 0.950535
+Wall paired change: -4.946%
+
+Interpretation
+--------------
+The v0.14 compiler is modestly slower to compile this benchmark translation
+unit than v0.01 on this host, but the generated program is about 5% faster by
+the primary paired execution metric.  There is therefore no generated-code
+performance regression.  Compilation timing is retained as a secondary release
+metric; generated-program execution remains the primary performance gate.
+
+Reproducibility hashes
+----------------------
+benchmark source: ba88259ba428c95e2ae0f047954cd91883b62e409dfc574ca2d4b54bae857db0
+v0.01 compiler:   844ed34578dcb28fb1cd18c3749aa5dffeb01b56b3758131bc1489021e660bb3
+v0.14 compiler:   4769f73eec7cf7b1505ea4fbf24d65aba16f8b10fa2b828632296c85c7ff9b9b
+
+Host/toolchain
+--------------
+Linux x86_64, kernel 6.18.35
+GCC/G++ 14.2.0 (Debian 14.2.0-19)

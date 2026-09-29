@@ -1,0 +1,551 @@
+/*****************************************************************************
+ *
+ * os_macosx_vm.c: Non-portable, operating system specific code for Mac OS X
+ *      Mach VM and mmap interface.
+ *
+ * based on material
+ * Copyright David Casperson 2008.
+ * Copyright (c) 1990-2007 Aldor Software Organization Ltd (Aldor.org).
+ *
+ ****************************************************************************/
+
+/*
+ * This file is meant to be included in os_unix.c.
+ */
+
+#if defined(OS_MAC_OSX)
+#define OS_Has_Alloc
+
+#include <mach/mach_types.h>
+#include <mach/machine/vm_param.h>
+#include <mach/mach.h>
+#include <mach/mach_vm.h>
+#include <mach/vm_region.h>
+#include <mach/vm_map.h>
+#include <sys/mman.h>
+#include <unistd.h>
+
+/*
+ * The BTree store keeps a dense page map spanning all storage returned by
+ * osAlloc.  Independent VM_FLAGS_ANYWHERE allocations can be arbitrarily far
+ * apart under ASLR, making that dense map enormous.  Reserve one contiguous
+ * virtual arena and make only the used prefix readable/writable.
+ */
+#define OS_ARENA_MAX_BYTES (4UL << 30)
+#define OS_ARENA_MIN_BYTES (16UL << 20)
+
+local int dbMachVM = 0;
+
+static char *osArenaBase   = 0;
+static char *osArenaFront  = 0;
+static char *osArenaCommit = 0;
+static char *osArenaLimit  = 0;
+static ULong osVmPageSize  = 0;
+
+local ULong
+osPageSize(void)
+{
+        long n;
+
+        if (osVmPageSize != 0) return osVmPageSize;
+
+        n = sysconf(_SC_PAGESIZE);
+        osVmPageSize = n > 0 ? (ULong) n : 4096UL;
+        return osVmPageSize;
+}
+
+local int
+osArenaInit(void)
+{
+        size_t want, min;
+        void *p;
+
+        if (osArenaBase) return 0;
+
+        want = (size_t) OS_ARENA_MAX_BYTES;
+        min  = (size_t) OS_ARENA_MIN_BYTES;
+
+        for (; want >= min; want >>= 1) {
+                p = mmap(0, want, PROT_NONE, MAP_PRIVATE | MAP_ANON, -1, 0);
+                if (p == MAP_FAILED) continue;
+
+                osArenaBase   = (char *) p;
+                osArenaFront  = (char *) p;
+                osArenaCommit = (char *) p;
+                osArenaLimit  = (char *) p + want;
+                return 0;
+        }
+
+        return -1;
+}
+
+void *
+osAlloc(ULong *pnbytes)
+{
+        ULong           nbytes = *pnbytes;
+        ULong           alignment, front, rem, nextra, need, page;
+        ULong           used, committed;
+        void *          p0, *p;
+        char *          end, *commitEnd;
+        struct osStore *fx;
+
+        /* Avoid creating zero-sized pieces. */
+        if (nbytes == 0) nbytes = 1;
+
+        /*
+         * Re-use a previously freed low-level piece when it also satisfies
+         * the current alignment hint.  We intentionally keep arena pages
+         * mapped so a free does not punch a hole in the reserved range.
+         */
+        alignment = alignHint == 0 ? 1 : (ULong) alignHint;
+        for (fx = osStoreHd.next; fx; fx = fx->next) {
+                if (fx->use != OS_STORE_FREE || fx->nbytes < nbytes)
+                        continue;
+                if (ptrToLong(fx->piece) % alignment != 0)
+                        continue;
+
+                fx->use  = OS_STORE_BUSY;
+                *pnbytes = fx->nbytes;
+                return fx->piece;
+        }
+
+        /* Ensure there is a descriptor for the new piece. */
+        if (!osFreeList && osAllocFreeList() == -1) {
+                *pnbytes = 0;
+                return 0;
+        }
+
+        if (osArenaInit() == -1) {
+                *pnbytes = 0;
+                return 0;
+        }
+
+        /*
+         * All returned blocks come from a monotonically increasing frontier.
+         * This is the sbrk-like property required by the dense BTree page map.
+         */
+        front  = (ULong) ptrToLong(osArenaFront);
+        rem    = front % alignment;
+        nextra = rem == 0 ? 0 : alignment - rem;
+
+        if (nbytes > ~(ULong) 0 - nextra) {
+                *pnbytes = 0;
+                return 0;
+        }
+        need = nbytes + nextra;
+
+        if ((ULong) (osArenaLimit - osArenaFront) < need) {
+                *pnbytes = 0;
+                return 0;
+        }
+
+        p0  = (void *) osArenaFront;
+        p   = (void *) (osArenaFront + nextra);
+        end = osArenaFront + need;
+
+        /*
+         * The logical frontier remains as dense as sbrk.  Only protection
+         * changes are rounded to the host VM page size (16K on Apple Silicon
+         * systems, commonly 4K on Intel).
+         */
+        page = osPageSize();
+        used = (ULong) (end - osArenaBase);
+        if (used > ~(ULong) 0 - (page - 1)) {
+                *pnbytes = 0;
+                return 0;
+        }
+        committed = ((used + page - 1) / page) * page;
+        commitEnd = osArenaBase + committed;
+
+        if (commitEnd > osArenaCommit) {
+                size_t ncommit = (size_t) (commitEnd - osArenaCommit);
+                if (mprotect(osArenaCommit, ncommit,
+                             PROT_READ | PROT_WRITE) != 0) {
+                        *pnbytes = 0;
+                        return 0;
+                }
+                osArenaCommit = commitEnd;
+        }
+        osArenaFront = end;
+
+        fx         = osFreeList;
+        osFreeList = osFreeList->next;
+        fx->use    = OS_STORE_BUSY;
+        fx->piece0 = ptrCanon(p0);
+        fx->piece  = ptrCanon(p);
+        fx->nbytes = nbytes;
+        fx->nbytes0= need;
+
+        osAllocLinkIn(fx);
+        *pnbytes = fx->nbytes;
+        return fx->piece;
+}
+
+void
+osFree(void *p)
+{
+        struct osStore *ff;
+
+        /* Find the descriptor corresponding to this piece. */
+        p = ptrCanon(p);
+        for (ff = osStoreHd.next; ff; ff = ff->next)
+                if (ptrEQ(ff->piece, p)) break;
+
+        if (ptrEQ(ff, NULL)) return;     /* Bad free request; ignore. */
+        if (ff->use != OS_STORE_BUSY) return;
+
+        /*
+         * Keep the virtual range reserved and mapped.  It can be re-used by
+         * osAlloc without allowing an unrelated mapping to split the arena.
+         */
+        ff->use = OS_STORE_FREE;
+}
+
+/*
+ * Place a link in the pieces list, preserving address order of the pieces.
+ * The "piece" field is a pointer in canonical form.
+ */
+local void
+osAllocLinkIn(struct osStore *fx)
+{
+        struct osStore *fp, *ff;
+
+        for (fp = &osStoreHd, ff = fp->next; ; fp = ff, ff = fp->next)
+                if (!ff || ff->piece > fx->piece) {
+                        fp->next = fx;
+                        fx->next = ff;
+                        break;
+                }
+}
+
+/*
+ * Allocate more descriptors into the free list.
+ * Success => 0.  Failure => -1.
+ */
+local int
+osAllocFreeList(void)
+{
+        struct osStore *fx;
+        struct osStore  f0;
+        void           *p;
+        ULong           i, nalloc, nbytes;
+        vm_address_t    addr = 0;
+        vm_size_t       size;
+        kern_return_t   kr;
+
+        nbytes = osPageSize();
+        size   = (vm_size_t) nbytes;
+        kr     = vm_allocate(mach_task_self(), &addr, size,
+                             VM_FLAGS_ANYWHERE);
+        if (kr != KERN_SUCCESS) return -1;
+
+        p      = (void *) addr;
+        fx     = (struct osStore *) p;
+        nalloc = nbytes / sizeof(struct osStore);
+
+        /* Avoid needlessly confusing conservative garbage collectors. */
+        f0.use     = OS_STORE_FREE;
+        f0.nbytes  = 0;
+        f0.nbytes0 = 0;
+        f0.next    = 0;
+        f0.piece   = 0;
+        f0.piece0  = 0;
+
+        for (i = 0; i < nalloc; i++) {
+                fx[i] = f0;
+                fx[i].next = osFreeList;
+                osFreeList = &fx[i];
+        }
+
+        if (!osFreeList) {
+                vm_deallocate(mach_task_self(), addr, size);
+                return -1;
+        }
+
+        fx         = osFreeList;
+        osFreeList = osFreeList->next;
+        fx->use    = OS_STORE_ADMIN;
+        fx->nbytes = nbytes;
+        fx->nbytes0= nbytes;
+        fx->piece0 = ptrCanon(p);
+        fx->piece  = ptrCanon(p);
+
+        osAllocLinkIn(fx);
+        return 0;
+}
+
+void
+osAllocShow(void)
+{
+        struct osStore *ff;
+
+        for (ff = osStoreHd.next; ff; ff = ff->next) {
+                const char *s;
+                switch (ff->use) {
+                case OS_STORE_ADMIN: s = "Ad"; break;
+                case OS_STORE_BUSY:  s = "Us"; break;
+                case OS_STORE_FREE:  s = "Fr"; break;
+                default:             s = "??"; break;
+                }
+                (void) s;
+        }
+}
+
+#endif /* OS_UNIX && OS_MAC_OSX */
+
+
+/****************************************************************************
+ *
+ * :: osMemMap
+ *
+ ****************************************************************************/
+
+#if defined(OS_MAC_OSX)
+
+#define OS_Has_MemMap
+
+#include <mach/mach.h>      /* For mach_task_self */
+#include <mach/mach_vm.h>   /* For mach_vm_region */
+
+/*
+ * Find the assigned address space regions.
+ * The count of the regions is returned..
+ * Information about the first regc regions is returned via regv.
+ * On error, -1 is returned.
+ */
+struct osMemRegionInfo {
+    void        *baseAddr;
+    size_t      byteCount;
+
+    int         hasRead;
+    int         hasWrite;
+    int         hasExec;
+    int         isShared;
+};
+
+int osFindMemRegions(int regc, struct osMemRegionInfo *regv) {
+    task_t                  task  = mach_task_self();
+    mach_vm_address_t       addr;
+    mach_vm_size_t          size;
+    vm_region_flavor_t      flavor= VM_REGION_BASIC_INFO_64;
+    vm_region_basic_info_data_64_t  info;
+    mach_msg_type_number_t  count = sizeof(info)/sizeof(int);
+    mach_port_t             object_name;
+
+    int iterc = 0;
+    for (addr = 0; ; addr += size, iterc++, regv++) {
+        kern_return_t kr = mach_vm_region(task,
+                    &addr,  &size,
+                    flavor, (vm_region_info_t)&info, &count,
+                    &object_name);
+
+        if (kr != KERN_SUCCESS) break;
+        if (addr == 0 && iterc != 0) break;
+
+        if (iterc > regc) continue;
+
+        regv->baseAddr   = (void *) addr;
+        regv->byteCount  = (size_t) size;
+        regv->hasRead    = !!(info.protection & VM_PROT_READ);
+        regv->hasWrite   = !!(info.protection & VM_PROT_WRITE);
+        regv->hasExec    = !!(info.protection & VM_PROT_EXECUTE);
+        regv->isShared   = !!info.shared;
+    }
+
+    return iterc;
+}
+
+void *osMemRegionLimitAddr(struct osMemRegionInfo *reg) {
+    void *lim = (char *) reg->baseAddr + reg->byteCount;
+    if (lim == 0) {
+        fprintf(stderr, "Region goes to end of address space.\n");
+        exit(EXIT_FAILURE);
+    }
+    if (lim < reg->baseAddr) {
+        fprintf(stderr, "Wrong number of bytes reported.\n");
+        exit(EXIT_FAILURE);
+    }
+    return lim;
+}
+void osShowMemRegions(FILE *fout, int regc, struct osMemRegionInfo *regv) {
+    for (int i = 0; i < regc; i++, regv++) {
+        fprintf(fout, "[%14p, %14p) ", regv->baseAddr, osMemRegionLimitAddr(regv));
+        fprintf(fout, "%#10x bytes ", (int) regv->byteCount);
+        fprintf(fout, "%c", regv->hasRead  ? 'r' : '-');
+        fprintf(fout, "%c", regv->hasWrite ? 'w' : '-');
+        fprintf(fout, "%c", regv->hasExec  ? 'x' : '-');
+        fprintf(fout, "%c", regv->isShared ? '*' : ' ');
+        fprintf(fout, "\n");
+    }
+}
+int osAreMemRegionsAdjacent(struct osMemRegionInfo *r1, struct osMemRegionInfo *r2) {
+    return osMemRegionLimitAddr(r1) == r2->baseAddr;
+}
+int osHaveMemRegionsSameProps(struct osMemRegionInfo *r1, struct osMemRegionInfo *r2) {
+    return r1->hasRead  == r2->hasRead  &&
+           r1->hasWrite == r2->hasWrite &&
+           r1->hasExec  == r2->hasExec  &&
+           r1->isShared == r2->isShared;
+}
+void osCopyMemRegionInfo(struct osMemRegionInfo *dest, struct osMemRegionInfo *src) {
+    dest->baseAddr  = src->baseAddr;
+    dest->byteCount = src->byteCount;
+    dest->hasRead   = src->hasRead;
+    dest->hasWrite  = src->hasWrite;
+    dest->hasExec   = src->hasExec;
+    dest->isShared  = src->isShared;
+}
+/*
+ * Coalesce adjacent regions with the same properties.
+ * Modifies input in-place.  Returns number of coalesced regions.
+ */
+int osJoinMemRegions(int regc, struct osMemRegionInfo *regv) {
+    if (regc <= 0) return regc;
+    
+    int currIx = 0;
+    for (int nextIx = 1; nextIx < regc; nextIx++) {
+        if (osAreMemRegionsAdjacent  (regv+currIx, regv+nextIx) &&
+            osHaveMemRegionsSameProps(regv+currIx, regv+nextIx)
+        )
+            regv[currIx].byteCount += regv[nextIx].byteCount;
+        else {
+            currIx++;
+            osCopyMemRegionInfo(regv+currIx, regv+nextIx);
+        }
+    }
+    return currIx+1;
+}
+extern char     **environ;
+
+#define MAX_MMAPS 1024
+    /* this is arbitrary. Find out if there is any way of anticipating this. */
+
+struct osMemMap **
+osMemMap(int mask) {
+
+    /* Array needed by the osFindMemoryRegions function. */
+    struct osMemRegionInfo   mrInfoV[MAX_MMAPS];
+
+    /* Static array of memory map entries. */
+    static struct osMemMap   mmv[MAX_MMAPS];
+    static struct osMemMap  *mpv[MAX_MMAPS];
+
+    /* Get regions from operating system. Save one slot for OSMEM_END later. */
+    int mrInfoC = osFindMemRegions(MAX_MMAPS-1, mrInfoV);
+
+    if (dbMachVM) {
+        fprintf(stdout, "Found Mem Regions.\n");
+        osShowMemRegions(stdout, mrInfoC, mrInfoV);
+        fprintf(stdout, "There are now %d regions\n", mrInfoC);
+    }
+
+    if  (mrInfoC <= 0) return 0;
+
+    /* Join adjacent regions of the same type. */
+    mrInfoC = osJoinMemRegions(mrInfoC, mrInfoV);
+
+    if (dbMachVM) {
+        fprintf(stdout, "Joined Mem Regions.\n");
+        osShowMemRegions(stdout, mrInfoC, mrInfoV);
+        fprintf(stdout, "There are now %d regions\n", mrInfoC);
+    }
+    
+    /*
+     * Add regions of interest to the return array.
+     *
+     * We assume that any region overlapping the call stack is a stack region.
+     *
+     * If the stack frontier (F) lies within a region (cases 3 & 4 below),
+     * the part of the region below the frontier (...) is not reported.
+     * (On Mac OS stack grows down.)
+     *
+     * Stack:      F<<<<<<<<<<<<<<<)
+     * case 1:  [-----------------------)
+     * case 2:  [----------------)
+     * case 3:     ...[-----------------)
+     * case 4:     ...[----------)
+     */
+
+    int iv = 0, ir = 0; /* indices into mmv and mrInfoV, respectively. */
+
+    void *stackMax = &environ,
+         *stackMin = &stackMin;
+    void * stackLimit = (void *)((void * *)stackMax+1);
+
+    if (dbMachVM)
+        fprintf(stdout, "Stack is [%p, %p).\n", stackMin, stackLimit);
+
+    for (ir = 0; ir < mrInfoC && iv < MAX_MMAPS - 1; ir++) {
+        struct osMemRegionInfo *mri = mrInfoV + ir;
+
+        void *base  = mri->baseAddr;
+        void *limit = (void *) ((char *) base + mri->byteCount);
+
+        if (!mri->hasWrite || !mri->hasRead || mri->isShared) {
+            /*
+             * Skip regions that cannot be read or written, or are shared.
+             */
+            if (dbMachVM) {
+                fprintf(stdout, "[%p, %p) Skipping", base, limit);
+                if (!mri->hasWrite) fprintf(stdout, " unwritable");
+                if (!mri->hasRead)  fprintf(stdout, " unreadable");
+                if (mri->isShared)  fprintf(stdout, " shared");
+                fprintf(stdout, ".\n");
+            }
+        }
+        else {
+            /*
+             * Region ir is relevant.
+             */
+            if (dbMachVM)
+                fprintf(stdout, "[%p, %p) Handling.\n", base, limit);
+            
+            if (base < stackLimit && limit > stackMin) {
+                if (mask & OSMEM_STACK) { 
+                    mmv[iv].lo  = stackMin > base ? stackMin : base;;
+                    mmv[iv].hi  = limit;
+                    mmv[iv].use = OSMEM_STACK;
+                    if (dbMachVM)
+                        fprintf(stdout, "[%p, %p) stack\n", mmv[iv].lo, limit);
+                    iv++;
+                }
+            }
+            else {
+                if (mask & (OSMEM_IDATA | OSMEM_DDATA)) {
+                    /* We don't distinguish IDATA and DDATA, but should. */
+                    mmv[iv].lo  = base;
+                    mmv[iv].hi  = limit;
+                    mmv[iv].use = OSMEM_DDATA;
+                    if (dbMachVM)
+                        fprintf(stdout, "[%p, %p) ddata\n", base, limit);
+                    iv++;
+                }
+            }
+        }
+    }
+    mmv[iv].lo = mmv[iv].hi = 0;
+    mmv[iv].use = OSMEM_END;
+    iv++;
+    
+    if (dbMachVM) {
+        printf("osMemMap Result: =========================================\n");
+        for (int i = 0; i < iv; i++) {
+            int use = mmv[i].use;
+            printf("[%p, %p) %s\n", mmv[i].lo, mmv[i].hi,         
+                use == OSMEM_STACK ? "stack" :
+                use == OSMEM_IDATA ? "idata" :
+                use == OSMEM_DDATA ? "ddata" :
+                use == OSMEM_END   ? "end"   :
+                "???"
+            );
+        }
+    }
+
+    /* Make array of pointers to structures. */
+    for (int i = 0; i < iv; i++) mpv[i] = &mmv[i];
+    return mpv;
+}
+/* !!!!!!!!!!! */
+
+
+#endif /* OS_MAC_OSX */

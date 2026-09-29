@@ -1,0 +1,4 @@
+"bug1189.as", line 9:    assert(true); -- Boom
+                      ...^
+[L9 C4] #1 (Error) A value is needed but `assert' does not produce one.
+

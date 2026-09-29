@@ -1,0 +1,20 @@
+== (Generating the runtime system)
+== (Generating the test program)
+== (Compiling the runtime system)
+== (Lazy version at -Q1)
+*** Success!
+
+eager0.as:
+== (Lazy version at -Q3)
+*** Success!
+
+eager0.as:
+== (Eager version at -Q1)
+*** Success!
+
+eager0.as:
+== (Eager version at -Q3)
+*** Success!
+
+eager0.as:
+== (Cleaning up)

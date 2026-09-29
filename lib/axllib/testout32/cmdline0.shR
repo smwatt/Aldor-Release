@@ -1,0 +1,5 @@
+== Test compiling with non-existent objects on command line ==
+#1 (Fatal Error) Could not open file `foo.o'.
+== Test capitalized file types ==
+FOO.AS
+FOO.c

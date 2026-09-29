@@ -1,0 +1,22 @@
+#!/bin/sh
+#
+# Invoke the host C++ compiler.  Historical per-machine compiler command
+# lines and private libstdc++ installation paths were retired in v0.02.
+
+export PATH="$ALDORROOT/toolbin:$PATH"
+compiler=${CXX:-c++}
+args="$(buildarg docc-extra)"
+
+for i in "$@"
+do
+    case "$i" in
+        -motif-ld) args="$args $(buildarg docc-motif-ld)" ;;
+        -motif-cc) args="$args $(buildarg docc-motif-cc)" ;;
+        -src)      args="$args $(buildarg docc-src)" ;;
+        *)         args="$args $i" ;;
+    esac
+done
+
+# buildarg values are intentionally shell-style option lists.
+# shellcheck disable=SC2086
+exec "$compiler" $args

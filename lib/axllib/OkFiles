@@ -1,0 +1,3 @@
+build.sh
+
+src test testout testout32

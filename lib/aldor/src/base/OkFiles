@@ -1,0 +1,19 @@
+build.sh OkFiles
+
+ald_pfunc.as
+sal_base.as
+sal_bstream.as
+sal_byte.as
+sal_char.as
+sal_copy.as
+sal_gener.as
+sal_htype.as
+sal_itype.as
+sal_manip.as
+sal_order.as
+sal_otype.as
+sal_partial.as
+sal_serial.as
+sal_syntax.as
+sal_torder.as
+sal_tstream.as

@@ -1,0 +1,21 @@
+Aldor Copyright
+===============
+
+Copyright (C) 1990-2026 Stephen M. Watt.
+
+Aldor originated in work at IBM Research.  Copyright and other rights in
+the Aldor software were subsequently held by Numerical Algorithms Group Ltd
+and transferred in 2007 to Aldor Software Organization Ltd.  Those rights
+are now held by Stephen M. Watt.
+
+Historical source files may contain copyright notices naming Aldor Software
+Organization Ltd or earlier rights holders.  Those notices record historical
+authorship, ownership, and provenance; they do not indicate that Aldor
+Software Organization Ltd remains a current rights holder.
+
+Some parts of the source tree contain work by other authors or organizations,
+including material from the EU FRISCO project and work by Manuel Bronstein.
+Their individual copyright and licensing notices remain applicable.
+
+Separately licensed and third-party components are identified in
+LICENSE and by notices within those components.

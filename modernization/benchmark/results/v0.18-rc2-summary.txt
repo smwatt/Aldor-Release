@@ -1,0 +1,23 @@
+Measured paired compile runs: 9
+compile cpu baseline median: 2.170000 s
+compile cpu current median:  1.030000 s
+compile cpu median paired ratio: 0.471111
+compile cpu paired change: -52.889%
+compile wall baseline median: 2.180000 s
+compile wall current median:  1.030000 s
+compile wall median paired ratio: 0.472477
+compile wall paired change: -52.752%
+
+CPU affinity: 0
+Warmups: 3
+Measured paired runs: 21
+cpu baseline median: 0.166232 s
+cpu current median:  0.167324 s
+cpu ratio of medians: 1.006569
+cpu median paired ratio: 1.006909
+cpu paired change: +0.691%
+wall baseline median: 0.166773 s
+wall current median:  0.167664 s
+wall ratio of medians: 1.005341
+wall median paired ratio: 1.006807
+wall paired change: +0.681%

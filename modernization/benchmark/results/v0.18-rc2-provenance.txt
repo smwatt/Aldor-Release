@@ -1,0 +1,61 @@
+Aldor v0.18rc2 benchmark provenance
+Date: 2026-09-09
+Host: Trixie (Linux x86_64)
+
+Workload:
+  modernization/benchmark/sm_dmp0-benchmark.as
+  Aldor options: -O -Qall
+  backend C: GCC with effective -O3
+  warmups: 3
+  measured execution pairs: 21
+  measured compilation pairs: 9
+  CPU affinity: 0
+
+Baseline translation compiler:
+  original v0.01 source package supplied for the comparison
+  Aldor version 1.2.-10(69)
+  compiler SHA-256:
+  811f87f4af7366cc9d3854d19212be5214b9025d0396028c51f58b3a2b6ae1d5
+  historical release provenance identifies commit
+  772b6a7f51c5815c2612c4ed389dd135c4a9eee3
+
+Historical-hash support root:
+  generated from the same v0.18rc2 high-level library source snapshot as the
+  current support root by a modern C99-clean bridge compiler retaining the
+  historical export-type hash.  The bridge also writes the historical raw .ao
+  payload rather than the v0.18 8-byte external "ALDOAO" envelope, because the
+  original v0.01 translation compiler predates that envelope.
+
+  The bridge-only source delta is retained as:
+    modernization/benchmark/v0.01-support-bridge.patch
+
+  It changes only the export-type hash combine and .ao external container
+  compatibility.  It does not change the RC2 high-level Aldor library sources.
+
+Current translation compiler/support root:
+  v0.18rc2 candidate, rebuilt from an empty root on the same host.
+  compiler SHA-256:
+  a392a96de3f9999d6fd7db12efbd16b9b62d320bb575d2869fd810f9f63c71eb
+
+Output identity:
+  baseline/current SHA-256:
+  e39d0470a682e8b05192d5e7cccb8178ee6142bb867ec11c72cb1831e87628aa
+
+Measurement hygiene:
+  An earlier timing attempt overlapped with unrelated library reconstruction
+  and is not used for the release record.  Before the recorded run, all such
+  compiler/library build processes were stopped and the host process list was
+  checked for CPU-consuming build work.  Two independent 7-pair idle runs
+  bracketed the final result (-0.059% and +0.974% paired CPU execution change),
+  motivating the larger 21-pair release measurement.
+
+Final result:
+  paired execution CPU change:  +0.691%
+  paired execution wall change: +0.681%
+  paired compile CPU change:    -52.889%
+  paired compile wall change:   -52.752%
+
+This preserves the v0.16/v0.17 ABI-boundary benchmark rule: both sides use the
+same high-level library sources and host runtime/toolchain; the baseline side
+retains the historical export hash and historical .ao container form, while
+current RC2 uses the corrected hash and current .ao envelope.

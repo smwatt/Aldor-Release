@@ -1,0 +1,21 @@
+#!/bin/bash
+set -e
+
+# Executables produced by normal Unix/Cygwin linkers are already runnable.
+# macOS may require removing quarantine metadata and code signing before a
+# freshly linked executable can be launched from the test/build tree.
+[ "$(uname -s 2>/dev/null)" = Darwin ] || exit 0
+
+file="$1"
+chmod ugo+x "$file"
+
+DarwinVersion=$(uname -r | cut -d. -f1)
+if [ "$DarwinVersion" -ge 20 ]; then
+    if command -v xattr >/dev/null 2>&1; then
+        xattr -d com.apple.quarantine "$file" 2>/dev/null || true
+    fi
+    codesign --force --sign - "$file" >/dev/null 2>&1 || {
+        echo "Unable to code sign $file" >&2
+        exit 1
+    }
+fi

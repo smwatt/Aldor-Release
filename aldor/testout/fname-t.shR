@@ -1,0 +1,10 @@
+===========================================================
+===  Test "fname"
+===========================================================
+fnameParse: "newfile"
+fnameUnparseStatic: "newfile"
+fnameFree: DONE.
+fnameTemp: 40 unique files OK
+fnameTempVector: 5 files OK
+
+Test "fname" completed.

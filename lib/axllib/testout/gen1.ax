@@ -1,0 +1,34 @@
+(Sequence
+  (Sequence () () ())
+  (Sequence () () () () () () () () () ())
+  (Sequence (Import () AxlLib) (Inline () AxlLib))
+  (Import () Boolean)
+  (Import
+    (With
+      ()
+      (Sequence
+        (Declare string (Apply -> Literal %))
+        (Declare << (Apply -> (Comma TextWriter %) TextWriter))
+        (Declare << (Apply -> % (Apply -> TextWriter TextWriter)))))
+    String)
+  (Import
+    (With
+      ()
+      (Sequence
+        (Declare newline %)
+        (Declare << (Apply -> (Comma TextWriter %) TextWriter))
+        (Declare << (Apply -> % (Apply -> TextWriter TextWriter)))))
+    Character)
+  (Import
+    (With () (Sequence (Declare print %) (Declare error %)))
+    TextWriter)
+  (Import () FormattedOutput)
+  (Sequence
+    (Import () Integer)
+    (Define
+      (Declare f (Apply -> (Declare n Integer) Integer))
+      (Lambda
+        (Comma (Declare n Integer))
+        Integer
+        (Label f (Apply * (Apply + n \1) n))))
+    (Apply f \1)))

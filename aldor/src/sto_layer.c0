@@ -1,0 +1,209 @@
+/*****************************************************************************
+ *
+ * sto_layer.c0: Common Aldor Store implementation over a StoreManager.
+ *
+ * This file is included after defining SelectedStoreManager.  The manager
+ * supplies static allocate/deallocate/resize operations.  LayeredStore is a
+ * compile-time abstraction: the public C99 entry points remain the hot-path
+ * functions and the manager calls are intended to inline completely.
+ *
+ ****************************************************************************/
+#include "cport.h"
+#include "util.h"
+#include "store.h"
+#include "storeconcept.hpp"
+
+#if STO_USE >= STO_USE_MIN_LAYERED && !defined(_STO_LAYER_C0_)
+#define _STO_LAYER_C0_
+
+static CBool stoMustTag = false;
+
+ULong stoBytesOwn   = 0;
+ULong stoBytesAlloc = 0;
+ULong stoBytesFree  = 0;
+ULong stoBytesGc    = 0;
+ULong stoPiecesGc[STO_CODE_LIMIT];
+
+#ifdef STO_TALLY
+# define stoTally(expr) (expr)
+#else
+# define stoTally(expr) Nothing
+#endif
+
+struct stoHdr {
+        unsigned short magic;
+        unsigned char  code;
+        Length         size;
+        MostAlignedType data;
+};
+
+# define STO_MAGIC      0xFE20
+# define sizeofHdr      (sizeof(struct stoHdr) - sizeof(MostAlignedType))
+# define stoPtrToHdr(p) ((struct stoHdr *)((char *) (p) - sizeofHdr))
+# define stoHdrToPtr(h) ((void *) &((h)->data))
+
+local MostAlignedType *
+stoDefaultError(int errnum)
+{
+        String msg;
+        switch (errnum) {
+        case StoErr_OutOfMemory:
+                return 0;
+        case StoErr_UsedNonalloc:
+                msg = "using non-allocated space";
+                break;
+        case StoErr_CantBuild:
+                msg = "can't build internal structure";
+                break;
+        default:
+                msg = "unexpected";
+                break;
+        }
+        fprintf(osStderr, "Storage allocation error (%s).\n", msg);
+        exitFailure();
+        NotReached(return 0);
+}
+
+static StoErrorFun stoError = stoDefaultError;
+
+/*
+ * This is intentionally static/compile-time polymorphism.  There is no
+ * virtual interface and no manager object.  At optimization levels used for
+ * release runtimes these calls collapse into the selected manager operation.
+ */
+template <class StoreManager>
+class LayeredStore {
+public:
+        static inline MostAlignedType *allocate(unsigned code, ULong size)
+        {
+                Length sz = size + sizeofHdr;
+                void *p;
+                struct stoHdr *q;
+
+                if (sz == 0) sz = 1;
+                p = StoreManager::allocate(sz);
+                if (!p) return (*stoError)(StoErr_OutOfMemory);
+
+                q = (struct stoHdr *) p;
+                p = stoHdrToPtr(q);
+                if (stoMustTag) {
+                        q->code  = code;
+                        q->magic = STO_MAGIC;
+                }
+                stoTally(stoBytesAlloc += size);
+                q->size = sz;
+                return (MostAlignedType *) p;
+        }
+
+        static inline void deallocate(void *p)
+        {
+                stoTally(stoBytesFree += stoPtrToHdr(p)->size);
+                StoreManager::deallocate(stoPtrToHdr(p));
+        }
+
+        static inline ULong size(void *p)
+        {
+                return stoPtrToHdr(p)->size - sizeofHdr;
+        }
+
+        static inline MostAlignedType *resize(void *p0, ULong size)
+        {
+                struct stoHdr *q0, *q1;
+                Length nsz = size + sizeofHdr;
+
+                q0 = stoPtrToHdr(p0);
+                q1 = (struct stoHdr *)
+                        StoreManager::resize(q0, q0->size, nsz);
+                if (!q1) return (*stoError)(StoErr_OutOfMemory);
+                q1->size = nsz;
+                return (MostAlignedType *) stoHdrToPtr(q1);
+        }
+};
+
+static_assert(StoreManager<SelectedStoreManager>);
+using SelectedStore = LayeredStore<SelectedStoreManager>;
+static_assert(Store<SelectedStore>);
+
+ALDOR_C_BEGIN
+
+#if !defined(STO_Has_stoAlloc)
+MostAlignedType *
+__stoAlloc(unsigned code, ULong size)
+{
+        return SelectedStore::allocate(code, size);
+}
+#endif
+
+#if !defined(STO_Has_stoFree)
+void
+__stoFree(void *p)
+{
+        SelectedStore::deallocate(p);
+}
+#endif
+
+ULong
+__stoSize(void *p)
+{
+        return SelectedStore::size(p);
+}
+
+unsigned
+stoCode(void *p)
+{
+        int c = 0;
+        if (stoMustTag) c = stoPtrToHdr(p)->code;
+        return c;
+}
+
+MostAlignedType *
+__stoResize(void *p0, ULong size)
+{
+        return SelectedStore::resize(p0, size);
+}
+
+MostAlignedType *
+stoRecode(void *p, unsigned code)
+{
+        if (stoMustTag) stoPtrToHdr(p)->code = code;
+        return (MostAlignedType *) p;
+}
+
+CBool
+stoIsPointer(void *p)
+{
+        int isMagic = 1;
+        if (!p) return 0;
+        if (stoMustTag) isMagic = stoPtrToHdr(p)->magic == STO_MAGIC;
+        return isMagic;
+}
+
+void stoGc(void) { }
+void stoRootRegion(void *base, void *limit) { }
+void stoWeakRegion(void *base, void *limit,
+                   void (*collectOneAction)(void **),
+                   void (*collectDoneAction)(void)) { }
+void stoTune(void) { }
+int  stoShowArgs(const char *detail) { return 0; }
+void stoShow(void) { }
+void stoShowDetail(int x) { }
+void stoAudit(void) { }
+void stoRegister(int code, CBool hasPtrs) { }
+void stoSetAldorTracer(int code, void *clos) { }
+void stoSetTracer(int code, void *fun) { }
+int  stoMarkObject(void *p) { return 0; }
+int  stoWritablePointer(void *p) { return POINTER_IS_UNKNOWN; }
+int  stoCtl(int cmd, ...) { return 0; }
+void gcTimer() { }
+
+StoErrorFun
+stoSetHandler(StoErrorFun f)
+{
+        StoErrorFun oldf = stoError;
+        stoError = f ? f : (StoErrorFun) stoDefaultError;
+        return oldf;
+}
+
+ALDOR_C_END
+
+#endif

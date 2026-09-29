@@ -1,0 +1,11 @@
+build.sh 
+
+sit_fullgcd.as
+sit_gcdint0.as
+sit_gcdint.as
+sit_gcdintg.as
+sit_halfgcd.as
+sit_heugcd.as
+sit_loggcd.as
+sit_modgcd.as
+sit_modpgcd.as

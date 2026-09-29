@@ -1,0 +1,24 @@
+"defgroup1.as", line 34:    A:SingleInteger ==
+                         ...^
+[L34 C4] #3 (Warning) Implementation restriction: the value of `A:SingleInteger' depends on the value of `D:SingleInteger', `B:SingleInteger' and `C:SingleInteger'. Perhaps you ought to define `A:SingleInteger' later?
+
+"defgroup1.as", line 46:    B:SingleInteger == C - D;
+                         ...^
+[L46 C4] #2 (Warning) Implementation restriction: the value of `B:SingleInteger' depends on the value of `D:SingleInteger' and `C:SingleInteger'. Perhaps you ought to define `B:SingleInteger' later?
+
+"defgroup1.as", line 50:    C:SingleInteger ==
+                         ...^
+[L50 C4] #1 (Warning) Implementation restriction: the value of `C:SingleInteger' depends on the value of `D:SingleInteger'. Perhaps you ought to define `C:SingleInteger' later?
+
+"defgroup1.as", line 83:    A:SingleInteger ==
+                         ...^
+[L83 C4] #6 (Warning) Implementation restriction: the value of `A:SingleInteger' depends on the value of `B:SingleInteger'. Perhaps you ought to define `A:SingleInteger' later?
+
+"defgroup1.as", line 95:    B:SingleInteger == C;
+                         ...^
+[L95 C4] #5 (Warning) Implementation restriction: the value of `B:SingleInteger' depends on the value of `C:SingleInteger'. Perhaps you ought to define `B:SingleInteger' later?
+
+"defgroup1.as", line 99:    C:SingleInteger ==
+                         ...^
+[L99 C4] #4 (Warning) Implementation restriction: the value of `C:SingleInteger' depends on the value of `D:SingleInteger'. Perhaps you ought to define `C:SingleInteger' later?
+

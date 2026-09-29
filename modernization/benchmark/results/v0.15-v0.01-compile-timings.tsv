@@ -1,0 +1,11 @@
+pair	version	wall_seconds	user_seconds	sys_seconds
+0	baseline	2.82	2.63	0.18
+0	current	2.65	2.46	0.18
+1	current	3.46	2.90	0.50
+1	baseline	3.83	3.54	0.26
+2	baseline	2.89	2.58	0.29
+2	current	2.88	2.58	0.28
+3	current	2.81	2.46	0.34
+3	baseline	2.80	2.53	0.26
+4	baseline	2.83	2.55	0.25
+4	current	2.62	2.39	0.23

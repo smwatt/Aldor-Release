@@ -1,0 +1,8 @@
+== Compiling packfns.c into packfns.o
+== Compiling pack0.as into pack0 executable
+
+pack0.as:
+== Executing pack0
+6.7200000000000006
+== Cleaning up
+== Done

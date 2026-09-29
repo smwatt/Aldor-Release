@@ -1,0 +1,45 @@
+/*****************************************************************************
+ * sto_once.c0: Once StoreManager.
+ ****************************************************************************/
+#if !defined(_STO_ONCE_C0_) && defined(STO_USE) && STO_USE == STO_USE_ONCE
+#define _STO_ONCE_C0_
+
+#include <stdlib.h>
+#include "util.h"
+
+static long onceCount = 0;
+static char *onceFrontier = 0;
+
+class OnceStoreManager {
+public:
+        static inline void *allocate(Length size)
+        {
+                void *result;
+                size = ROUND_UP(size, cportAlignof(MostAlignedType));
+                if (size > onceCount) {
+                        ULong len = MAX(size, ((long) 1) << 15);
+                        void *p = osAlloc(&len);
+                        if (!p) return 0;
+                        onceCount = len;
+                        onceFrontier = (char *) p;
+                }
+                result = (void *) onceFrontier;
+                onceCount -= size;
+                onceFrontier += size;
+                return result;
+        }
+
+        static inline void deallocate(void *) { }
+
+        static inline void *resize(void *p, Length oldSize, Length newSize)
+        {
+                if (oldSize >= newSize) return p;
+                void *result = allocate(newSize);
+                if (result) memmove(result, p, oldSize);
+                return result;
+        }
+};
+
+using SelectedStoreManager = OnceStoreManager;
+#include "sto_layer.c0"
+#endif

@@ -1,0 +1,10 @@
+"opt3.as", line 37: 
+Matrix(R: Ring): MatCategory R with { new: (SI,SI,R) -> % } == add {
+...................................................................^
+[L37 C68] #7 (Warning) Domains with implicit exports must define Rep (as a constant not a macro)
+
+"opt3.as", line 43:         if R has EuclideanDomain then {
+                    ......................................^
+[L43 C39] #1 (Warning) Domains with implicit exports must define Rep (as a constant not a macro)
+
+0

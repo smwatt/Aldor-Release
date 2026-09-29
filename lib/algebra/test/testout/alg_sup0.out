@@ -1,0 +1,8 @@
+Testing alg_sup0...
+    testing primitiveType...                OK
+    testing additiveType...                OK
+    testing linearCombinationType...                OK
+    testing freeLinearCombinationType...                OK
+    testing indexedFreeLinearCombinationType...                OK
+    testing indexedFreeModule...                OK
+

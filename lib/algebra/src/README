@@ -1,0 +1,21 @@
+Algebra library source tree
+===========================
+
+This directory contains the source of the Algebra library.  The former
+[g]make targets were retired in modernization v0.02.
+
+Build the library through the supported recursive build system.  Normally,
+from the distribution root:
+
+    bash build.sh build
+
+After the compiler and prerequisite libraries have already been built, the
+Algebra subtree may be rebuilt directly with:
+
+    (cd lib/algebra && bash build.sh build)
+
+The build.sh files encode a non-trivial dependency order, including
+interleaved matrix and univariate-polynomial stages.  Preserve that order
+when changing the build machinery.  Products are written below ALDORROOT.
+Use the top-level `bash build.sh test` command for the supported distribution
+test sequence.

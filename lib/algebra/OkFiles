@@ -1,0 +1,5 @@
+build.sh 
+
+COPYRIGHT README
+
+src test bin doc include lib

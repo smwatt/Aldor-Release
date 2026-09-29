@@ -1,0 +1,495 @@
+===========================================================
+===  Test "float"
+===========================================================
+------------ Rounding (SFlo): ------------
+Orig: 0.000000 
+ up:	0
+ down:	0
+ zero:	0
+ nearest:	0
+ any:	0
+Orig: 0.100000 
+ up:	1
+ down:	0
+ zero:	0
+ nearest:	0
+ any:	0
+Orig: 0.900000 
+ up:	1
+ down:	0
+ zero:	0
+ nearest:	1
+ any:	0
+Orig: 1.000000 
+ up:	1
+ down:	1
+ zero:	1
+ nearest:	1
+ any:	1
+Orig: 1.200000 
+ up:	2
+ down:	1
+ zero:	1
+ nearest:	1
+ any:	1
+Orig: 1.600000 
+ up:	2
+ down:	1
+ zero:	1
+ nearest:	2
+ any:	1
+Orig: 2.000000 
+ up:	2
+ down:	2
+ zero:	2
+ nearest:	2
+ any:	2
+Orig: 2.500000 
+ up:	3
+ down:	2
+ zero:	2
+ nearest:	2
+ any:	2
+Orig: 4.000000 
+ up:	4
+ down:	4
+ zero:	4
+ nearest:	4
+ any:	4
+Orig: 4.990934 
+ up:	5
+ down:	4
+ zero:	4
+ nearest:	5
+ any:	4
+Orig: 5.800000 
+ up:	6
+ down:	5
+ zero:	5
+ nearest:	6
+ any:	5
+Orig: 9.000000 
+ up:	9
+ down:	9
+ zero:	9
+ nearest:	9
+ any:	9
+Orig: 10.000000 
+ up:	10
+ down:	10
+ zero:	10
+ nearest:	10
+ any:	10
+Orig: 100.000000 
+ up:	100
+ down:	100
+ zero:	100
+ nearest:	100
+ any:	100
+Orig: 100.123238 
+ up:	101
+ down:	100
+ zero:	100
+ nearest:	100
+ any:	100
+Orig: 10000.000000 
+ up:	10000
+ down:	10000
+ zero:	10000
+ nearest:	10000
+ any:	10000
+Orig: 10000.534180 
+ up:	10001
+ down:	10000
+ zero:	10000
+ nearest:	10001
+ any:	10000
+Orig: 10.079300 
+ up:	11
+ down:	10
+ zero:	10
+ nearest:	10
+ any:	10
+Orig: 10000000000.000000 
+ up:	10000000000
+ down:	10000000000
+ zero:	10000000000
+ nearest:	10000000000
+ any:	10000000000
+Orig: -0.000000 
+ up:	0
+ down:	0
+ zero:	0
+ nearest:	0
+ any:	0
+Orig: -0.100000 
+ up:	0
+ down:	-1
+ zero:	0
+ nearest:	0
+ any:	0
+Orig: -0.900000 
+ up:	0
+ down:	-1
+ zero:	0
+ nearest:	-1
+ any:	0
+Orig: -1.000000 
+ up:	-1
+ down:	-1
+ zero:	-1
+ nearest:	-1
+ any:	-1
+Orig: -1.200000 
+ up:	-1
+ down:	-2
+ zero:	-1
+ nearest:	-1
+ any:	-1
+Orig: -1.600000 
+ up:	-1
+ down:	-2
+ zero:	-1
+ nearest:	-2
+ any:	-1
+Orig: -2.000000 
+ up:	-2
+ down:	-2
+ zero:	-2
+ nearest:	-2
+ any:	-2
+Orig: -2.500000 
+ up:	-2
+ down:	-3
+ zero:	-2
+ nearest:	-2
+ any:	-2
+Orig: -4.000000 
+ up:	-4
+ down:	-4
+ zero:	-4
+ nearest:	-4
+ any:	-4
+Orig: -4.990934 
+ up:	-4
+ down:	-5
+ zero:	-4
+ nearest:	-5
+ any:	-4
+Orig: -5.800000 
+ up:	-5
+ down:	-6
+ zero:	-5
+ nearest:	-6
+ any:	-5
+Orig: -9.000000 
+ up:	-9
+ down:	-9
+ zero:	-9
+ nearest:	-9
+ any:	-9
+Orig: -10.000000 
+ up:	-10
+ down:	-10
+ zero:	-10
+ nearest:	-10
+ any:	-10
+Orig: -100.000000 
+ up:	-100
+ down:	-100
+ zero:	-100
+ nearest:	-100
+ any:	-100
+Orig: -100.123238 
+ up:	-100
+ down:	-101
+ zero:	-100
+ nearest:	-100
+ any:	-100
+Orig: -10000.000000 
+ up:	-10000
+ down:	-10000
+ zero:	-10000
+ nearest:	-10000
+ any:	-10000
+Orig: -10000.534180 
+ up:	-10000
+ down:	-10001
+ zero:	-10000
+ nearest:	-10001
+ any:	-10000
+Orig: -10.079300 
+ up:	-10
+ down:	-11
+ zero:	-10
+ nearest:	-10
+ any:	-10
+Orig: -10000000000.000000 
+ up:	-10000000000
+ down:	-10000000000
+ zero:	-10000000000
+ nearest:	-10000000000
+ any:	-10000000000
+------------ Rounding (DFlo): ------------
+Orig: 0.000000 
+ up:	0
+ down:	0
+ zero:	0
+ nearest:	0
+ no care:	0
+Orig: 0.100000 
+ up:	1
+ down:	0
+ zero:	0
+ nearest:	0
+ no care:	0
+Orig: 0.900000 
+ up:	1
+ down:	0
+ zero:	0
+ nearest:	1
+ no care:	0
+Orig: 1.000000 
+ up:	1
+ down:	1
+ zero:	1
+ nearest:	1
+ no care:	1
+Orig: 1.200000 
+ up:	2
+ down:	1
+ zero:	1
+ nearest:	1
+ no care:	1
+Orig: 1.600000 
+ up:	2
+ down:	1
+ zero:	1
+ nearest:	2
+ no care:	1
+Orig: 2.000000 
+ up:	2
+ down:	2
+ zero:	2
+ nearest:	2
+ no care:	2
+Orig: 2.500000 
+ up:	3
+ down:	2
+ zero:	2
+ nearest:	2
+ no care:	2
+Orig: 4.000000 
+ up:	4
+ down:	4
+ zero:	4
+ nearest:	4
+ no care:	4
+Orig: 4.990934 
+ up:	5
+ down:	4
+ zero:	4
+ nearest:	5
+ no care:	4
+Orig: 5.800000 
+ up:	6
+ down:	5
+ zero:	5
+ nearest:	6
+ no care:	5
+Orig: 9.000000 
+ up:	9
+ down:	9
+ zero:	9
+ nearest:	9
+ no care:	9
+Orig: 10.000000 
+ up:	10
+ down:	10
+ zero:	10
+ nearest:	10
+ no care:	10
+Orig: 100.000000 
+ up:	100
+ down:	100
+ zero:	100
+ nearest:	100
+ no care:	100
+Orig: 100.123238 
+ up:	101
+ down:	100
+ zero:	100
+ nearest:	100
+ no care:	100
+Orig: 10000.000000 
+ up:	10000
+ down:	10000
+ zero:	10000
+ nearest:	10000
+ no care:	10000
+Orig: 10000.534180 
+ up:	10001
+ down:	10000
+ zero:	10000
+ nearest:	10001
+ no care:	10000
+Orig: 10.079300 
+ up:	11
+ down:	10
+ zero:	10
+ nearest:	10
+ no care:	10
+Orig: 10000000000.000000 
+ up:	10000000000
+ down:	10000000000
+ zero:	10000000000
+ nearest:	10000000000
+ no care:	10000000000
+Orig: -0.000000 
+ up:	0
+ down:	0
+ zero:	0
+ nearest:	0
+ no care:	0
+Orig: -0.100000 
+ up:	0
+ down:	-1
+ zero:	0
+ nearest:	0
+ no care:	0
+Orig: -0.900000 
+ up:	0
+ down:	-1
+ zero:	0
+ nearest:	-1
+ no care:	0
+Orig: -1.000000 
+ up:	-1
+ down:	-1
+ zero:	-1
+ nearest:	-1
+ no care:	-1
+Orig: -1.200000 
+ up:	-1
+ down:	-2
+ zero:	-1
+ nearest:	-1
+ no care:	-1
+Orig: -1.600000 
+ up:	-1
+ down:	-2
+ zero:	-1
+ nearest:	-2
+ no care:	-1
+Orig: -2.000000 
+ up:	-2
+ down:	-2
+ zero:	-2
+ nearest:	-2
+ no care:	-2
+Orig: -2.500000 
+ up:	-2
+ down:	-3
+ zero:	-2
+ nearest:	-2
+ no care:	-2
+Orig: -4.000000 
+ up:	-4
+ down:	-4
+ zero:	-4
+ nearest:	-4
+ no care:	-4
+Orig: -4.990934 
+ up:	-4
+ down:	-5
+ zero:	-4
+ nearest:	-5
+ no care:	-4
+Orig: -5.800000 
+ up:	-5
+ down:	-6
+ zero:	-5
+ nearest:	-6
+ no care:	-5
+Orig: -9.000000 
+ up:	-9
+ down:	-9
+ zero:	-9
+ nearest:	-9
+ no care:	-9
+Orig: -10.000000 
+ up:	-10
+ down:	-10
+ zero:	-10
+ nearest:	-10
+ no care:	-10
+Orig: -100.000000 
+ up:	-100
+ down:	-100
+ zero:	-100
+ nearest:	-100
+ no care:	-100
+Orig: -100.123238 
+ up:	-100
+ down:	-101
+ zero:	-100
+ nearest:	-100
+ no care:	-100
+Orig: -10000.000000 
+ up:	-10000
+ down:	-10000
+ zero:	-10000
+ nearest:	-10000
+ no care:	-10000
+Orig: -10000.534180 
+ up:	-10000
+ down:	-10001
+ zero:	-10000
+ nearest:	-10001
+ no care:	-10000
+Orig: -10.079300 
+ up:	-10
+ down:	-11
+ zero:	-10
+ nearest:	-10
+ no care:	-10
+Orig: -10000000000.000000 
+ up:	-10000000000
+ down:	-10000000000
+ zero:	-10000000000
+ nearest:	-10000000000
+ no care:	-10000000000
+---------- Rounding tests finished. --------------
+Starting truncate self-test...
+Truncate self-test finished [success].
+Starting prev/next test. (Please, wait!)
+SFlo Range [0.01, 0.010001]
+Epsilon = 9.31323e-10
+There are 1074 sflo in the range.
+(s1 - s2) / epsilon = 1074
+SFlo Range [100.0, 100.1]
+Epsilon = 7.62939e-06
+#There are 13107 sflo in the range.
+(s1 - s2) / epsilon = 13107
+SFlo Range [2.0e-38, 2.0001e-38]
+Epsilon = 1.4013e-45
+There are 714 sflo in the range.
+(s1 - s2) / epsilon = 714
+DFlo Range [0.01, 0.010000000000001]
+Different epsilon!: 1.73472e-18 != 2.22045e-16
+[0011,1111.1000,0100.0111,1010.1110,0001.0100,0111.1010,1110.0001,0100.0111,1011.]
+[0011,1111.1000,0100.0111,1010.1110,0001.0100,0111.1010,1110.1111,0101.1010,1001.]
+[0011,1111.1000,0100.0111,1010.1110,0001.0100,0111.1010,1110.0001,0100.0111,1100.]
+[0011,1111.1000,0100.0111,1010.1110,0001.0100,0111.1010,1110.1111,0101.1010,1001.]
+There are 57646 dflo in the range
+(d1 - d2) / epsilon = 57646
+DFlo Range [100.0, 100.00000000001]
+Different epsilon!: 1.42109e-14 != 2.22045e-16
+[0100,0000.0101,1001.0000,0000.0000,0000.0000,0000.0000,0000.0000,0000.0000,0000.]
+[0100,0000.0101,1001.0000,0000.0000,0000.0000,0000.0000,0001.0001,0010.1110,0001.]
+[0100,0000.0101,1001.0000,0000.0000,0000.0000,0000.0000,0000.0000,0000.0000,0001.]
+[0100,0000.0101,1001.0000,0000.0000,0000.0000,0000.0000,0001.0001,0010.1110,0001.]
+There are 70369 dflo in the range
+(d1 - d2) / epsilon = 70369
+
+Test "float" completed.

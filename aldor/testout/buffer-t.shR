@@ -1,0 +1,32 @@
+===========================================================
+===  Test "buffer"
+===========================================================
+bufNew: [0/64]
+
+BUF_START / BUF_ADD1:
+"The rain in Iberia falls mainly in the cafeteria. " [50]
+[51/64]
+
+bufNeed(69): [51/69]
+bufChars: "The rain in Iberia falls mainly in the cafeteria. " [50]
+
+bufGrow(5): [51/74]
+bufChars: "The rain in Iberia falls mainly in the cafeteria. " [50]
+
+bufFree: OK
+
+bufNew: [0/64]
+
+BUF_ADD1 across a boundary: 
+ a: [60/64] b: [61/64] c: [62/64] d: [63/64] e: [64/64] f: [65/96] g: [66/96] h: [67/96] i: [68/96] j: [69/96]
+bufChars: "12345678901234567890123456789012345678901234567890123456789abcdefghij" [69]
+
+bufPrint: [70/96]"12345678901234567890123456789012345678901234567890123456789abcdefghij"
+bufLiberate: "12345678901234567890123456789012345678901234567890123456789abcdefghij"
+
+strFree: OK
+
+bufPrintf:
+56: This is a format command.  ! marks the 28-th character.
+
+Test "buffer" completed.

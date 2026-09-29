@@ -1,0 +1,19 @@
+===========================================================
+===  Test "fluid"
+===========================================================
+initial          42 42.42 0
+normal return    1001 1001.25 0
+after return     42 42.42 0
+nested outer     100 42.42 0
+nested inner     200 42.42 0
+nested restored  100 42.42 0
+after nested     42 42.42 0
+multiple         -7 3.50 1
+after multiple   42 42.42 0
+throw outer      500 500.50 0
+throw inner      600 600.50 1
+after throw      42 42.42 0
+bind on entry    77 77.50 1
+final            42 42.42 0
+
+Test "fluid" completed.

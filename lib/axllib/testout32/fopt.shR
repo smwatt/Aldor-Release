@@ -1,0 +1,26 @@
+== Compiling test0.as to test0.ai
+-- The files are:
+test0.ai
+== Compiling test0.ai to test0.ax
+-- The files are:
+test0.ai test0.ax
+== Compiling test0.ai to test0.fm
+-- The files are:
+test0.ai test0.ax test0.fm
+== Compiling test0.fm to test0.ao
+-- The files are:
+test0.ai test0.ao test0.ax test0.fm
+== Leaving just .as and .ao files.
+== Compiling test0.ao to test0.fm
+-- The files are:
+test0.ao test0.fm
+== Removing all output files.
+== Compiling test0.as to test0.{ai,ax,fm}
+-- The files are:
+test0.ai test0.ax test0.fm
+== Try compiling test0.fm to test0.fm
+#1 (Fatal Error) Output would clobber input file `test0.fm'.
+== Try compiling test0.ai to test0.c with test0.{ax,fm} around
+#1 (Warning) The file `test0.ax' will now be out of date.
+#2 (Warning) The file `test0.fm' will now be out of date.
+== Cleaning up

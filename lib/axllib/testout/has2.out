@@ -1,0 +1,6 @@
+"has2.as", line 15: 
+                loco (bt: BasicType) : BasicType == r s bt;
+......................^
+[L15 C23] #1 (Warning) Function returns a domain that might not be constant (which may cause problems if it is used in a dependent type).
+
+list(list(1, 2, 3, 4), list(8, 9))

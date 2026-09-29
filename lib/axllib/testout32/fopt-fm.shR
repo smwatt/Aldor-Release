@@ -1,0 +1,143 @@
+== Compiling test0.as to $TMPDIR/test0.fm
+(Unit
+  (DFmt
+    (DDecl
+      Globals
+      (GDecl Clos "test0" -1 4 0 Init)
+      (GDecl Clos "noOperation" -1 4 1 Foam)
+      (GDecl Clos "test0_f_847847226" -1 4 0 Foam)
+      (GDecl Clos "runtime" -1 4 1 Init)
+      (GDecl Word "integer_Integer_244869820" -1 4 1 Foam)
+      (GDecl Clos "rtLazyDomFrInit" -1 4 1 Foam)
+      (GDecl Clos "lazyGetExport!" -1 4 1 Foam)
+      (GDecl Clos "lazyForceImport" -1 4 1 Foam)
+      (GDecl Clos "rtDelayedGetExport!" -1 4 1 Foam)
+      (GDecl Clos "stdGetWordWordRetWord0" -1 4 1 Foam)
+      (GDecl Clos "integer" -1 4 1 Init))
+    (DDecl
+      Consts
+      (Decl Prog "test0" -1 4)
+      (Decl Prog "f" -1 4)
+      (Decl Prog "integer-init" -1 4))
+    (DDecl LocalEnv)
+    (DDecl Fluids)
+    (DDecl Locals)
+    (DDecl
+      LocalEnv
+      (Decl Word "Integer" -1 4)
+      (Decl Clos "+" -1 4)
+      (Decl Word "1" -1 4)
+      (Decl Clos "*" -1 4)
+      (Decl Word "dom" -1 4)
+      (Decl Bool "" -1 4)))
+  (DDef
+    (Def
+      (Const 0 test0)
+      (Prog
+        0
+        1
+        NOp
+        0
+        8192
+        0
+        0
+        0
+        (DDecl Params)
+        (DDecl Locals (Decl Clos "" -1 4))
+        (DFluid)
+        (DEnv 5)
+        (Seq
+          (CCall NOp (Glo 3 runtime))
+          (Set (Glo 0 test0) (Glo 1 noOperation))
+          (Def (Loc 0) (Clos (Env 0) (Const 2 integer-init)))
+          (Def (Glo 2 test0_f_847847226) (Clos (Env 0) (Const 1 f)))
+          (Set (Lex 0 5) (Bool 0))
+          (Def
+            (Lex 0 0 Integer)
+            (CCall Word (Glo 5 rtLazyDomFrInit) (Loc 0) (SInt 0)))
+          (Def (Lex 0 4 dom) (Lex 0 0 Integer))
+          (Def
+            (Lex 0 2 \1)
+            (CCall
+              Word
+              (Glo 6 lazyGetExport!)
+              (Lex 0 4 dom)
+              (SInt 200090)
+              (SInt 484208045)))
+          (Def
+            (Lex 0 1 +)
+            (CCall
+              Clos
+              (Glo 9 stdGetWordWordRetWord0)
+              (CCall
+                Word
+                (Glo 8 rtDelayedGetExport!)
+                (Lex 0 4 dom)
+                (SInt 200084)
+                (SInt 2104366580))))
+          (Def
+            (Lex 0 3 *)
+            (CCall
+              Clos
+              (Glo 9 stdGetWordWordRetWord0)
+              (CCall
+                Word
+                (Glo 8 rtDelayedGetExport!)
+                (Lex 0 4 dom)
+                (SInt 200083)
+                (SInt 2104366580))))
+          (OCall
+            Word
+            (Const 1 f)
+            (Env 0)
+            (CCall Word (Glo 7 lazyForceImport) (Lex 0 2 \1)))
+          (Return (Values)))))
+    (Def
+      (Const 1 f)
+      (Prog
+        0
+        0
+        Word
+        4
+        3
+        0
+        0
+        0
+        (DDecl Params (Decl Word "n" -1 4))
+        (DDecl Locals)
+        (DFluid)
+        (DEnv 4 5)
+        (Seq
+          (Return
+            (CCall
+              Word
+              (Lex 1 3 *)
+              (CCall
+                Word
+                (Lex 1 1 +)
+                (Par 0 n)
+                (CCall Word (Glo 7 lazyForceImport) (Lex 1 2 \1)))
+              (Par 0 n))))))
+    (Def
+      (Const 2 integer-init)
+      (Prog
+        0
+        1
+        Word
+        0
+        2
+        0
+        0
+        0
+        (DDecl Params (Decl SInt "idx" -1 4))
+        (DDecl Locals)
+        (DFluid)
+        (DEnv 4 5)
+        (Seq
+          (If (Lex 1 5) 0)
+          (Set (Lex 1 5) (Bool 1))
+          (CCall NOp (Glo 10 integer))
+          (Label 0)
+          (Return (Glo 4 integer_Integer_244869820)))))
+    (Def (Glo 0 test0) (Clos (Env 0) (Const 0 test0)))
+    (Def (Glo 2 test0_f_847847226) (Cast Clos (Nil)))))

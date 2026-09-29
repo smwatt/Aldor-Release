@@ -1,0 +1,6 @@
+build.sh OkFiles
+
+sal_fltgmp.as
+sal_gmptls.as
+sal_intgmp.as
+sal_gmpabi.c

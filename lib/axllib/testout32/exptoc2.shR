@@ -1,0 +1,9 @@
+== Compiling expquo.c into expquo.o
+== Compiling exptoc2.as into exptoc2 executable
+
+exptoc2.as:
+== Executing exptoc2
+7
+2
+== Cleaning up
+== Done

@@ -1,0 +1,20 @@
+f1_V ? 
+(-1)*v^3 + (3*u^2)*v + 4
+
+f1_V ? 
+g1_V ? 
+(u)*v^3 + u^2 + -9
+
+resCoefBound ? 
+33592320
+
+maxNorm(res)? 
+972
+
+resDegBound ? 
+12
+
+degree(res)? 
+10
+
+

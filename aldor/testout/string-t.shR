@@ -1,0 +1,29 @@
+===========================================================
+===  Test "string"
+===========================================================
+strIsPrefix:
+The prefix is "Pre", the rest is "fix".
+strIsSuffix:
+"fix" is a suffix of "Postfix".
+strMatch:
+The first 1 characters of "Prefix" and "Postfix" match.
+strCopy:
+"Prefix" and "Prefix" match
+strFree:
+strnCopy:
+The first 3 characters of "Prefix" are "Pre".
+strConcat, strLength:
+Concatenating "Pre" and "Postfix" yields:
+"PrePostfix", of length 10.
+strlConcat:
+Concatenating "Pre", "Prefix" and "Postfix" yields:
+"PrePrefixPostfix"
+strPrintf/strVPrintf:
+Pre--Prefix--Postfix--13--      3.14
+Pre--Prefix--Postfix--13--      3.14
+Pre--Prefix--Postfix--13--      3.14
+strPrint:
+"The rain's flat by `\\/' gum!, he \"said\". \012"
+`The rain!'s flat by !`\/!' gum!!, he "said". !xa'
+
+Test "string" completed.

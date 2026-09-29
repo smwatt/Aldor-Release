@@ -1,0 +1,11 @@
+== Compiling numeral*.as into numeral*.ao
+
+numeral0.as:
+
+numeral1.as:
+
+numeral2.as:
+== Building an archive containing numeral*.ao
+== Creating a client for the archive
+== Testing that the client imports from the archive
+== Done

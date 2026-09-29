@@ -1,0 +1,8 @@
+== Compiling expfact.c into expfact.o
+== Compiling exptoc.as into exptoc executable
+
+exptoc.as:
+== Executing exptoc
+120
+== Cleaning up
+== Done

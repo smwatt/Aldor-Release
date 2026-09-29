@@ -1,0 +1,6 @@
+"enum1.as", line 42:         return cons(1 pretend YY, nil);
+                     ........^
+[L42 C9] #1 (Warning) The `return' gives a value but none is expected.
+
+a
+a

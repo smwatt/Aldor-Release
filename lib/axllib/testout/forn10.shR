@@ -1,0 +1,211 @@
+== Generating C++ from mylist.as
+-- The files are: mylist_as.as mylist_cc.h
+************************** mylist_as.as
+#include "mylist.as"
+export {
+	ALDOR__Op__PLUS____MySI0: (MySI,MySI) -> MySI;
+	ALDOR__output__MySI1: (MySI) -> ();
+	ALDOR__bracket__MySI2: (SInt$Machine) -> MySI;
+	ALDOR__coerce__MySI3: (MySI) -> SInt$Machine;
+	ALDOR__givetype__MySI(): ItemCat with {
+ 		bracket: (SInt$Machine) -> %;
+		coerce: (%) -> SInt$Machine;
+	} == MySI;
+	ALDOR__Op__PLUS____MyString0: (MyString,MyString) -> MyString;
+	ALDOR__output__MyString1: (MyString) -> ();
+	ALDOR__bracket__MyString2: (String) -> MyString;
+	ALDOR__coerce__MyString3: (MyString) -> String;
+	ALDOR__givetype__MyString(): ItemCat with {
+ 		bracket: (String) -> %;
+		coerce: (%) -> String;
+	} == MyString;
+	ALDOR__bracket__MyListI0: (I: ItemCat) -> MyList(I);
+	ALDOR__append__MyListI1: (I: ItemCat,I,MyList(I)) -> MyList(I);
+	ALDOR__total__MyListI2: (I: ItemCat,MyList(I)) -> I;
+	ALDOR__output__MyListI3: (I: ItemCat,MyList(I)) -> ();
+	ALDOR__givetype__MyListI(I: ItemCat):  with {
+ 		bracket: () -> %;
+		append: (I,%) -> %;
+		total: (%) -> I;
+		output: (%) -> ();
+	} == MyList(I);
+	ALDOR__runlist__Global0: () -> ();
+} to Foreign C;
+ALDOR__Op__PLUS____MySI0(parm0: MySI,parm1: MySI): MySI == { 
+	import from MySI;
+	(parm0) + (parm1);
+}
+ALDOR__output__MySI1(parm0: MySI): () == { 
+	import from MySI;
+	output(parm0);
+}
+ALDOR__bracket__MySI2(parm0: SInt$Machine): MySI == { 
+	import from MySI;
+	bracket(parm0);
+}
+ALDOR__coerce__MySI3(parm0: MySI): SInt$Machine == { 
+	import from MySI;
+	coerce(parm0);
+}
+ALDOR__Op__PLUS____MyString0(parm0: MyString,parm1: MyString): MyString == { 
+	import from MyString;
+	(parm0) + (parm1);
+}
+ALDOR__output__MyString1(parm0: MyString): () == { 
+	import from MyString;
+	output(parm0);
+}
+ALDOR__bracket__MyString2(parm0: String): MyString == { 
+	import from MyString;
+	bracket(parm0);
+}
+ALDOR__coerce__MyString3(parm0: MyString): String == { 
+	import from MyString;
+	coerce(parm0);
+}
+ALDOR__bracket__MyListI0(I: ItemCat): MyList(I) == { 
+	import from MyList(I);
+	bracket();
+}
+ALDOR__append__MyListI1(I: ItemCat,parm0: I,parm1: MyList(I)): MyList(I) == { 
+	import from MyList(I);
+	append(parm0,parm1);
+}
+ALDOR__total__MyListI2(I: ItemCat,parm0: MyList(I)): I == { 
+	import from MyList(I);
+	total(parm0);
+}
+ALDOR__output__MyListI3(I: ItemCat,parm0: MyList(I)): () == { 
+	import from MyList(I);
+	output(parm0);
+}
+ALDOR__runlist__Global0(): () == { 
+	runlist();
+}
+************************** mylist_cc.h
+#include <foam_c.h>
+extern "C" {
+	void * ALDOR_Op_PLUS__MySI0(void *,void *);
+	void ALDOR_output_MySI1(void *);
+	void * ALDOR_bracket_MySI2(FiSInt);
+	FiSInt ALDOR_coerce_MySI3(void *);
+	void *ALDOR_givetype_MySI();
+	void * ALDOR_Op_PLUS__MyString0(void *,void *);
+	void ALDOR_output_MyString1(void *);
+	void * ALDOR_bracket_MyString2(char*);
+	char* ALDOR_coerce_MyString3(void *);
+	void *ALDOR_givetype_MyString();
+	void * ALDOR_bracket_MyListI0(void *);
+	void * ALDOR_append_MyListI1(void *,void *,void *);
+	void * ALDOR_total_MyListI2(void *,void *);
+	void ALDOR_output_MyListI3(void *,void *);
+	void *ALDOR_givetype_MyListI(void *);
+	void ALDOR_runlist_Global0();
+}
+template <class PercentType>
+class ItemCat {
+public:
+	virtual ~ItemCat() {}
+	virtual PercentType * operator+(PercentType *) = 0;
+	virtual void  output() = 0;
+};
+template <class PercentType>
+class ALDORCategoryMySI0:  virtual public ItemCat<PercentType> {
+public:
+	virtual ~ALDORCategoryMySI0() {}
+	virtual FiSInt  coerce() = 0;
+};
+class MySI:  virtual public ALDORCategoryMySI0<MySI> {
+	MySI *ptr;
+public:
+	MySI() { ptr = 0; }
+	MySI(MySI *orig) { ptr = orig; }
+	MySI(void *orig) { ptr = reinterpret_cast<MySI *>(orig); }
+	virtual ~MySI() {}
+	friend MySI *realObject(MySI *ob) { return ob->ptr; }
+	static void *givetype() { return ALDOR_givetype_MySI(); }
+	virtual MySI * operator+(MySI * parm0) { return new MySI(ALDOR_Op_PLUS__MySI0(ptr,realObject(parm0))); 	}
+	virtual void  output() { ALDOR_output_MySI1(ptr); 	}
+	static MySI * bracket(FiSInt parm0) { return new MySI(ALDOR_bracket_MySI2(parm0)); 	}
+	virtual FiSInt  coerce() { return ALDOR_coerce_MySI3(ptr); 	}
+};
+template <class PercentType>
+class ALDORCategoryMyString0:  virtual public ItemCat<PercentType> {
+public:
+	virtual ~ALDORCategoryMyString0() {}
+	virtual char*  coerce() = 0;
+};
+class MyString:  virtual public ALDORCategoryMyString0<MyString> {
+	MyString *ptr;
+public:
+	MyString() { ptr = 0; }
+	MyString(MyString *orig) { ptr = orig; }
+	MyString(void *orig) { ptr = reinterpret_cast<MyString *>(orig); }
+	virtual ~MyString() {}
+	friend MyString *realObject(MyString *ob) { return ob->ptr; }
+	static void *givetype() { return ALDOR_givetype_MyString(); }
+	virtual MyString * operator+(MyString * parm0) { return new MyString(ALDOR_Op_PLUS__MyString0(ptr,realObject(parm0))); 	}
+	virtual void  output() { ALDOR_output_MyString1(ptr); 	}
+	static MyString * bracket(char* parm0) { return new MyString(ALDOR_bracket_MyString2(parm0)); 	}
+	virtual char*  coerce() { return ALDOR_coerce_MyString3(ptr); 	}
+};
+template <class PercentType,class I>
+class ALDORCategoryMyList0 {
+public:
+	virtual ~ALDORCategoryMyList0() {}
+	virtual I * total() = 0;
+	virtual void  output() = 0;
+};
+template <class I>
+class MyList:  virtual public ALDORCategoryMyList0<MyList<I>,I> {
+	MyList<I> *ptr;
+public:
+	MyList() { ptr = 0; }
+	MyList(MyList<I> *orig) { ptr = orig; }
+	MyList(void *orig) { ptr = reinterpret_cast<MyList<I> *>(orig); }
+	virtual ~MyList() {}
+	friend MyList<I> *realObject(MyList<I> *ob) { return ob->ptr; }
+	static void *givetype() { return ALDOR_givetype_MyListI(I::givetype()); }
+	static MyList<I> * bracket() { return new MyList<I>(ALDOR_bracket_MyListI0(I::givetype())); 	}
+	static MyList<I> * append(I * parm0,MyList<I> * parm1) { return new MyList<I>(ALDOR_append_MyListI1(I::givetype(),realObject(parm0),realObject(parm1))); 	}
+	virtual I * total() { return new I(ALDOR_total_MyListI2(I::givetype(),ptr)); 	}
+	virtual void  output() { ALDOR_output_MyListI3(I::givetype(),ptr); 	}
+};
+void runlist() { ALDOR_runlist_Global0(); 	}
+== Compiling generated C++ 
+"mylist_as.as", line 7:         ALDOR__givetype__MySI(): ItemCat with {
+                        ........^
+[L7 C9] #1 (Warning) Function returns a domain that might not be constant (which may cause problems if it is used in a dependent type).
+
+"mylist_as.as", line 15:         ALDOR__givetype__MyString(): ItemCat with {
+                         ........^
+[L15 C9] #2 (Warning) Function returns a domain that might not be constant (which may cause problems if it is used in a dependent type).
+
+"mylist_as.as", line 23:         ALDOR__givetype__MyListI(I: ItemCat):  with {
+                         .................................^
+[L23 C34] #3 (Warning) Function returns a domain that might not be constant (which may cause problems if it is used in a dependent type).
+
+mylist_as.as
+mylist_as.o
+mylist_cc.h
+== Linking program
+== Running program
+------------------------------------------
+   Actual C++ program using Aldor types   
+------------------------------------------
+List 1: [Hello,][ I am ][happy to ][be there.]
+
+List 2: [32][54][73]
+
+Hello, I am happy to be there.
+159
+------------------------------------------
+    Call to the Aldor function runlist    
+------------------------------------------
+List 1: [Hello,][ I am ][happy to ][be there.]
+
+List 2: [32][54][73]
+
+Hello, I am happy to be there.
+159
+== Removing all output files.

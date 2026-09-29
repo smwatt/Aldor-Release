@@ -1,0 +1,13 @@
+CPU affinity: 0
+Warmups: 2
+Measured paired runs: 7
+cpu baseline median: 2.170000 s
+cpu current median:  2.160000 s
+cpu ratio of medians: 0.995392
+cpu median paired ratio: 1.000000
+cpu paired change: +0.000%
+wall baseline median: 2.180000 s
+wall current median:  2.160000 s
+wall ratio of medians: 0.990826
+wall median paired ratio: 0.995392
+wall paired change: -0.461%

@@ -152,7 +152,7 @@ suggest. The traversal is supplied by the type being traversed.
 for x in xs repeat ...
 ```
 
-`for` is not a list-specific construct; other library or user-defined types
+The `for` is not a list-specific construct; other library or user-defined types
 can provide generators and participate in the same notation.
 
 Likewise, the bracket construction does not intrinsically mean "construct a
@@ -387,8 +387,8 @@ The function first accepts a ring `R`, and then two values of that very `R`.
 Supplying the first argument therefore determines both the operation and the
 types of its remaining arguments. Because `R` is declared to be a `Ring`,
 the required multiplication and subtraction are available. This does not
-require `x` and `y` to be allocated objects: they may be passed as raw data
-values.
+require `x` and `y` to be tagged values or general objects: they may be 
+passed as raw data values.
 
 To use this with integers, we first declare the existing `Integer` type to
 belong to the new category `Ring`, using its existing exports to satisfy the
@@ -616,11 +616,12 @@ Generated build roots used by `rebuild.sh` are placed outside the source tree.
 
 Guides and manuals for earlier versions:
 
-- [Aldor User Guide](doc/aldor-ug-2003/aldorug.pdf)
-- [libaldor Reference Manual](lib/aldor/doc/libaldor.pdf)
-- [Algebra Reference Manual](lib/algebra/doc/algebra.pdf)
+- [Aldor User Guide](https://www.aldor.org/docs/aldorug.pdf)
+- [FOAM: A First Order Abstract Machine](https://cs.uwaterloo.ca/~smwatt/pub/reprints/1994-ibmtr-foam.pdf)
+- [libaldor Reference Manual](https://github.com/smwatt/Aldor-Release/blob/main/lib/aldor/doc/libaldor.pdf)
+- [Algebra Reference Manual](https://github.com/smwatt/Aldor-Release/blob/main/lib/algebra/doc/algebra.pdf)
 
-Additional historical and technical documentation is under [`doc/`](doc/).
+These and additional historical and technical documentation is under [`doc/`](doc/), [`lib/aldor/doc/`](lib/aldor/doc/) and [`lib/algebra/doc/`](lib/algebra/doc/) in the distribution.
 
 ## Releases
 

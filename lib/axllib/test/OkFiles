@@ -161,6 +161,7 @@ errorax.sh
 exit0.as
 exit1.as
 exit2.as
+examples-v1.5.1.as
 exn1.as
 exn2.as
 exn3.as
@@ -179,6 +180,7 @@ exptoc.sh
 extend0.as
 extend1.as
 extend2.as
+extend3.as
 f11.as
 f21.as
 fact.as

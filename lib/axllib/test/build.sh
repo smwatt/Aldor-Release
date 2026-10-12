@@ -420,7 +420,7 @@ RunOk=(
     defgroup3.as depend6.as depend7.as depend8.as df1.as
     domain1.as domain2.as domain3.as embed1.as emerge0.as
     enum0.as enum1.as exit2.as exn1.as exn2.as
-    exn3.as extend0.as extend1.as f11.as f21.as
+    exn3.as extend0.as extend1.as extend3.as f11.as f21.as
     float0.as float1.as float3.as flow0.as fluid0.as
     format1.as format2.as forn1.as funvar.as gc0.as
     genops.as goto0.as grok.as has1.as hash0.as
@@ -449,6 +449,7 @@ RunOk=(
     intfact.as t1025.as t1028.as exn4.as exn5.as
     exn6.as float2.as halt0.as halt1.as missing1.as
     object0.as bug1212.as default8.as pack3.as
+    examples-v1.5.1.as
 )
 RunFix=(
 )

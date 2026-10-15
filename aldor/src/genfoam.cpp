@@ -55,6 +55,8 @@ bool    genfoamDebug            = false;
 bool    genfoamHashDebug        = false;
 bool    genfoamConstDebug       = false;
 
+static int gen0ExtendFrontier   = -1;
+
 extern bool genfExportDebug;    /* (from gf_add.c) */
 #define genfExportDEBUG(s)      DEBUG_IF(genfExportDebug, s)
 
@@ -131,7 +133,9 @@ local Foam         gen0Embed              (Foam, AbSyn, TForm, AbEmbed);
 local Symbol       gen0ExportingTo        (AbSyn absyn);
 local void         gen0ExportToBuiltin    (AbSyn fun);
 local void         gen0ExportToC          (AbSyn fun);
+local void         gen0ExportToLisp       (AbSyn fun);
 local Foam         gen0Extend             (AbSyn);
+local Foam         gen0ExtendDeclare      (AbSyn, List<Syme>);
 local void         gen0FindDefs           (AbSyn, AbSyn, Stab, bool, bool );
 local int          gen0FoamLevel          (AInt level);
 local FoamTag      gen0FoamType           (Foam foam);
@@ -139,7 +143,7 @@ local void         gen0ForIter            (AbSyn, List<Foam> *, List<Foam> *);
 local void         gen0FreeTemp           (Foam);
 local void         gen0GenFoamInit        (void);
 local void         gen0GenFoamFini        (void);
-local Syme         gen0FindImportedSyme   (Syme, AInt, bool);
+local GenFoamImport gen0FindImportedSyme   (Syme, AInt, bool);
 local bool         gen0GetImportedSyme    (Syme, AInt, bool);
 local void         gen0SetImportedSyme    (Syme, AInt);
 local Foam         gen0GetRealFormat      (AInt);
@@ -160,8 +164,9 @@ local Foam *       gen0MakeApplyArgs      (AbSyn, Length *);
 local Foam         gen0EmbedApply         (int, AbSyn *, AbSyn, AbEmbed);
 local void         gen0MakeBuiltinExports (void);
 local Foam         gen0MakeExtend         (Syme, TForm);
-local Foam         gen0MakeExtendLambda   (Syme, TForm);
-local Foam         gen0MakeExtendBase     (Syme);
+local Foam         gen0MakeExtendWithParents(Syme, TForm, List<Syme>);
+local Foam         gen0MakeExtendLambda   (Syme, TForm, List<Syme>);
+local Foam         gen0MakeExtendBase     (Syme, List<Syme>);
 local void         gen0MakeExtendParents  (Syme, List<Syme>);
 local void         gen0MakeExtendParent   (Syme, Syme, Length, Foam);
 local Foam         gen0MakeExtendApply    (TForm, Foam);
@@ -671,8 +676,12 @@ genFoam(AbSyn absyn)
         Foam            foam = 0;
         AbSynTag        tag;
         MutString          msg;
+        Fluid           fluidBinding_gen0ExtendFrontier(gen0ExtendFrontier);
 
         if (!absyn) return NULL;
+
+        if (abExtendFrontier(absyn) >= 0)
+                gen0ExtendFrontier = abExtendFrontier(absyn);
 
         tag = abTag(absyn);
 
@@ -842,9 +851,28 @@ genFoam(AbSyn absyn)
         case AB_Export:
                 genExport(absyn);
                 break;
-        case AB_Extend:
-                genFoam(absyn->abExtend.body);
+        case AB_Extend: {
+                AbSyn           body = absyn->abExtend.body;
+                AbSyn           *argv = abArgvAs(AB_Sequence, body);
+                List<Syme>      declarations = listNil<Syme>;
+                Length          i, argc = abArgcAs(AB_Sequence, body);
+
+                genFoam(body);
+                for (i = 0; i < argc; i += 1) {
+                        if (abHasTag(argv[i], AB_Declare) ||
+                            abHasTag(argv[i], AB_Id))
+                                declarations = listCons<Syme>(
+                                        abSyme(abDefineeId(argv[i])),
+                                        declarations);
+                }
+                for (i = 0; i < argc; i += 1) {
+                        if (abHasTag(argv[i], AB_Declare) ||
+                            abHasTag(argv[i], AB_Id))
+                                gen0ExtendDeclare(argv[i], declarations);
+                }
+                listFree<Syme>(declarations);
                 break;
+        }
         case AB_Select:
                 foam = genSelect(absyn);
                 break;
@@ -908,6 +936,8 @@ genExport(AbSyn absyn)
                         gen0ExportToBuiltin(ab);
                 else if (sym == ssymC)
                         gen0ExportToC(ab);
+                else if (sym == ssymLisp)
+                        gen0ExportToLisp(ab);
                 else if (sym == ssymFortran)
                         gen0ExportToFortran(ab);
         }
@@ -998,6 +1028,45 @@ gen0ExportToC(AbSyn absyn)
         /*!! Assumes export to C is exporting a function! */
         decl = foamNewGDecl(FOAM_Clos, strCopy(symeString(syme)),
                             init, FOAM_GDecl_Export, FOAM_Proto_C);
+        foamGDeclSetRType(decl, rtype);
+
+        index = gen0AddGlobal(decl);
+        gen0BuiltinExports = listCons<AInt>(index, gen0BuiltinExports);
+        gen0BuiltinExports = listCons<AInt>(int0, gen0BuiltinExports);
+
+        gen0AddStmt(foamNewSet(foamNewGlo(index), gen0Syme(syme)), absyn);
+}
+
+/*
+ * Create a global variable binding for exporting to Lisp.
+ */
+local void
+gen0ExportToLisp(AbSyn absyn)
+{
+        AbSyn   name = abDefineeId(absyn);
+        Syme    syme = abSyme(name);
+        TForm   tf;
+        FoamTag rtype;
+        AInt    init = gloInitIdx;
+        Foam    decl;
+        AInt    index;
+
+        assert(syme);
+        tf = symeType(syme);
+        rtype = tfIsMap(tf) ? gen0Type(tfMapRet(tf), NULL) : FOAM_Nil;
+
+        if (!(gen0State->tag == GF_File &&
+              stabLevelNo(gen0State->stab) == 1)) {
+                AbSyn   exporter = gen0ProgGetExporter();
+                if (exporter && abHasTag(exporter, AB_Id)) {
+                        Syme    xsyme = abSyme(exporter);
+                        if (xsyme && gen0FoamKind(xsyme) == FOAM_Glo)
+                                init = gen0VarIndex(abSyme(exporter));
+                }
+        }
+
+        decl = foamNewGDecl(FOAM_Clos, strCopy(symeString(syme)),
+                            init, FOAM_GDecl_Export, FOAM_Proto_Lisp);
         foamGDeclSetRType(decl, rtype);
 
         index = gen0AddGlobal(decl);
@@ -4243,6 +4312,70 @@ gen0IsDomainInit(Foam foam)
 }
 
 /*
+ * Generate Foam for a declarative domain extension.
+ *
+ * Scope/type analysis creates the extension syme even when no implementation
+ * body is present.  Such an extension still needs a runtime extension object;
+ * otherwise imports from it capture an uninitialized domain value.
+ */
+local Foam
+gen0ExtendDeclare(AbSyn absyn, List<Syme> declarations)
+{
+        AbSyn           lhs = abDefineeId(absyn);
+        Syme            syme = abSyme(lhs), extension;
+        List<Syme>      extendee, parents, l;
+        Foam            val, dom, def;
+
+        assert(syme);
+        extension = symeExtension(syme);
+        assert(extension && symeIsExtend(extension));
+
+        extendee = symeExtendee(extension);
+        assert(listMemq<Syme>(extendee, syme));
+
+        if (syme != car(listLastCons<Syme>(extendee)))
+                return NULL;
+
+        if (symeHashNum(syme))
+                symeSetHashNum(extension, symeHashNum(syme));
+
+        /*
+         * The semantic extendee list also contains the declaration symes
+         * introduced by a bare extend statement.  They contribute type
+         * information but have no runtime domain value.  Only implemented
+         * or previously-existing extendees belong in the parent vector.
+         */
+        parents = listNil<Syme>;
+        for (l = extendee; l; l = cdr(l))
+                if (!listMemq<Syme>(declarations, car(l)))
+                        parents = listCons<Syme>(car(l), parents);
+        parents = listNReverse<Syme>(parents);
+
+        val = gen0MakeExtendWithParents(extension, symeType(extension), parents);
+        listFree<Syme>(parents);
+
+        dom = gen0Syme(extension);
+        def = foamNewDef(dom, val);
+
+        if (gen0IsDomainInit(val)) {
+                gen0AddInit(def);
+#if AXL_EDIT_1_1_12p6_25
+                if (symeHashNum(extension) &&
+                    foamTag(val) == FOAM_Clos) {
+                        AInt hash = symeHashNum(extension);
+                        Foam ext = foamCopy(dom);
+
+                        gen0AddInit(gen0RtSetProgHash(ext, hash));
+                }
+#endif
+                return NULL;
+        }
+
+        return gen0SetValue(def, absyn);
+}
+
+
+/*
  * Generate Foam for a domain extension.
  */
 local Foam
@@ -4297,17 +4430,23 @@ gen0Extend(AbSyn absyn)
 local Foam
 gen0MakeExtend(Syme syme, TForm tf)
 {
+        return gen0MakeExtendWithParents(syme, tf, symeExtendee(syme));
+}
+
+local Foam
+gen0MakeExtendWithParents(Syme syme, TForm tf, List<Syme> parents)
+{
         if (tfIsMap(tf))
-                return gen0MakeExtendLambda(syme, tf);
+                return gen0MakeExtendLambda(syme, tf, parents);
         else
-                return gen0MakeExtendBase(syme);
+                return gen0MakeExtendBase(syme, parents);
 }
 
 /*
  * Generate code for the function to create a parameterized extension domain.
  */
 local Foam
-gen0MakeExtendLambda(Syme syme, TForm tf)
+gen0MakeExtendLambda(Syme syme, TForm tf, List<Syme> parents)
 {
         Foam            *paramv;
         Foam            foam, clos, var;
@@ -4359,7 +4498,9 @@ gen0MakeExtendLambda(Syme syme, TForm tf)
         }
         gen0CacheCheck(cache, tfMapArgc(symeType(syme)), paramv);
 
-        gen0AddStmt(foamNewSet(var, gen0MakeExtend(syme, tfret)), NULL);
+        gen0AddStmt(foamNewSet(var,
+                                gen0MakeExtendWithParents(syme, tfret, parents)),
+                    NULL);
         var = gen0CacheReturn(cache, foamCopy(var));
         gen0AddStmt(foamNewReturn(var), NULL);
         gen0ProgAddFormat(index);
@@ -4389,7 +4530,7 @@ gen0MakeExtendLambda(Syme syme, TForm tf)
  * Generate code for the function to create an extension domain.
  */
 local Foam
-gen0MakeExtendBase(Syme syme)
+gen0MakeExtendBase(Syme syme, List<Syme> parents)
 {
         Foam            foam, clos;
         AInt            index;
@@ -4414,7 +4555,7 @@ gen0MakeExtendBase(Syme syme)
         gen0State->program = foam;
         gen0State->program->foamProg.infoBits = IB_SIDE;
 
-        gen0MakeExtendParents(syme, symeExtendee(syme));
+        gen0MakeExtendParents(syme, parents);
         gen0AddStmt(foamNewReturn(foamNewPar(int0)), NULL);
 
         gen0ProgAddFormat(index);
@@ -4565,7 +4706,54 @@ gen0ParamIndex(Syme param)
 Foam
 gen0ExtendSyme(Syme syme)
 {
-        while (symeExtension(syme)) syme = symeExtension(syme);
+
+        /*
+         * A TForm/import may already name an extension layer directly.
+         * If that layer did not yet exist at this use's source-order
+         * frontier, retreat through the extension's predecessor before
+         * considering forward links.
+         *
+         * tiTfExtend1 records the pre-extension meaning at the head of the
+         * extension's extendee list; the remaining entries are the meanings
+         * contributed by this extension.
+         */
+        while (symeIsExtend(syme) &&
+               symeExtendNo(syme) != 0 &&
+               gen0ExtendFrontier >= 0 &&
+               symeExtendNo(syme) > gen0ExtendFrontier) {
+                List<Syme> extendees = symeExtendee(syme);
+
+                if (!extendees)
+                        break;
+                syme = car(extendees);
+        }
+
+        /*
+         * A semantic extension link may point to a layer introduced later
+         * in the same lexical scope.  Follow only layers which existed at
+         * this syntax node's binding frontier.  Imported and legacy
+         * extensions have generation zero.
+         */
+        while (symeExtension(syme)) {
+                Syme next = symeExtension(syme);
+
+                if (symeExtendNo(next) != 0 &&
+                    gen0ExtendFrontier >= 0 &&
+                    symeExtendNo(next) > gen0ExtendFrontier)
+                        break;
+
+                /*
+                 * An extension defined in an inner lexical level must not
+                 * change the meaning of an outer use.
+                 */
+                if (!symeLib(next) &&
+                    !listMemq<StabLevel>(gen0State->stab,
+                                         symeDefLevel(next)))
+                        break;
+                syme = next;
+        }
+
+
         return gen0Syme(syme);
 }
 
@@ -4731,6 +4919,15 @@ gen0SymeImport(Syme syme)
         if (!symeImportInit(syme)) {
                 gen0SetImportedSyme(syme, level);
                 gen0InitImport(syme);
+
+                /*
+                 * Import initialization can recursively generate code in
+                 * another state and thereby change the shared Syme's FOAM
+                 * fields.  Reload this state's metadata before constructing
+                 * the reference returned to the caller.
+                 */
+                if (!gen0GetImportedSyme(syme, level, false))
+                        bug("gen0SymeImport: import missing after initialization");
         }
 
         idx = (gen0State->whereNest) ?
@@ -5830,6 +6027,16 @@ gen0VarsImport(Syme syme, Stab stab)
 
         gen0SetVarIndex(syme, index);
         gen0SetFoamKind(syme, FOAM_Lex);
+
+        {
+                GenFoamImport import =
+                        gen0FindImportedSyme(syme, l, false);
+
+                assert(import);
+                import->index = index;
+                import->kind = FOAM_Lex;
+                import->allocated = true;
+        }
 
         sefo = tfExpr(symeExporter(syme));
         symes = gen0GetExporterSymes(stab, sefo, listNil<Syme>);
@@ -7056,7 +7263,7 @@ gen0NewState(Stab stab, int format, GenFoamTag tag)
         s->inits         = listNil<Foam>;
         s->importPlace   = NULL;
         s->importPlacePrev = NULL;
-        s->funImportList = listNil<Syme>;
+        s->funImportList = listNil<GenFoamImport>;
         s->domImportList = listNil<TForm>;
         s->domList       = listNil<Foam>;
         s->hasTemps      = false;
@@ -7271,50 +7478,68 @@ gen0UseFormat(AInt level, int slot)
         car(l) = slot;
 }
 
-local Syme
+local GenFoamImport
 gen0FindImportedSyme(Syme syme, AInt level, bool add)
 {
-        GenFoamState    s = gen0NthState(level);
-        List<Syme>        l = s->funImportList;
-        Syme            osyme = NULL;
+        GenFoamState          s = gen0NthState(level);
+        List<GenFoamImport>   l = s->funImportList;
+        GenFoamImport         import = NULL;
 
-        for (; !osyme && l; l = cdr(l))
-                if (symeEqual(syme, car(l)))
-                        osyme = car(l);
+        for (; !import && l; l = cdr(l))
+                if (symeEqual(syme, car(l)->syme))
+                        import = car(l);
 
-        if (!osyme && add) {
+        if (!import && add) {
+                import = (GenFoamImport)
+                        stoAlloc(OB_Other, sizeof(*import));
+                import->syme = syme;
+                import->index = int0;
+                import->kind = FOAM_LIMIT;
+                import->initialized = false;
+                import->allocated = false;
+
                 symeClrImportInit(syme);
-                s->funImportList = listCons<Syme>(syme, s->funImportList);
+                s->funImportList =
+                        listCons<GenFoamImport>(import, s->funImportList);
+
+                /*
+                 * Preserve the historical protocol: insertion reserves the
+                 * import but is reported as "not previously present", so
+                 * gen0VarsImport proceeds to allocate its FOAM slot.
+                 */
+                return NULL;
         }
 
-        return osyme;
+        return import;
 }
 
 local bool
 gen0GetImportedSyme(Syme syme, AInt level, bool add)
 {
-        Syme    osyme = gen0FindImportedSyme(syme, level, add);
+        GenFoamImport import =
+                gen0FindImportedSyme(syme, level, add);
 
-        if (osyme && osyme != syme) {
-                gen0SetVarIndex(syme, gen0VarIndex(osyme));
-                gen0SetFoamKind(syme, gen0FoamKind(osyme));
-                if (symeImportInit(osyme))
+        if (import && import->allocated) {
+                gen0SetVarIndex(syme, import->index);
+                gen0SetFoamKind(syme, import->kind);
+                if (import->initialized)
                         symeSetImportInit(syme);
                 else
                         symeClrImportInit(syme);
         }
 
-        return osyme != NULL;
+        return import != NULL;
 }
 
 local void
 gen0SetImportedSyme(Syme syme, AInt level)
 {
-        Syme    osyme = gen0FindImportedSyme(syme, level, false);
+        GenFoamImport import =
+                gen0FindImportedSyme(syme, level, false);
 
-        assert(osyme);
+        assert(import && import->allocated);
         symeSetImportInit(syme);
-        symeSetImportInit(osyme);
+        import->initialized = true;
 }
 
 local void
@@ -7515,6 +7740,8 @@ MutString
 gen0GlobalName(MutString libname, Syme syme)
 {
         Syme    ext0 = symeExtension(syme);
+        Syme    original = symeIsImport(syme) ? symeOriginal(syme) : NULL;
+        Syme    originalExt = original ? symeExtension(original) : NULL;
         MutString  g;
 
         symeSetExtension(syme, NULL);
@@ -7522,7 +7749,23 @@ gen0GlobalName(MutString libname, Syme syme)
                 g = strCopy(symeString(syme));
         else {
                 MutString l = strLower(strCopy(libname));
-                Hash   h = gen0SymeTypeCode(syme);
+                Hash h;
+
+                /*
+                 * The global identity of an imported value belongs to
+                 * its original definition, not its extended type.
+                 */
+                if (originalExt) {
+                        if (original != syme)
+                                symeSetExtension(original, NULL);
+
+                        h = tfHash(symeType(original));
+
+                        if (original != syme)
+                                symeSetExtension(original, originalExt);
+                }
+                else
+                        h = gen0SymeTypeCode(syme);
                 g = strPrintf("%s_%s_%09d", l, symeString(syme), h);
                 strFree(l);
         }

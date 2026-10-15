@@ -95,7 +95,38 @@ for f in "${INPUTS[@]}"; do
                 exit 1
         fi
 done
-CURRENT_FP=$(sha256_files "${INPUTS[@]}") || exit 1
+# Standalone validation does not inherit the build subprocess's Aldor
+# compiler arguments.  Resolve GMP's link directory independently, using the
+# same explicit-prefix / pkg-config / Homebrew precedence as the build.
+gmp_lib_dir=${ALDOR_GMP_LIB_DIR:-}
+if [ -z "$gmp_lib_dir" ] && [ -n "${ALDOR_GMP_PREFIX:-}" ]; then
+        gmp_lib_dir="$ALDOR_GMP_PREFIX/lib"
+fi
+if [ -z "$gmp_lib_dir" ] &&
+   command -v pkg-config >/dev/null 2>&1 &&
+   pkg-config --exists gmp >/dev/null 2>&1; then
+        gmp_lib_dir=$(pkg-config --variable=libdir gmp 2>/dev/null || :)
+fi
+if [ -z "$gmp_lib_dir" ] && [ "$(uname -s)" = Darwin ] &&
+   command -v brew >/dev/null 2>&1; then
+        gmp_prefix=$(brew --prefix gmp 2>/dev/null || :)
+        [ -z "$gmp_prefix" ] || gmp_lib_dir="$gmp_prefix/lib"
+fi
+if [ -n "$gmp_lib_dir" ] && [ ! -d "$gmp_lib_dir" ]; then
+        echo "GMP library directory does not exist: $gmp_lib_dir" >&2
+        exit 1
+fi
+gmp_link_args=()
+if [ -n "$gmp_lib_dir" ]; then
+        gmp_link_args=("-Cargs=-L$gmp_lib_dir")
+        echo "GMP library directory: $gmp_lib_dir"
+fi
+
+# The matrix is resumable: changing this script or the selected GMP library
+# directory must invalidate saved compile failures as well as successes.
+GMP_LINK_CONFIG="$OUTROOT/gmp-library-directory.txt"
+printf '%s\n' "$gmp_lib_dir" > "$GMP_LINK_CONFIG"
+CURRENT_FP=$(sha256_files "${INPUTS[@]}" "$SRCROOT/modernization/algebra-matrix.sh" "$GMP_LINK_CONFIG") || exit 1
 
 if [ -f "$RESULTS" ] && [ ! -f "$FINGERPRINT" ]; then
         rm -f "$RESULTS"
@@ -159,6 +190,7 @@ for backend in std gmp; do
                 else
                         "$ROOT/bin/aldor" -fx -y"$ROOT/lib" -lalgebra-gmp \
                                 -laldor -q1 -qinline-all \
+                                "${gmp_link_args[@]}" \
                                 -cruntime=foam-gmp,gmp -dGMP "$t.test.as" \
                                 >compile.out 2>&1
                 fi

@@ -1575,6 +1575,7 @@ abTransferSemantics(AbSyn from, AbSyn to)
                 abSetImplicit(to, abImplicit(from));
                 abSetTContext(to, abTContext(from));
                 abSetDefineIdx(to, abDefineIdx(from));
+                abSetExtendFrontier(to, abExtendFrontier(from));
         }
 
         switch (abState(from)) {
@@ -1619,6 +1620,7 @@ abNewSemantics(void)
         as->embed       = 0;
         as->defnIdx     = -1;
         as->impl        = NULL;
+        as->extendFrontier = -1;
 
         return as;
 }
@@ -1669,6 +1671,16 @@ abSetDefineIdx(AbSyn ab, int idx)
                 ab->abHdr.seman->defnIdx = idx;
         }
 }
+void
+abSetExtendFrontier(AbSyn ab, int frontier)
+{
+        if (ab) {
+                if (!ab->abHdr.seman)
+                        ab->abHdr.seman = abNewSemantics();
+                ab->abHdr.seman->extendFrontier = frontier;
+        }
+}
+
 void
 abSetImpl(AbSyn ab, SImpl impl)
 {

@@ -766,6 +766,10 @@ if grep -q '^Result = ' "$SRCROOT/lib/axllib/testout/float2.out"; then
     exit 1
 fi
 
+# The fake compilers used below cannot emit Mach-O deployment metadata.
+# Select a synthetic deployment target so their warning-option probes exercise
+# only the C/C++ diagnostic logic, not real compiler target discovery.
+
 # RC13: generated-C Clang warning probes are independent.  Emulate an older
 # Clang that rejects -Wno-deprecated-non-prototype but accepts
 # -Wno-unused-value, then source build-fns and inspect the generated-C args.
@@ -781,6 +785,7 @@ SH
 chmod +x "$TMP/fake-clang14"
 mkdir -p "$TMP/fake-root"
 ALDORROOT="$TMP/fake-root" \
+MACOSX_DEPLOYMENT_TARGET=26.0 \
 ALDOR_TOOLCHAIN=clang \
 ALDOR_CC="$TMP/fake-clang14" \
 ALDOR_CXX="$TMP/fake-clang14" \
@@ -845,6 +850,7 @@ SH
 chmod +x "$TMP/fake-macos-bin/uname" "$TMP/fake-macos-bin/sw_vers"
 PATH="$TMP/fake-macos-bin:$PATH" \
 ALDORROOT="$TMP/fake-root-gcc16" \
+MACOSX_DEPLOYMENT_TARGET=26.0 \
 ALDOR_TOOLCHAIN=gcc \
 ALDOR_CC="$TMP/fake-gcc16" \
 ALDOR_CXX="$TMP/fake-gcc16" \
@@ -865,6 +871,7 @@ fake_sdk="$TMP/MacOSX15.4.sdk"
 mkdir -p "$fake_sdk" "$TMP/fake-root-gcc-sdk"
 PATH="$TMP/fake-macos-bin:$PATH" \
 ALDORROOT="$TMP/fake-root-gcc-sdk" \
+MACOSX_DEPLOYMENT_TARGET=26.0 \
 ALDOR_TOOLCHAIN=gcc \
 ALDOR_CC="$TMP/fake-gcc16" \
 ALDOR_CXX="$TMP/fake-gcc16" \
@@ -886,6 +893,7 @@ grep -F "SDKROOT=$fake_sdk" "$TMP/fake-gcc-sdk.args" >/dev/null
 mkdir -p "$TMP/fake-root-gcc-compat"
 PATH="$TMP/fake-macos-bin:$PATH" \
 ALDORROOT="$TMP/fake-root-gcc-compat" \
+MACOSX_DEPLOYMENT_TARGET=26.0 \
 ALDOR_TOOLCHAIN=gcc \
 ALDOR_CC="$TMP/fake-gcc16" ALDOR_CXX="$TMP/fake-gcc16" \
 ALDOR_MACOS_CXX_COMPAT_FLAG='-D_Static_assert=static_assert' \

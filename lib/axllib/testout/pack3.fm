@@ -4,16 +4,16 @@
       Globals
       (GDecl Clos "pack3" -1 4 0 Init)
       (GDecl Clos "noOperation" -1 4 1 Foam)
-      (GDecl Word "pack3_SingleInteger_091739099" -1 4 0 Foam)
       (GDecl Word "pack3_DoubleFloat_091739099" -1 4 0 Foam)
+      (GDecl Word "pack3_SingleInteger_091739099" -1 4 0 Foam)
       (GDecl Clos "pack3_main_778822608" -1 4 0 Foam)
       (GDecl Clos "pack3_raise10_229316524" -1 4 0 Foam)
       (GDecl Clos "pack3_increment_431027880" -1 4 0 Foam)
       (GDecl Clos "pack3_applyPacked_304121057" -1 4 0 Foam)
       (GDecl Word "pack3_WGS84Position_075340687" -1 4 0 Foam)
       (GDecl Word "pack3_PackableValue_733819283" -1 4 0 Foam)
-      (GDecl Word "pack3_DoubleFloat_854338884" -1 4 0 Foam)
       (GDecl Word "pack3_SingleInteger_662414144" -1 4 0 Foam)
+      (GDecl Word "pack3_DoubleFloat_854338884" -1 4 0 Foam)
       (GDecl Clos "runtime" -1 4 1 Init)
       (GDecl Clos "rtConstSIntFn" -1 4 1 Foam)
       (GDecl Clos "domainHash!" -1 4 1 Foam)
@@ -59,16 +59,19 @@
       (Decl Prog "PackableValue" -1 4)
       (Decl Prog "addLevel0" -1 4)
       (Decl Prog "addLevel1" -1 4)
+      (Decl Prog "lazyCategory0" -1 4)
       (Decl Prog "raw" -1 4)
       (Decl Prog "box" -1 4)
       (Decl Prog "extend0" -1 4)
       (Decl Prog "addLevel0" -1 4)
       (Decl Prog "addLevel1" -1 4)
+      (Decl Prog "lazyCategory0" -1 4)
       (Decl Prog "raw" -1 4)
       (Decl Prog "box" -1 4)
       (Decl Prog "extend0" -1 4)
       (Decl Prog "addLevel0" -1 4)
       (Decl Prog "addLevel1" -1 4)
+      (Decl Prog "lazyCategory0" -1 4)
       (Decl Prog "new" -1 4)
       (Decl Prog "latitude" -1 4)
       (Decl Prog "longitude" -1 4)
@@ -151,8 +154,8 @@
     (DDecl Records)
     (DDecl
       LocalEnv
-      (Decl Word "SingleInteger" -1 4)
       (Decl Word "DoubleFloat" -1 4)
+      (Decl Word "SingleInteger" -1 4)
       (Decl Word "Machine" -1 4)
       (Decl Word "BasicType" -1 4)
       (Decl Clos "Record" -1 4)
@@ -183,7 +186,7 @@
         NOp
         0
         8832
-        2765
+        2789
         1521
         0
         (DDecl Params)
@@ -204,46 +207,46 @@
         (Seq
           (CCall NOp (Glo 12 runtime))
           (Set (Glo 0 pack3) (Glo 1 noOperation))
-          (Def (Loc 0) (Clos (Env 0) (Const 37 axlcat-init)))
-          (Def (Loc 1) (Clos (Env 0) (Const 38 sinteger-init)))
+          (Def (Loc 0) (Clos (Env 0) (Const 40 axlcat-init)))
+          (Def (Loc 1) (Clos (Env 0) (Const 41 sinteger-init)))
           (Def
-            (Glo 2 pack3_SingleInteger_091739099)
+            (Glo 3 pack3_SingleInteger_091739099)
             (CCall
               Word
               (Glo 33 domainMake)
               (Clos (Env 0) (Const 2 addLevel0))))
           (Def
-            (Glo 11 pack3_SingleInteger_662414144)
-            (CCall Word (Glo 35 extendMake) (Clos (Env 0) (Const 6 extend0))))
-          (Def (Loc 2) (Clos (Env 0) (Const 34 machine-init)))
+            (Glo 10 pack3_SingleInteger_662414144)
+            (CCall Word (Glo 35 extendMake) (Clos (Env 0) (Const 7 extend0))))
+          (Def (Loc 2) (Clos (Env 0) (Const 37 machine-init)))
           (Def
-            (Glo 3 pack3_DoubleFloat_091739099)
+            (Glo 2 pack3_DoubleFloat_091739099)
             (CCall
               Word
               (Glo 33 domainMake)
-              (Clos (Env 0) (Const 7 addLevel0))))
-          (Def (Loc 3) (Clos (Env 0) (Const 36 dfloat-init)))
+              (Clos (Env 0) (Const 8 addLevel0))))
+          (Def (Loc 3) (Clos (Env 0) (Const 39 dfloat-init)))
           (Def
-            (Glo 10 pack3_DoubleFloat_854338884)
-            (CCall Word (Glo 35 extendMake) (Clos (Env 0) (Const 11 extend0))))
-          (Def (Loc 4) (Clos (Env 0) (Const 33 langx-init)))
-          (Def (Loc 5) (Clos (Env 0) (Const 35 textwrit-init)))
+            (Glo 11 pack3_DoubleFloat_854338884)
+            (CCall Word (Glo 35 extendMake) (Clos (Env 0) (Const 13 extend0))))
+          (Def (Loc 4) (Clos (Env 0) (Const 36 langx-init)))
+          (Def (Loc 5) (Clos (Env 0) (Const 38 textwrit-init)))
           (Def
             (Glo 8 pack3_WGS84Position_075340687)
             (CCall
               Word
               (Glo 33 domainMake)
-              (Clos (Env 0) (Const 12 addLevel0))))
+              (Clos (Env 0) (Const 14 addLevel0))))
           (Def
             (Glo 7 pack3_applyPacked_304121057)
-            (Clos (Env 0) (Const 29 applyPacked)))
+            (Clos (Env 0) (Const 32 applyPacked)))
           (Def
             (Glo 6 pack3_increment_431027880)
-            (Clos (Env 0) (Const 30 increment)))
+            (Clos (Env 0) (Const 33 increment)))
           (Def
             (Glo 5 pack3_raise10_229316524)
-            (Clos (Env 0) (Const 31 raise10)))
-          (Def (Glo 4 pack3_main_778822608) (Clos (Env 0) (Const 32 main)))
+            (Clos (Env 0) (Const 34 raise10)))
+          (Def (Glo 4 pack3_main_778822608) (Clos (Env 0) (Const 35 main)))
           (Set (Lex 0 10) (Bool 0))
           (Set (Lex 0 11) (Bool 0))
           (Set (Lex 0 12) (Bool 0))
@@ -338,7 +341,7 @@
                 (Glo 22 rtConstNameFn)
                 (Arr Char 80 97 99 107 97 98 108 101 86 97 108 117 101))))
           (Def
-            (Lex 0 0 SingleInteger)
+            (Lex 0 1 SingleInteger)
             (CCall Word (Glo 31 rtLazyDomFrInit) (Loc 1) (SInt 0)))
           (Def
             (Lex 0 2 Machine)
@@ -353,7 +356,7 @@
               (SInt 298204937)
               (SInt 547382598)))
           (Def
-            (Lex 0 1 DoubleFloat)
+            (Lex 0 0 DoubleFloat)
             (CCall Word (Glo 31 rtLazyDomFrInit) (Loc 3) (SInt 0)))
           (Def
             (Lex 0 4 Record)
@@ -373,7 +376,7 @@
               (Lex 0 9 dom)
               (SInt 828947258)
               (SInt 182752316)))
-          (OCall NOp (Const 32 main) (Env 0))
+          (OCall NOp (Const 35 main) (Env 0))
           (Return (Values)))))
     (Def
       (Const 1 PackableValue)
@@ -448,7 +451,7 @@
         Clos
         0
         1673
-        187
+        195
         61
         0
         (DDecl Params (Decl Word "domain" -1 4))
@@ -478,8 +481,8 @@
         Word
         0
         1673
-        172
-        141
+        180
+        161
         0
         (DDecl
           Params
@@ -506,8 +509,8 @@
             (CCall Word (Glo 27 domainMakeDispatch) (Par 0 domain)))
           (Def (Lex 0 3) (Par 1 hashcode))
           (Set (Lex 0 2 RawType) (CCall Word (Glo 29 domainMakeDummy)))
-          (Def (Lex 0 1 raw) (Clos (Env 0) (Const 4 raw)))
-          (Def (Lex 0 0 box) (Clos (Env 0) (Const 5 box)))
+          (Def (Lex 0 1 raw) (Clos (Env 0) (Const 5 raw)))
+          (Def (Lex 0 0 box) (Clos (Env 0) (Const 6 box)))
           (Set (Loc 3) (RNew 5))
           (Set (RElt 5 (Loc 3) 0) (SInt 3))
           (Set (RElt 5 (Loc 3) 1) (SInt 3))
@@ -531,9 +534,13 @@
             Word
             (Glo 28 domainAddDefaults!)
             (Par 0 domain)
-            (Glo 9 pack3_PackableValue_733819283)
+            (CCall
+              Word
+              (Glo 17 rtLazyCatFrInit)
+              (Clos (Env 0) (Const 4 lazyCategory0))
+              (SInt 0))
             (Loc 6))
-          (Def (Loc 7) (Lex 2 0 SingleInteger))
+          (Def (Loc 7) (Lex 2 1 SingleInteger))
           (CCall NOp (Glo 32 domainResolve!) (Lex 0 2 RawType) (Loc 7))
           (Set (AElt SInt (SInt 0) (Loc 0)) (SInt 632091307))
           (Set (AElt SInt (SInt 0) (Loc 1)) (SInt 547382598))
@@ -565,7 +572,23 @@
           (Set (AElt Word (SInt 2) (Loc 2)) (Cast Word (Lex 0 0 box)))
           (Return (Par 0 domain)))))
     (Def
-      (Const 4 raw)
+      (Const 4 lazyCategory0)
+      (Prog
+        0
+        1
+        Word
+        0
+        11394
+        3
+        1
+        0
+        (DDecl Params (Decl SInt "idx" -1 4))
+        (DDecl Locals)
+        (DFluid)
+        (DEnv 4 4 4 4)
+        (Seq (Return (Glo 9 pack3_PackableValue_733819283)))))
+    (Def
+      (Const 5 raw)
       (Prog
         0
         1
@@ -581,7 +604,7 @@
         (DEnv 4 4 4 4)
         (Seq (Return (Par 0 x)))))
     (Def
-      (Const 5 box)
+      (Const 6 box)
       (Prog
         0
         1
@@ -597,7 +620,7 @@
         (DEnv 4 4 4 4)
         (Seq (Return (Par 0 x)))))
     (Def
-      (Const 6 extend0)
+      (Const 7 extend0)
       (Prog
         0
         1
@@ -615,10 +638,10 @@
           (Set (Loc 0) (ANew Word (SInt 2)))
           (Set
             (AElt Word (SInt 1) (Cast Word (Loc 0)))
-            (Lex 1 0 SingleInteger))
+            (Lex 1 1 SingleInteger))
           (Set
             (AElt Word (SInt 0) (Cast Word (Loc 0)))
-            (Glo 2 pack3_SingleInteger_091739099))
+            (Glo 3 pack3_SingleInteger_091739099))
           (Set (Loc 1) (RNew 5))
           (Set (RElt 5 (Loc 1) 0) (SInt 2))
           (Set (RElt 5 (Loc 1) 1) (SInt 2))
@@ -626,14 +649,14 @@
           (CCall Word (Glo 34 extendFill!) (Par 0 domain) (Loc 1))
           (Return (Par 0 domain)))))
     (Def
-      (Const 7 addLevel0)
+      (Const 8 addLevel0)
       (Prog
         0
         1
         Clos
         0
         1673
-        197
+        205
         61
         0
         (DDecl Params (Decl Word "domain" -1 4))
@@ -654,17 +677,17 @@
             (Glo 25 domainAddHash!)
             (Par 0 domain)
             (SInt 813025748))
-          (Return (Clos (Env 0) (Const 8 addLevel1))))))
+          (Return (Clos (Env 0) (Const 9 addLevel1))))))
     (Def
-      (Const 8 addLevel1)
+      (Const 9 addLevel1)
       (Prog
         0
         1
         Word
         0
         1673
-        182
-        281
+        190
+        301
         0
         (DDecl
           Params
@@ -691,8 +714,8 @@
             (CCall Word (Glo 27 domainMakeDispatch) (Par 0 domain)))
           (Def (Lex 0 3) (Par 1 hashcode))
           (Set (Lex 0 2 RawType) (CCall Word (Glo 29 domainMakeDummy)))
-          (Def (Lex 0 1 raw) (Clos (Env 0) (Const 9 raw)))
-          (Def (Lex 0 0 box) (Clos (Env 0) (Const 10 box)))
+          (Def (Lex 0 1 raw) (Clos (Env 0) (Const 11 raw)))
+          (Def (Lex 0 0 box) (Clos (Env 0) (Const 12 box)))
           (Set (Loc 3) (RNew 5))
           (Set (RElt 5 (Loc 3) 0) (SInt 3))
           (Set (RElt 5 (Loc 3) 1) (SInt 3))
@@ -716,7 +739,11 @@
             Word
             (Glo 28 domainAddDefaults!)
             (Par 0 domain)
-            (Glo 9 pack3_PackableValue_733819283)
+            (CCall
+              Word
+              (Glo 17 rtLazyCatFrInit)
+              (Clos (Env 0) (Const 10 lazyCategory0))
+              (SInt 0))
             (Loc 6))
           (Def (Loc 7) (Lex 2 7 DFlo))
           (CCall NOp (Glo 32 domainResolve!) (Lex 0 2 RawType) (Loc 7))
@@ -750,7 +777,23 @@
           (Set (AElt Word (SInt 2) (Loc 2)) (Cast Word (Lex 0 0 box)))
           (Return (Par 0 domain)))))
     (Def
-      (Const 9 raw)
+      (Const 10 lazyCategory0)
+      (Prog
+        0
+        1
+        Word
+        0
+        11394
+        3
+        1
+        0
+        (DDecl Params (Decl SInt "idx" -1 4))
+        (DDecl Locals)
+        (DFluid)
+        (DEnv 4 4 4 4)
+        (Seq (Return (Glo 9 pack3_PackableValue_733819283)))))
+    (Def
+      (Const 11 raw)
       (Prog
         0
         1
@@ -766,7 +809,7 @@
         (DEnv 4 4 4 4)
         (Seq (Return (Cast Word (RElt 20 (Par 0 x) 0))))))
     (Def
-      (Const 10 box)
+      (Const 12 box)
       (Prog
         0
         1
@@ -785,7 +828,7 @@
           (Set (RElt 20 (Loc 0) 0) (Cast DFlo (Par 0 x)))
           (Return (Loc 0)))))
     (Def
-      (Const 11 extend0)
+      (Const 13 extend0)
       (Prog
         0
         1
@@ -803,10 +846,10 @@
           (Set (Loc 0) (ANew Word (SInt 2)))
           (Set
             (AElt Word (SInt 1) (Cast Word (Loc 0)))
-            (Lex 1 1 DoubleFloat))
+            (Lex 1 0 DoubleFloat))
           (Set
             (AElt Word (SInt 0) (Cast Word (Loc 0)))
-            (Glo 3 pack3_DoubleFloat_091739099))
+            (Glo 2 pack3_DoubleFloat_091739099))
           (Set (Loc 1) (RNew 5))
           (Set (RElt 5 (Loc 1) 0) (SInt 2))
           (Set (RElt 5 (Loc 1) 1) (SInt 2))
@@ -814,14 +857,14 @@
           (CCall Word (Glo 34 extendFill!) (Par 0 domain) (Loc 1))
           (Return (Par 0 domain)))))
     (Def
-      (Const 12 addLevel0)
+      (Const 14 addLevel0)
       (Prog
         0
         1
         Clos
         0
         1673
-        1046
+        1054
         61
         0
         (DDecl Params (Decl Word "domain" -1 4))
@@ -842,17 +885,17 @@
             (Glo 25 domainAddHash!)
             (Par 0 domain)
             (SInt 494584839))
-          (Return (Clos (Env 0) (Const 13 addLevel1))))))
+          (Return (Clos (Env 0) (Const 15 addLevel1))))))
     (Def
-      (Const 13 addLevel1)
+      (Const 15 addLevel1)
       (Prog
         0
         1
         Word
         0
         1673
-        1031
-        1201
+        1039
+        1221
         0
         (DDecl
           Params
@@ -893,15 +936,15 @@
           (Def (Lex 0 18) (Par 1 hashcode))
           (Set (Lex 0 11 Rep) (CCall Word (Glo 29 domainMakeDummy)))
           (Set (Lex 0 10 RawType) (CCall Word (Glo 29 domainMakeDummy)))
-          (Def (Lex 0 8 new) (Clos (Env 0) (Const 14 new)))
-          (Def (Lex 0 7 latitude) (Clos (Env 0) (Const 15 latitude)))
-          (Def (Lex 0 6 longitude) (Clos (Env 0) (Const 16 longitude)))
-          (Def (Lex 0 5 altitude) (Clos (Env 0) (Const 17 altitude)))
-          (Def (Lex 0 4 raise) (Clos (Env 0) (Const 18 raise)))
-          (Def (Lex 0 3 raw) (Clos (Env 0) (Const 19 raw)))
-          (Def (Lex 0 2 box) (Clos (Env 0) (Const 20 box)))
-          (Def (Lex 0 1 <<) (Clos (Env 0) (Const 21 <<)))
-          (Def (Lex 0 0 =) (Clos (Env 0) (Const 22 =)))
+          (Def (Lex 0 8 new) (Clos (Env 0) (Const 17 new)))
+          (Def (Lex 0 7 latitude) (Clos (Env 0) (Const 18 latitude)))
+          (Def (Lex 0 6 longitude) (Clos (Env 0) (Const 19 longitude)))
+          (Def (Lex 0 5 altitude) (Clos (Env 0) (Const 20 altitude)))
+          (Def (Lex 0 4 raise) (Clos (Env 0) (Const 21 raise)))
+          (Def (Lex 0 3 raw) (Clos (Env 0) (Const 22 raw)))
+          (Def (Lex 0 2 box) (Clos (Env 0) (Const 23 box)))
+          (Def (Lex 0 1 <<) (Clos (Env 0) (Const 24 <<)))
+          (Def (Lex 0 0 =) (Clos (Env 0) (Const 25 =)))
           (Def
             (Loc 11)
             (BCall
@@ -947,7 +990,11 @@
             Word
             (Glo 28 domainAddDefaults!)
             (Par 0 domain)
-            (Glo 9 pack3_PackableValue_733819283)
+            (CCall
+              Word
+              (Glo 17 rtLazyCatFrInit)
+              (Clos (Env 0) (Const 16 lazyCategory0))
+              (SInt 0))
             (Loc 6))
           (Def (Loc 8) (Lex 0 11 Rep))
           (Set (Loc 9) (ANew Word (SInt 3)))
@@ -956,13 +1003,13 @@
           (Set (RElt 9 (Loc 10) 1) (Loc 9))
           (Set
             (AElt Word (SInt 0) (Loc 9))
-            (Glo 10 pack3_DoubleFloat_854338884))
+            (Glo 11 pack3_DoubleFloat_854338884))
           (Set
             (AElt Word (SInt 1) (Loc 9))
-            (Glo 10 pack3_DoubleFloat_854338884))
+            (Glo 11 pack3_DoubleFloat_854338884))
           (Set
             (AElt Word (SInt 2) (Loc 9))
-            (Glo 10 pack3_DoubleFloat_854338884))
+            (Glo 11 pack3_DoubleFloat_854338884))
           (Def
             (Loc 7)
             (CCall Word (Lex 2 4 Record) (Cast Word (Loc 10))))
@@ -1062,7 +1109,7 @@
           (Set (AElt Word (SInt 11) (Loc 2)) (Lex 0 9 sample))
           (Def
             (Lex 0 17 PackedArrayNew)
-            (Clos (Env 0) (Const 23 PackedArrayNew)))
+            (Clos (Env 0) (Const 26 PackedArrayNew)))
           (Set (AElt SInt (SInt 12) (Loc 0)) (SInt 757252399))
           (Set (AElt SInt (SInt 12) (Loc 1)) (SInt 351334505))
           (Set
@@ -1070,7 +1117,7 @@
             (Cast Word (Lex 0 17 PackedArrayNew)))
           (Def
             (Lex 0 16 PackedArrayGet)
-            (Clos (Env 0) (Const 24 PackedArrayGet)))
+            (Clos (Env 0) (Const 27 PackedArrayGet)))
           (Set (AElt SInt (SInt 13) (Loc 0)) (SInt 767785253))
           (Set
             (AElt SInt (SInt 13) (Loc 1))
@@ -1080,7 +1127,7 @@
             (Cast Word (Lex 0 16 PackedArrayGet)))
           (Def
             (Lex 0 15 PackedArraySet)
-            (Clos (Env 0) (Const 25 PackedArraySet)))
+            (Clos (Env 0) (Const 28 PackedArraySet)))
           (Set (AElt SInt (SInt 14) (Loc 0)) (SInt 756527409))
           (Set
             (AElt SInt (SInt 14) (Loc 1))
@@ -1096,7 +1143,7 @@
             (Cast Word (Lex 0 15 PackedArraySet)))
           (Def
             (Lex 0 14 PackedRecordSet)
-            (Clos (Env 0) (Const 26 PackedRecordSet)))
+            (Clos (Env 0) (Const 29 PackedRecordSet)))
           (Set (AElt SInt (SInt 15) (Loc 0)) (SInt 940586746))
           (Set
             (AElt SInt (SInt 15) (Loc 1))
@@ -1112,7 +1159,7 @@
             (Cast Word (Lex 0 14 PackedRecordSet)))
           (Def
             (Lex 0 13 PackedRecordGet)
-            (Clos (Env 0) (Const 27 PackedRecordGet)))
+            (Clos (Env 0) (Const 30 PackedRecordGet)))
           (Set (AElt SInt (SInt 16) (Loc 0)) (SInt 939800302))
           (Set
             (AElt SInt (SInt 16) (Loc 1))
@@ -1122,7 +1169,7 @@
             (Cast Word (Lex 0 13 PackedRecordGet)))
           (Def
             (Lex 0 12 PackedRepSize)
-            (Clos (Env 0) (Const 28 PackedRepSize)))
+            (Clos (Env 0) (Const 31 PackedRepSize)))
           (Set (AElt SInt (SInt 17) (Loc 0)) (SInt 920971615))
           (Set (AElt SInt (SInt 17) (Loc 1)) (SInt 485067507))
           (Set
@@ -1130,7 +1177,23 @@
             (Cast Word (Lex 0 12 PackedRepSize)))
           (Return (Par 0 domain)))))
     (Def
-      (Const 14 new)
+      (Const 16 lazyCategory0)
+      (Prog
+        0
+        1
+        Word
+        0
+        11394
+        3
+        1
+        0
+        (DDecl Params (Decl SInt "idx" -1 4))
+        (DDecl Locals)
+        (DFluid)
+        (DEnv 4 4 4 4)
+        (Seq (Return (Glo 9 pack3_PackableValue_733819283)))))
+    (Def
+      (Const 17 new)
       (Prog
         0
         1
@@ -1155,7 +1218,7 @@
           (Set (RElt 10 (Loc 0) 2) (Par 2 alt))
           (Return (Loc 0)))))
     (Def
-      (Const 15 latitude)
+      (Const 18 latitude)
       (Prog
         0
         1
@@ -1171,7 +1234,7 @@
         (DEnv 4 4 4 4)
         (Seq (Return (RElt 10 (Par 0 p) 0)))))
     (Def
-      (Const 16 longitude)
+      (Const 19 longitude)
       (Prog
         0
         1
@@ -1187,7 +1250,7 @@
         (DEnv 4 4 4 4)
         (Seq (Return (RElt 10 (Par 0 p) 1)))))
     (Def
-      (Const 17 altitude)
+      (Const 20 altitude)
       (Prog
         0
         1
@@ -1203,7 +1266,7 @@
         (DEnv 4 4 4 4)
         (Seq (Return (RElt 10 (Par 0 p) 2)))))
     (Def
-      (Const 18 raise)
+      (Const 21 raise)
       (Prog
         0
         1
@@ -1231,7 +1294,7 @@
           (Set (RElt 10 (Loc 1) 2) (Loc 0))
           (Return (Loc 1)))))
     (Def
-      (Const 19 raw)
+      (Const 22 raw)
       (Prog
         0
         1
@@ -1247,7 +1310,7 @@
         (DEnv 4 4 4 4)
         (Seq (Return (Par 0 p)))))
     (Def
-      (Const 20 box)
+      (Const 23 box)
       (Prog
         0
         1
@@ -1263,7 +1326,7 @@
         (DEnv 4 4 4 4)
         (Seq (Return (Par 0 p)))))
     (Def
-      (Const 21 <<)
+      (Const 24 <<)
       (Prog
         0
         6
@@ -1425,7 +1488,7 @@
           (Set (Loc 29) (BCall SIntNext (Loc 29)))
           (Goto 4))))
     (Def
-      (Const 22 =)
+      (Const 25 =)
       (Prog
         0
         7
@@ -1472,7 +1535,7 @@
           (Set (Loc 1) (Bool 0))
           (Goto 3))))
     (Def
-      (Const 23 PackedArrayNew)
+      (Const 26 PackedArrayNew)
       (Prog
         0
         1
@@ -1488,7 +1551,7 @@
         (DEnv 4 4 4 4)
         (Seq (Return (ANew Word (Par 0 x0))))))
     (Def
-      (Const 24 PackedArrayGet)
+      (Const 27 PackedArrayGet)
       (Prog
         0
         1
@@ -1504,7 +1567,7 @@
         (DEnv 4 4 4 4)
         (Seq (Return (AElt Word (Par 1 x1) (Par 0 x0))))))
     (Def
-      (Const 25 PackedArraySet)
+      (Const 28 PackedArraySet)
       (Prog
         0
         1
@@ -1526,7 +1589,7 @@
           (Set (AElt Word (Par 1 x1) (Par 0 x0)) (Par 2 x2))
           (Return (Par 2 x2)))))
     (Def
-      (Const 26 PackedRecordSet)
+      (Const 29 PackedRecordSet)
       (Prog
         0
         1
@@ -1544,7 +1607,7 @@
           (Set (AElt Word (SInt 0) (Cast Arr (Par 0 x0))) (Par 1 x1))
           (Return (Par 1 x1)))))
     (Def
-      (Const 27 PackedRecordGet)
+      (Const 30 PackedRecordGet)
       (Prog
         0
         1
@@ -1560,7 +1623,7 @@
         (DEnv 4 4 4 4)
         (Seq (Return (AElt Word (SInt 0) (Par 0 x0))))))
     (Def
-      (Const 28 PackedRepSize)
+      (Const 31 PackedRepSize)
       (Prog
         0
         1
@@ -1576,7 +1639,7 @@
         (DEnv 4 4 4 4)
         (Seq (Return (BCall SizeOfWord)))))
     (Def
-      (Const 29 applyPacked)
+      (Const 32 applyPacked)
       (Prog
         0
         1
@@ -1653,7 +1716,7 @@
               (Loc 1 box)
               (CCall Word (Par 1 f) (CCall Word (Loc 0 raw) (Par 2 x))))))))
     (Def
-      (Const 30 increment)
+      (Const 33 increment)
       (Prog
         0
         1
@@ -1671,7 +1734,7 @@
           (Set (Loc 0) (BCall SIntNext (Cast SInt (Par 0 x))))
           (Return (Cast Word (Loc 0))))))
     (Def
-      (Const 31 raise10)
+      (Const 34 raise10)
       (Prog
         0
         1
@@ -1704,7 +1767,7 @@
           (Set (RElt 10 (Loc 1) 2) (Loc 0))
           (Return (Loc 1)))))
     (Def
-      (Const 32 main)
+      (Const 35 main)
       (Prog
         0
         2
@@ -1760,7 +1823,7 @@
           (Set
             (Loc 14)
             (CCall Word (Glo 42 lazyForceImport) (Lex 1 6 print)))
-          (Set (Loc 24) (Glo 11 pack3_SingleInteger_662414144))
+          (Set (Loc 24) (Glo 10 pack3_SingleInteger_662414144))
           (Set (Loc 25) (Glo 6 pack3_increment_431027880))
           (Def
             (Loc 36 RawType)
@@ -1950,7 +2013,7 @@
           (Set (Loc 16) (Arr Char 102 97 108 115 101))
           (Goto 1))))
     (Def
-      (Const 33 langx-init)
+      (Const 36 langx-init)
       (Prog
         0
         1
@@ -1971,7 +2034,7 @@
           (Label 0)
           (Return (Glo 38 langx_Record_460184160)))))
     (Def
-      (Const 34 machine-init)
+      (Const 37 machine-init)
       (Prog
         0
         1
@@ -1992,7 +2055,7 @@
           (Label 0)
           (Return (Glo 36 machine_Machine_915715331)))))
     (Def
-      (Const 35 textwrit-init)
+      (Const 38 textwrit-init)
       (Prog
         0
         1
@@ -2013,7 +2076,7 @@
           (Label 0)
           (Return (Glo 40 textwrit_TextWriter_636558258)))))
     (Def
-      (Const 36 dfloat-init)
+      (Const 39 dfloat-init)
       (Prog
         0
         1
@@ -2034,7 +2097,7 @@
           (Label 0)
           (Return (Glo 37 dfloat_DoubleFloat_701519844)))))
     (Def
-      (Const 37 axlcat-init)
+      (Const 40 axlcat-init)
       (Prog
         0
         1
@@ -2055,7 +2118,7 @@
           (Label 0)
           (Return (Glo 16 axlcat_BasicType_952865127)))))
     (Def
-      (Const 38 sinteger-init)
+      (Const 41 sinteger-init)
       (Prog
         0
         1
@@ -2076,13 +2139,13 @@
           (Label 0)
           (Return (Glo 30 sinteger_SingleInteger_810416892)))))
     (Def (Glo 0 pack3) (Clos (Env 0) (Const 0 pack3)))
-    (Def (Glo 2 pack3_SingleInteger_091739099) (Cast Word (Nil)))
-    (Def (Glo 3 pack3_DoubleFloat_091739099) (Cast Word (Nil)))
+    (Def (Glo 2 pack3_DoubleFloat_091739099) (Cast Word (Nil)))
+    (Def (Glo 3 pack3_SingleInteger_091739099) (Cast Word (Nil)))
     (Def (Glo 4 pack3_main_778822608) (Cast Clos (Nil)))
     (Def (Glo 5 pack3_raise10_229316524) (Cast Clos (Nil)))
     (Def (Glo 6 pack3_increment_431027880) (Cast Clos (Nil)))
     (Def (Glo 7 pack3_applyPacked_304121057) (Cast Clos (Nil)))
     (Def (Glo 8 pack3_WGS84Position_075340687) (Cast Word (Nil)))
     (Def (Glo 9 pack3_PackableValue_733819283) (Cast Word (Nil)))
-    (Def (Glo 10 pack3_DoubleFloat_854338884) (Cast Word (Nil)))
-    (Def (Glo 11 pack3_SingleInteger_662414144) (Cast Word (Nil)))))
+    (Def (Glo 10 pack3_SingleInteger_662414144) (Cast Word (Nil)))
+    (Def (Glo 11 pack3_DoubleFloat_854338884) (Cast Word (Nil)))))

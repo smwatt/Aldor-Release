@@ -1,0 +1,4 @@
+# Generated C reference outputs are compared byte-for-byte with Aldor's
+# emitter.  Preserve emitter whitespace in these goldens while retaining
+# strict whitespace checking for handwritten compiler and library sources.
+*.c -whitespace

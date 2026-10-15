@@ -1066,7 +1066,7 @@ emitTheC(EmitInfo finfo, List<CCode> cco)
         }
         if (finfo->flist) finfo->flist = listNReverse<FileName>(finfo->flist);
         emitInfoInUse(finfo, FTYPENO_C) = false;
-        emitSetDone(FTYPENO_LISP);
+        emitSetDone(FTYPENO_C);
         if (hout) {
                 fclose(hout);
                 emitInfoInUse(finfo, FTYPENO_H) = false;

@@ -6632,7 +6632,20 @@ tfMapSelectArg(TForm opTf, AbSyn ab, Length i)
                                        abApplyArgc(ab), i,
                                        abApplyArgf, tfi, &def, &ai);
 
-        if (abTag(abi) == AB_Define)
+        /* A default argument is written in the formal-parameter
+         * environment.  Substitute the actual arguments selected by this
+         * application before the default reaches FOAM generation.
+         */
+        if (def && abi && abApplyOp(ab) &&
+            abState(abApplyOp(ab)) == AB_State_HasUnique) {
+                AbSub sigma = tfSatSubList(ab);
+                if (sigma != absFail()) {
+                        abi = sefoSubst(sigma, abi);
+                        absFree(sigma);
+                }
+        }
+
+        if (abi && abTag(abi) == AB_Define)
                 abi = abi->abDefine.rhs;
 
         return abi;

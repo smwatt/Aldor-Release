@@ -106,7 +106,8 @@ fi
 fakeroot="$fakepkg/build/aldor-9.9.9-test-${fakeos}-${fakearch}-${faketc}"
 mkdir -p "$fakedistro/aldor/src" "$fakedistro/lib" "$fakedistro/modernization" "$fakeroot/toolbin"
 printf '#define ALDOR_VERSION_STRING "9.9.9-test"\n' > "$fakedistro/aldor/src/version.h"
-cp "$distro/build.sh" "$distro/build-fns.sh" "$fakedistro/"
+cp "$distro/build.sh" "$distro/build-fns.sh" \
+   "$distro/source-revision.sh" "$fakedistro/"
 printf '#!/bin/sh\nexit 0\n' > "$fakedistro/aldor/build.sh"
 printf '#!/bin/sh\nexit 0\n' > "$fakedistro/lib/build.sh"
 printf '#!/bin/sh\nexit 0\n' > "$fakedistro/modernization/validate.sh"
@@ -137,7 +138,7 @@ logdistro="$logpkg/distro"
 logroot="$logpkg/build/aldor-9.9.9-test-testos-testarch-testtool"
 mkdir -p "$logdistro/aldor/src" "$logdistro/lib" \
   "$logdistro/modernization/benchmark"
-cp "$distro/build.sh" "$logdistro/build.sh"
+cp "$distro/build.sh" "$distro/source-revision.sh" "$logdistro/"
 cat > "$logdistro/aldor/src/version.h" <<'EOF'
 #define ALDOR_VERSION_STRING "9.9.9-test"
 EOF
@@ -200,8 +201,8 @@ for f in "$logroot/build.log" "$logroot/test.log"; do
   [ "$(tail -1 "$f")" = 'Exit status:     0' ] || fail "status is not final line of $f"
 done
 
-# Official full packages contain .git.  Log metadata must recover the exact
-# commit even when the git executable itself is unavailable.
+# Git checkouts contain .git; exported archives instead carry SOURCE-REVISION.
+# Both mechanisms must work even if the git executable is unavailable.
 mkdir -p "$logpkg/.git/refs/heads"
 printf 'ref: refs/heads/release-test\n' > "$logpkg/.git/HEAD"
 printf '0123456789abcdef0123456789abcdef01234567\n' > \
@@ -221,6 +222,27 @@ PATH="$PATH_NO_GIT:$PATH" ALDOR_BUILD_ROOT="$logroot" ALDORROOT="$logroot" \
 grep -q '^Git HEAD:       0123456789abcdef0123456789abcdef01234567$' \
   "$logroot/build.log" || fail "build.log did not recover embedded Git HEAD"
 
+# Exported source archives lack .git; the embedded revision is their identity.
+rm -rf "$logpkg/.git"
+printf '%s\n' 'fedcba9876543210fedcba9876543210fedcba98' > "$logdistro/SOURCE-REVISION"
+rm -f "$logroot/build.log" "$logroot/test.log"
+PATH="$PATH_NO_GIT:$PATH" ALDOR_BUILD_ROOT="$logroot" ALDORROOT="$logroot" \
+  ALDORTMP="$logroot/tmp" ALDOR_TOOLCHAIN=testtool \
+  bash "$logdistro/build.sh" build > "$work/log-build-archive.out" 2>&1 || \
+  fail "exported source provenance build failed"
+grep -q '^Git HEAD:       fedcba9876543210fedcba9876543210fedcba98$' \
+  "$logroot/build.log" || fail "source archive revision was not recorded"
+# The actual source export also has to substitute the tag/commit.
+git_top=$(git -C "$package" rev-parse --show-toplevel 2>/dev/null || true)
+if [ "$git_top" = "$package" ]; then
+    actual=$(git -C "$package" archive --format=tar HEAD | \
+        tar -xOf - distro/SOURCE-REVISION)
+    expected=$(git -C "$package" rev-parse HEAD)
+    [ "$actual" = "$expected" ] || fail "git archive revision substitution failed"
+fi
+
+
+
 # Darwin must default to Apple's native archive tools rather than whichever
 # GNU binutils happen to occur first in PATH.  Xcode 26 requires 64-bit Mach-O
 # archive members to have Apple's 8-byte member alignment.  ALDOR_AR and
@@ -235,6 +257,10 @@ chmod +x "$work/fake-darwin-default-bin/uname"
   set +u
   export PATH="$work/fake-darwin-default-bin:$PATH"
   export ALDORROOT="$work/archive-default-root"
+  # This is a simulated Darwin host; real Mach-O deployment discovery cannot
+  # succeed when the actual host compiler emits Linux ELF objects.
+  unset ALDOR_MACOS_SDK SDKROOT
+  export MACOSX_DEPLOYMENT_TARGET=11.0
   export ALDOR_TOOLCHAIN=gcc
   export ALDOR_CC="${CC:-cc}"
   export ALDOR_CXX="${CXX:-c++}"
@@ -304,6 +330,10 @@ chmod +x "$work/fake-darwin-bin/uname" "$work/fake-ar" \
   set +u
   export PATH="$work/fake-darwin-bin:$distro/aldor/tools/unix:$PATH"
   export ALDORROOT="$work/archive-policy-root"
+  # This is a simulated Darwin host; real Mach-O deployment discovery cannot
+  # succeed when the actual host compiler emits Linux ELF objects.
+  unset ALDOR_MACOS_SDK SDKROOT
+  export MACOSX_DEPLOYMENT_TARGET=11.0
   export ALDOR_TOOLCHAIN=clang
   export ALDOR_CC="${CC:-cc}"
   export ALDOR_CXX="${CXX:-c++}"
@@ -381,6 +411,10 @@ chmod +x "$work/fake-gmp-bin/uname" "$work/fake-gmp-bin/pkg-config" "$work/fake-
   set +u
   export PATH="$work/fake-gmp-bin:$PATH"
   export ALDORROOT="$work/gmp-root"
+  # This is a simulated Darwin host; real Mach-O deployment discovery cannot
+  # succeed when the actual host compiler emits Linux ELF objects.
+  unset ALDOR_MACOS_SDK SDKROOT
+  export MACOSX_DEPLOYMENT_TARGET=11.0
   export ALDOR_TOOLCHAIN=gcc
   export ALDOR_CC="${CC:-cc}"
   export ALDOR_CXX="${CXX:-c++}"

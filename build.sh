@@ -54,6 +54,9 @@ if ! ALDORDISTRO_PHYS=$(cd -P -- "$script_parent" 2>/dev/null && pwd -P); then
 fi
 
 
+# Use the same identity helper as the standalone release driver.
+source "$ALDORDISTRO_PHYS/source-revision.sh"
+
 sanitize_component() {
     printf '%s' "$1" | tr '[:upper:]' '[:lower:]' | tr -c 'a-z0-9._-' '_'
 }
@@ -142,46 +145,6 @@ aldorOsVersion() {
     printf '%s\n' "$value"
 }
 
-readProjectHead() {
-    local project_top=$1 head ref ref_file
-
-    head=$(git -C "$project_top" rev-parse HEAD 2>/dev/null || true)
-    if [ -n "$head" ]; then
-        printf '%s\n' "$head"
-        return 0
-    fi
-
-    if [ -r "$project_top/.git/HEAD" ]; then
-        head=$(cat "$project_top/.git/HEAD" 2>/dev/null || true)
-        case "$head" in
-            'ref: '*)
-                ref=${head#ref: }
-                ref_file="$project_top/.git/$ref"
-                if [ -r "$ref_file" ]; then
-                    cat "$ref_file"
-                    return 0
-                fi
-                if [ -r "$project_top/.git/packed-refs" ]; then
-                    head=$(awk -v r="$ref" '$2 == r { print $1; exit }' \
-                        "$project_top/.git/packed-refs")
-                    if [ -n "$head" ]; then
-                        printf '%s\n' "$head"
-                        return 0
-                    fi
-                fi
-                ;;
-            *)
-                if [ -n "$head" ]; then
-                    printf '%s\n' "$head"
-                    return 0
-                fi
-                ;;
-        esac
-    fi
-
-    printf 'unknown\n'
-}
-
 writeLogHeader() {
     local operation=$1 started=$2 version host system os arch toolchain
     local cc cxx cc_version cxx_version target head project_top
@@ -199,7 +162,7 @@ writeLogHeader() {
     target=$("$cc" -dumpmachine 2>/dev/null | head -1 || true)
     [ -n "$target" ] || target=unknown
     project_top=$(cd -P -- "$ALDORDISTRO_PHYS/.." && pwd -P 2>/dev/null || true)
-    head=$(readProjectHead "$project_top")
+    head=$(aldorSourceRevision "$project_top")
 
     printf 'Aldor %s log\n' "$operation"
     printf 'Version:        %s\n' "$version"

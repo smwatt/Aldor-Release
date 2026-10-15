@@ -64,6 +64,7 @@
       (Decl Prog "times" -1 4)
       (Decl Prog "addLevel0" -1 4)
       (Decl Prog "addLevel1" -1 4)
+      (Decl Prog "lazyCategory0" -1 4)
       (Decl Prog "RawType" -1 4)
       (Decl Prog "raw" -1 4)
       (Decl Prog "box" -1 4)
@@ -134,7 +135,7 @@
         NOp
         0
         8832
-        1273
+        1281
         541
         0
         (DDecl Params)
@@ -154,14 +155,15 @@
         (Seq
           (CCall NOp (Glo 9 runtime))
           (Set (Glo 0 pack1) (Glo 1 noOperation))
-          (Def (Loc 0) (Clos (Env 0) (Const 17 lang-init)))
-          (Def (Loc 1) (Clos (Env 0) (Const 18 machine-init)))
+          (Def (Loc 0) (Clos (Env 0) (Const 18 lang-init)))
+          (Def (Loc 1) (Clos (Env 0) (Const 19 machine-init)))
           (Set (Lex 0 6) (Cast Word (Nil)))
           (Def (Glo 7 pack1_Raw_967545652) (Clos (Env 0) (Const 1 Raw)))
           (Set
             (PRef 0 (CProg (Glo 7 pack1_Raw_967545652)))
             (SInt 316165989))
-          (Def (Loc 2) (Clos (Env 0) (Const 21 axlcat-init)))
+          (Def (Loc 2) (Clos (Env 0) (Const 22 axlcat-init)))
+          (Def (Loc 3) (Clos (Env 0) (Const 21 dfloat-init)))
           (Def
             (Glo 4 pack1_times_132148378)
             (Clos (Env 0) (Const 9 times)))
@@ -171,12 +173,11 @@
               Word
               (Glo 25 domainMake)
               (Clos (Env 0) (Const 10 addLevel0))))
-          (Def (Loc 3) (Clos (Env 0) (Const 20 dfloat-init)))
           (Def
             (Glo 8 pack1_DoubleFloat_899263646)
-            (CCall Word (Glo 38 extendMake) (Clos (Env 0) (Const 15 extend0))))
-          (Def (Loc 4) (Clos (Env 0) (Const 19 textwrit-init)))
-          (Def (Glo 3 pack1_main_778822608) (Clos (Env 0) (Const 16 main)))
+            (CCall Word (Glo 38 extendMake) (Clos (Env 0) (Const 16 extend0))))
+          (Def (Loc 4) (Clos (Env 0) (Const 20 textwrit-init)))
+          (Def (Glo 3 pack1_main_778822608) (Clos (Env 0) (Const 17 main)))
           (Set (Lex 0 10) (Bool 0))
           (Set (Lex 0 11) (Bool 0))
           (Set (Lex 0 12) (Bool 0))
@@ -262,7 +263,7 @@
               (Lex 0 9 dom)
               (SInt 828947258)
               (SInt 182752316)))
-          (OCall NOp (Const 16 main) (Env 0))
+          (OCall NOp (Const 17 main) (Env 0))
           (Return (Values)))))
     (Def
       (Const 1 Raw)
@@ -671,7 +672,7 @@
         Clos
         0
         9865
-        198
+        206
         61
         0
         (DDecl Params (Decl Word "domain" -1 4))
@@ -701,8 +702,8 @@
         Word
         0
         9865
-        183
-        221
+        191
+        241
         0
         (DDecl
           Params
@@ -729,9 +730,9 @@
             (Loc 6)
             (CCall Word (Glo 17 domainMakeDispatch) (Par 0 domain)))
           (Def (Lex 0 3) (Par 1 hashcode))
-          (Def (Lex 0 2 RawType) (Clos (Env 0) (Const 12 RawType)))
-          (Def (Lex 0 1 raw) (Clos (Env 0) (Const 13 raw)))
-          (Def (Lex 0 0 box) (Clos (Env 0) (Const 14 box)))
+          (Def (Lex 0 2 RawType) (Clos (Env 0) (Const 13 RawType)))
+          (Def (Lex 0 1 raw) (Clos (Env 0) (Const 14 raw)))
+          (Def (Lex 0 0 box) (Clos (Env 0) (Const 15 box)))
           (Def
             (Loc 7)
             (BCall
@@ -767,7 +768,11 @@
             Word
             (Glo 20 domainAddDefaults!)
             (Par 0 domain)
-            (Glo 6 pack1_Packable_435410541)
+            (CCall
+              Word
+              (Glo 30 rtLazyCatFrInit)
+              (Clos (Env 0) (Const 12 lazyCategory0))
+              (SInt 0))
             (Loc 6))
           (Set (AElt SInt (SInt 0) (Loc 0)) (SInt 632091307))
           (Set
@@ -790,7 +795,23 @@
           (Set (AElt Word (SInt 2) (Loc 2)) (Cast Word (Lex 0 0 box)))
           (Return (Par 0 domain)))))
     (Def
-      (Const 12 RawType)
+      (Const 12 lazyCategory0)
+      (Prog
+        0
+        1
+        Word
+        0
+        11394
+        3
+        1
+        0
+        (DDecl Params (Decl SInt "idx" -1 4))
+        (DDecl Locals)
+        (DFluid)
+        (DEnv 4 4 4 4)
+        (Seq (Return (Glo 6 pack1_Packable_435410541)))))
+    (Def
+      (Const 13 RawType)
       (Prog
         0
         1
@@ -806,7 +827,7 @@
         (DEnv 4 4 4 4)
         (Seq (Return (RElt 18 (Par 0 x) 0)))))
     (Def
-      (Const 13 raw)
+      (Const 14 raw)
       (Prog
         0
         1
@@ -822,7 +843,7 @@
         (DEnv 4 4 4 4)
         (Seq (Return (RElt 18 (Par 0 x) 0)))))
     (Def
-      (Const 14 box)
+      (Const 15 box)
       (Prog
         0
         1
@@ -841,7 +862,7 @@
           (Set (RElt 18 (Loc 0) 0) (Par 0 x))
           (Return (Loc 0)))))
     (Def
-      (Const 15 extend0)
+      (Const 16 extend0)
       (Prog
         0
         1
@@ -870,7 +891,7 @@
           (CCall Word (Glo 37 extendFill!) (Par 0 domain) (Loc 1))
           (Return (Par 0 domain)))))
     (Def
-      (Const 16 main)
+      (Const 17 main)
       (Prog
         0
         2
@@ -935,7 +956,7 @@
           (Set (Loc 8) (BCall SIntNext (Loc 8)))
           (Goto 0))))
     (Def
-      (Const 17 lang-init)
+      (Const 18 lang-init)
       (Prog
         0
         1
@@ -956,7 +977,7 @@
           (Label 0)
           (Return (Glo 18 lang_Type_394624008)))))
     (Def
-      (Const 18 machine-init)
+      (Const 19 machine-init)
       (Prog
         0
         1
@@ -977,7 +998,7 @@
           (Label 0)
           (Return (Glo 22 machine_Machine_915715331)))))
     (Def
-      (Const 19 textwrit-init)
+      (Const 20 textwrit-init)
       (Prog
         0
         1
@@ -998,7 +1019,7 @@
           (Label 0)
           (Return (Glo 39 textwrit_TextWriter_636558258)))))
     (Def
-      (Const 20 dfloat-init)
+      (Const 21 dfloat-init)
       (Prog
         0
         1
@@ -1019,7 +1040,7 @@
           (Label 0)
           (Return (Glo 36 dfloat_DoubleFloat_701519844)))))
     (Def
-      (Const 21 axlcat-init)
+      (Const 22 axlcat-init)
       (Prog
         0
         1

@@ -485,6 +485,7 @@ local void
 abCheckExtend(AbSyn absyn)
 {
         AbSyn   body    = absyn->abExtend.body;
+
         AbSyn   *argv   = abArgvAs(AB_Sequence, body);
         Length  i, argc = abArgcAs(AB_Sequence, body);
 

@@ -103,6 +103,7 @@ enum symeField {
         SYFI_DefnNum,                   /* Sequence number when defined */
         SYFI_HashNum,                   /* Runtime hash code */
         SYFI_ExtraBits,                 /* More syme bits */
+        SYFI_ExtendNo,                  /* Source-order extension generation */
     SYME_FIELD_LIMIT
 };
 
@@ -340,6 +341,7 @@ extern Lib              symeConstLib            (Syme);
 #define symeForeign(s)          ((ForeignOrigin) symeGetField(s, SYFI_Foreign))
 #define symeFoam(s)             (Foam::fromPacked(symeGetField(s, SYFI_Foam)))
 #define symeExtension(s)        ((Syme)     symeGetField(s, SYFI_Extension))
+#define symeExtendNo(s)         ((int)      symeGetField(s, SYFI_ExtendNo))
 #define symeDepths(s)           ((AIntList) symeGetField(s, SYFI_Depths))
 #define symeMark(s)             ((SefoMark) symeGetLocal(s, SYFI_Mark))
 #define symeLibNum(s)           ((UShort)   symeGetField(s, SYFI_LibNum))
@@ -428,6 +430,7 @@ extern void             symeSetConstNumX        (Syme, AInt);
 #define symeSetOriginal(s,v)            symeSetField(s, SYFI_Original, v)
 
 #define symeSetExtension(s,v)           symeSetField(s, SYFI_Extension, v)
+#define symeSetExtendNo(s,v)             symeSetField(s, SYFI_ExtendNo, v)
 /*#define       symeSetExtension(s,v)           symeXSetExtension(s, v)*/
 
 #define symeSetCondition(s,v)           symeSetField(s, SYFI_Condition, v)

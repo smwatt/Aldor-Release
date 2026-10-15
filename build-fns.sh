@@ -64,15 +64,115 @@ export ALDOR_HOST_SYSTEM
 #
 ###############################################################################
 
+# Report the minimum macOS version actually emitted by the selected C
+# compiler.  This is stronger than guessing from the running OS or SDK:
+# Homebrew GCC, Apple Clang, and other compiler installations may have
+# different defaults.
+aldor_macos_compiler_deployment_target()
+{
+    local cc=$1 sdk=${2:-} tmp target
+
+    [ "$ALDOR_HOST_SYSTEM" = Darwin ] || return 1
+    tmp=$(mktemp -d "${TMPDIR:-/tmp}/aldor-deployment-probe.XXXXXX") || return 1
+
+    cat > "$tmp/probe.c" <<'EOF_DEPLOYMENT_PROBE'
+int aldor_deployment_probe(void) { return 0; }
+EOF_DEPLOYMENT_PROBE
+
+    # Discover the compiler's own default.  In particular, do not let an
+    # inherited MACOSX_DEPLOYMENT_TARGET bias the probe.  If SDK selection has
+    # already chosen an SDK, use that same SDK for the probe.
+    if [ -n "$sdk" ]; then
+        ( unset MACOSX_DEPLOYMENT_TARGET
+          "$cc" -std=c99 -isysroot "$sdk" -c "$tmp/probe.c" \
+              -o "$tmp/probe.o" ) >/dev/null 2>&1 || {
+            rm -rf "$tmp"
+            return 1
+        }
+    else
+        ( unset MACOSX_DEPLOYMENT_TARGET
+          "$cc" -std=c99 -c "$tmp/probe.c" -o "$tmp/probe.o" ) \
+              >/dev/null 2>&1 || {
+            rm -rf "$tmp"
+            return 1
+        }
+    fi
+
+    if command -v otool >/dev/null 2>&1; then
+        target=$(otool -l "$tmp/probe.o" 2>/dev/null | awk '
+            $1 == "cmd" {
+                mode = ($2 == "LC_BUILD_VERSION") ? "build" : \
+                       (($2 == "LC_VERSION_MIN_MACOSX") ? "legacy" : "")
+                next
+            }
+            mode == "build"  && $1 == "minos"   { print $2; exit }
+            mode == "legacy" && $1 == "version" { print $2; exit }
+        ')
+    elif command -v xcrun >/dev/null 2>&1 && \
+         xcrun -f otool >/dev/null 2>&1; then
+        target=$(xcrun otool -l "$tmp/probe.o" 2>/dev/null | awk '
+            $1 == "cmd" {
+                mode = ($2 == "LC_BUILD_VERSION") ? "build" : \
+                       (($2 == "LC_VERSION_MIN_MACOSX") ? "legacy" : "")
+                next
+            }
+            mode == "build"  && $1 == "minos"   { print $2; exit }
+            mode == "legacy" && $1 == "version" { print $2; exit }
+        ')
+    fi
+
+    rm -rf "$tmp"
+    [ -n "$target" ] || return 1
+    printf '%s\n' "$target"
+}
+
 aldor_macos_ensure_deployment_target()
 {
+    local cc=${1:-${ALDOR_CC:-${HOST_CC:-${CC:-cc}}}}
+    local sdk=${2:-${ALDOR_MACOS_SDK:-${SDKROOT:-}}}
+    local target host_major
+
     [ "$ALDOR_HOST_SYSTEM" = Darwin ] || return 0
-    if [ -z "${MACOSX_DEPLOYMENT_TARGET:-}" ] && \
-       command -v sw_vers >/dev/null 2>&1; then
-        MACOSX_DEPLOYMENT_TARGET=$(sw_vers -productVersion 2>/dev/null | \
-            awk -F. '{print $1 "." $2}')
-        export MACOSX_DEPLOYMENT_TARGET
+
+    # An explicit caller setting is authoritative.
+    if [ -n "${MACOSX_DEPLOYMENT_TARGET:-}" ]; then
+        ALDOR_MACOS_DEPLOYMENT_SOURCE=environment
+        export MACOSX_DEPLOYMENT_TARGET ALDOR_MACOS_DEPLOYMENT_SOURCE
+        return 0
     fi
+
+    target=$(aldor_macos_compiler_deployment_target "$cc" "$sdk") || {
+        echo "Cannot determine the selected macOS compiler's deployment target." >&2
+        echo "Compiler: $cc" >&2
+        [ -z "$sdk" ] || echo "SDK:      $sdk" >&2
+        echo "Set MACOSX_DEPLOYMENT_TARGET explicitly to override discovery." >&2
+        return 2
+    }
+
+    ALDOR_MACOS_DEPLOYMENT_SOURCE=compiler-object
+
+    # GCC versions predating macOS 26's version-number jump can infer
+    # "macOS 16.0" from Darwin 25.  Apple's tools use macOS 26.0, and
+    # mixing the two produces -Woverriding-deployment-version warnings.
+    #
+    # Keep this workaround local to deployment-target discovery.  An
+    # explicitly supplied MACOSX_DEPLOYMENT_TARGET has already returned
+    # above and is never rewritten here.
+    if [ "$target" = "16.0" ] && command -v sw_vers >/dev/null 2>&1; then
+        case "$("$cc" --version 2>/dev/null | head -1)" in
+            *gcc*|*GCC*)
+                host_major=$(sw_vers -productVersion 2>/dev/null |
+                    awk -F. '{print $1}')
+                if [ "$host_major" = "26" ]; then
+                    target=26.0
+                    ALDOR_MACOS_DEPLOYMENT_SOURCE=compiler-object-gcc-macos26
+                fi
+                ;;
+        esac
+    fi
+
+    MACOSX_DEPLOYMENT_TARGET=$target
+    export MACOSX_DEPLOYMENT_TARGET ALDOR_MACOS_DEPLOYMENT_SOURCE
 }
 
 aldor_macos_active_sdk()
@@ -164,7 +264,6 @@ aldor_macos_select_sdk()
     ALDOR_MACOS_CXX_COMPAT_MODE=none
 
     [ "$ALDOR_HOST_SYSTEM" = Darwin ] || return 0
-    aldor_macos_ensure_deployment_target
 
     if [ -n "${ALDOR_MACOS_SDK:-}" ] && [ -n "${SDKROOT:-}" ] && \
        [ "$ALDOR_MACOS_SDK" != "$SDKROOT" ]; then
@@ -536,16 +635,19 @@ fi
 
 aldor_configure_macos_build_flags()
 {
-    # Use one deployment target for bootstrap/runtime/generated code.  If the
-    # caller has not selected one, use the running macOS major.minor version.
-    if [ -z "${MACOSX_DEPLOYMENT_TARGET:-}" ] && command -v sw_vers >/dev/null 2>&1 ; then
-        export MACOSX_DEPLOYMENT_TARGET=$(sw_vers -productVersion | awk -F. '{print $1 "." $2}')
-    fi
+    # Use one target for compiler implementation objects, runtime objects, and
+    # C generated later by Aldor.  An explicit environment setting wins;
+    # otherwise discover the selected C compiler's actual Mach-O default.
+    aldor_macos_ensure_deployment_target \
+        "$HOST_CC" "${ALDOR_MACOS_SDK:-}" || return $?
+    ALDOR_MACOS_DEPLOYMENT_ARG=\
+"-mmacosx-version-min=$MACOSX_DEPLOYMENT_TARGET"
+    export ALDOR_MACOS_DEPLOYMENT_ARG
 
     # Keep warning selection tied to the selected compiler rather than to a
     # hard-coded clang executable.  This permits either clang or GCC on macOS.
-    macCArgs="$ALDOR_MACOS_SDK_ARG"
-    macCxxArgs="$ALDOR_MACOS_SDK_ARG"
+    macCArgs="$ALDOR_MACOS_SDK_ARG $ALDOR_MACOS_DEPLOYMENT_ARG"
+    macCxxArgs="$ALDOR_MACOS_SDK_ARG $ALDOR_MACOS_DEPLOYMENT_ARG"
     [ -z "$ALDOR_MACOS_CXX_COMPAT_FLAG" ] || \
         macCxxArgs="$macCxxArgs $ALDOR_MACOS_CXX_COMPAT_FLAG"
     macAldorCArgs=""
@@ -576,10 +678,12 @@ aldor_configure_macos_build_flags()
         source='#warning ALDOR_WARNING_OPTION_PROBE
 int main(void) { return 0; }'
         baseline=$(printf '%s\n' "$source" | \
-            "$compiler" -x "$language" "$standard" $ALDOR_MACOS_SDK_ARG \
+            "$compiler" -x "$language" "$standard" \
+            $ALDOR_MACOS_SDK_ARG $ALDOR_MACOS_DEPLOYMENT_ARG \
             -c -o /dev/null - 2>&1) || return 1
         output=$(printf '%s\n' "$source" | \
-            "$compiler" -x "$language" "$standard" $ALDOR_MACOS_SDK_ARG "$probe" \
+            "$compiler" -x "$language" "$standard" \
+            $ALDOR_MACOS_SDK_ARG $ALDOR_MACOS_DEPLOYMENT_ARG "$probe" \
             -c -o /dev/null - 2>&1) || return 1
         [ "$output" = "$baseline" ]
     }
@@ -618,9 +722,9 @@ int main(void) { return 0; }'
     export GLOBAL_CFLAGS="-std=c99 $macCArgs"
     export GLOBAL_CXXFLAGS="-std=c++20 $macCxxArgs"
     if [ -n "$macAldorCArgs" ]; then
-        # Generated C may now be compiled directly by the selected CC rather
-        # than through unicl, so pass ordinary compiler options rather than
-        # unicl's private -Wopts syntax.
+        # Pass generated-C compiler options through Aldor's -Cargs
+        # interface.  The macOS deployment target is inherited separately
+        # through the MACOSX_DEPLOYMENT_TARGET environment variable.
         oldIFS=$IFS; IFS=,
         for arg in $macAldorCArgs; do
             [ -n "$arg" ] && ALDORARGS="$ALDORARGS -Cargs=$arg"
@@ -663,7 +767,7 @@ showAldorToolchain()
         echo "SDK selection: ${ALDOR_MACOS_SDK_SELECTION:-unknown}"
         echo "C++ compatibility: ${ALDOR_MACOS_CXX_COMPAT_MODE:-none}"
         [ -z "${MACOSX_DEPLOYMENT_TARGET:-}" ] || \
-            echo "Deployment target: $MACOSX_DEPLOYMENT_TARGET"
+            echo "Deployment target: $MACOSX_DEPLOYMENT_TARGET (${ALDOR_MACOS_DEPLOYMENT_SOURCE:-unknown})"
     fi
     echo "Archiver:      $HOST_AR"
     if [ "$ALDOR_HOST_SYSTEM" = Darwin ] && [ -n "${ALDOR_LIBTOOL:-}" ]; then

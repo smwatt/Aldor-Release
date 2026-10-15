@@ -799,6 +799,14 @@ stabGetSubstable(Stab stab)
 void
 stabExtendMeanings(Stab stab, Syme syme)
 {
+        /*
+         * Imports created from an extension must retain the generation of
+         * that extension so source-order frontiers apply to imported
+         * operations as well as to the domain meaning.
+         */
+        if (symeIsImportOfExtend(syme) && symeExtendNo(syme) == 0)
+                symeSetExtendNo(syme, symeExtendNo(symeOriginal(syme)));
+
         if (stabSymeIsRetiredMeaning(syme))
                 return;
 

@@ -18,9 +18,9 @@
 /* Public release identity. */
 #define ALDOR_VERSION_MAJOR 1
 #define ALDOR_VERSION_MINOR 5
-#define ALDOR_VERSION_MICRO 0
+#define ALDOR_VERSION_MICRO 1
 #define ALDOR_VERSION_SUFFIX ""
-#define ALDOR_VERSION_STRING "1.5.0"
+#define ALDOR_VERSION_STRING "1.5.1"
 
 /*
  * Version of the program. The edit number is for internal purposes

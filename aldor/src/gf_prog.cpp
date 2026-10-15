@@ -136,7 +136,13 @@ gen0ProgPopState()
         vpFree(state->lexPool);
         listFree<Foam>(state->inits);
         listFree<Foam>(state->lines);
-        listFree<Syme>(state->funImportList);
+        {
+                List<GenFoamImport> imports = state->funImportList;
+
+                for (; imports; imports = cdr(imports))
+                        stoFree(car(imports));
+                listFree<GenFoamImport>(state->funImportList);
+        }
         listFree<TForm>(state->domImportList);
         listFree<Foam>(state->domList);
 

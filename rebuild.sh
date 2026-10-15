@@ -117,6 +117,7 @@ else
     aldor_version=unknown
 fi
 workspace=$(cd -P -- "$here/.." 2>/dev/null && pwd -P) || exit 2
+source "$here/source-revision.sh"
 host_raw=$(hostname -s 2>/dev/null || hostname 2>/dev/null || printf unknown)
 host=$(sanitize_component "$host_raw")
 [ -n "$host" ] || host=unknown
@@ -599,6 +600,20 @@ if [ "$#" -eq 0 ]; then
     set -- all
 fi
 
+# Release archives must reflect committed sources, not an edited working tree.
+# Ordinary 'build' and diagnostic invocations remain free to use local edits.
+if [ "${1:-}" = all ] && command -v git >/dev/null 2>&1; then
+    git_top=$(git -C "$workspace" rev-parse --show-toplevel 2>/dev/null || true)
+    if [ -n "$git_top" ] && [ "$(cd -P -- "$git_top" && pwd -P)" = "$workspace" ]; then
+        if ! git -C "$workspace" diff --quiet -- ||
+           ! git -C "$workspace" diff --cached --quiet --; then
+            echo "Refusing release rebuild from modified tracked sources." >&2
+            echo "Commit changes, then build from the immutable release tag." >&2
+            exit 2
+        fi
+    fi
+fi
+
 case "${1:-}" in
     build|all) detailed_context=1 ;;
     *)         detailed_context=0 ;;
@@ -624,6 +639,32 @@ deliver_build() {
         echo "Delivery packaging requires build.log and test.log in $build_root." >&2
         return 1
     fi
+
+    # Keep successful build/test logs and compare source revisions when known.
+    # A plain distro tarball may legitimately have no Git source identity.
+    local logfile revision other
+    revision=
+    for logfile in "$build_root/build.log" "$build_root/test.log"; do
+        if [ "$(tail -n 1 "$logfile")" != 'Exit status:     0' ]; then
+            echo "Refusing delivery: failed/incomplete $logfile" >&2
+            return 1
+        fi
+        other=$(sed -n 's/^Git HEAD:       //p' "$logfile" | head -1)
+        case "$other" in
+            *[!0-9a-fA-F]*|'') other= ;;
+            *)
+                case "${#other}" in
+                    40|64) ;;
+                    *) other= ;;
+                esac
+                ;;
+        esac
+        if [ -n "$revision" ] && [ "$revision" != "$other" ]; then
+            echo "Refusing delivery: build/test source revisions differ." >&2
+            return 1
+        fi
+        revision=$other
+    done
 
     mkdir -p "$delivery" || return 1
     tmp_prefix="$delivery/.${stem}.tmp.$$"

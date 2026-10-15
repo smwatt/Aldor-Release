@@ -112,10 +112,12 @@ fi
 # is disabled until the complete auxiliary set has been exercised.
 aux_current=
 aux_current_failed=0
+aux_current_skipped=0
 aux_gate_status=0
 aux_finish_previous() {
         if [ -n "$aux_current" ]; then
-                if [ "$aux_current_failed" -eq 0 ]; then
+                if [ "$aux_current_failed" -eq 0 ] && \
+                   [ "$aux_current_skipped" -eq 0 ]; then
                         printf '0\n' > "$OUT/$aux_current.status"
                         echo "auxiliary modernization gate: $aux_current PASS"
                 fi
@@ -125,6 +127,7 @@ aux_begin() {
         aux_finish_previous
         aux_current=$1
         aux_current_failed=0
+        aux_current_skipped=0
         rm -f "$OUT/$aux_current.status"
         echo "auxiliary modernization gate: $aux_current"
 }
@@ -134,6 +137,13 @@ aux_failed() {
                 if [ "$aux_current_failed" -eq 0 ]; then
                         printf '%s\n' "$rc" > "$OUT/$aux_current.status"
                         echo "auxiliary modernization gate: $aux_current FAIL (status $rc)" >&2
+                        # Surface the saved diagnostic in the top-level test log.
+                        for stream in err out; do
+                                if [ -s "$OUT/$aux_current.$stream" ]; then
+                                        echo "--- $aux_current.$stream (last 24 lines) ---" >&2
+                                        tail -n 24 "$OUT/$aux_current.$stream" >&2
+                                fi
+                        done
                 fi
                 aux_current_failed=1
                 aux_gate_status=1
@@ -452,10 +462,10 @@ if bad_runtime:
 print('Algebra runtime/reference outcomes all current-correct:', len(c), 'cases')
 PY
 
-# Optional strong compiler-to-compiler comparison.  Point
-# ALDOR_COMPARE_ROOT at the prior release product tree.
+# Keep an identical gate call order on every host. Optional configuration
+# changes the body of a gate, never whether the gate is invoked.
+aux_begin generated-c-compare
 if [ -n "${ALDOR_COMPARE_ROOT:-}" ]; then
-        aux_begin generated-c-compare
         "$SRCROOT/modernization/generated-c-compare.sh" v007-v008 \
                 "$ALDOR_COMPARE_ROOT" "$ROOT" "$SRCROOT" \
                 "$OUT/generated-c-compare"
@@ -470,6 +480,10 @@ if bad:
     raise SystemExit(1)
 print('Generated-C compiler comparison identical:', len(rows), 'cases')
 PY
+else
+        aux_current_skipped=1
+        printf 'SKIP\n' > "$OUT/generated-c-compare.status"
+        echo "auxiliary modernization gate: generated-c-compare SKIPPED (not configured)"
 fi
 
 aux_finish_previous

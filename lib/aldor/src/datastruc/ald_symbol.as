@@ -100,3 +100,18 @@ is created at each call.}
 
 }
 
+#if ALDORTEST
+#include "aldor"
+#include "aldortest"
+
+local symbolInterningOK?(): Boolean == {
+    import from Symbol, String;
+    a: Symbol := -"x";
+    b: Symbol := -"x";
+    c: Symbol := -"y";
+    a = b and ~(a = c);
+}
+
+stdout << "Testing imported extension..." << endnl;
+stdout << (if symbolInterningOK?() then "OK" else "FAIL") << endnl;
+#endif

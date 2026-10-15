@@ -206,7 +206,8 @@ fi
     echo
     echo "Auxiliary modernization gates"
     echo "-----------------------------"
-    for item in build-diagnostics portability test-harness build-entry foreign-c-empty \
+    for item in build-diagnostics portability varargs-abi ccode-int-format-abi \
+        message-varargs test-harness build-entry foreign-c-empty \
         foreign-prototype generated-c-smoke generated-c-hygiene generated-c-c99 \
         compiler-self-tests implementation-c99 unitools algebra-matrix \
         generated-c-compare; do
@@ -214,6 +215,8 @@ fi
             rc=$(cat "$v/$item.status")
             if [ "$rc" = 0 ]; then
                 printf '%-28s PASS\n' "$item"
+            elif [ "$rc" = SKIP ]; then
+                printf '%-28s SKIPPED\n' "$item"
             else
                 printf '%-28s FAIL (status %s)\n' "$item" "$rc"
             fi

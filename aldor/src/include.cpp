@@ -101,6 +101,7 @@ long            inclFileLineNo   = 1;   /* Filled in at end. */
 Buffer          inclBuffer;             /* Input buffer */
 MutString          curLineString;          /* The current line being processed */
 IfState         ifState;                /* State of current )if */
+MutString       ifProperty;             /* Property of current opening #if */
 FileState       fileState;              /* State of current file */
 List<Hash>        includedFileCodes = 0;  /* Hash codes of all included files */
 
@@ -505,7 +506,7 @@ local List<SrcLine> inclHandleUnassert    (MutString property);
 local List<SrcLine> inclHandleIf          (MutString property);
 local List<SrcLine> inclHandleElseif      (MutString property);
 local List<SrcLine> inclHandleElse        (void);
-local List<SrcLine> inclHandleEndif       (void);
+local List<SrcLine> inclHandleEndif       (MutString property);
 local List<SrcLine> inclHandleLine        (int lno, MutString fname);
 local List<SrcLine> inclHandleUnknown     (void);
 
@@ -546,7 +547,9 @@ inclHandleDirective(void)
                 return inclHandleElseif(property);
         }
         if ((s = scmdIsDirective(s0,"endif")) != 0) {
-                return inclHandleEndif();
+                property = NULL;
+                (void) scmdScanId(s, &property);
+                return inclHandleEndif(property);
         }
         if ((s = scmdIsDirective(s0,"else")) != 0) {
                 return inclHandleElse();
@@ -626,7 +629,10 @@ inclHandleIf(MutString property)
 {
 
         Fluid fluidBinding_ifState(ifState);
+        Fluid fluidBinding_ifProperty(ifProperty);
         List<SrcLine>     result = listNil<SrcLine>;
+
+        ifProperty = property;
 
         if (INCLUDING(ifState)) {
                 SrcLine sl = SysCmdLine(true);
@@ -686,12 +692,23 @@ inclHandleElse(void)
 }
 
 local List<SrcLine>
-inclHandleEndif(void)
+inclHandleEndif(MutString property)
 {
         SrcLine sl = SysCmdLine(true);
         sl.setEndifLine();
+
         if (ifState == NoIf)
                 return addSysCmd(inclError(ALDOR_E_InclUnbalEndif), sl);
+
+        /*
+         * A label on #endif names the opening #if, not the most recent
+         * #elseif.  inclHandleIf dynamically scopes the opening property, so
+         * nested conditionals compare against their own opener and restore
+         * the enclosing one on return.
+         */
+        if (property && (!ifProperty || !strEqual(property, ifProperty)))
+                return addSysCmd(inclError(ALDOR_E_SysCmdBad, "endif"), sl);
+
         if (ifState == ActiveIf || ifState == InactiveIf)
                 return addSysCmd(listNil<SrcLine>, sl);
         return EndifLine;

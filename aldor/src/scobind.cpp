@@ -181,6 +181,8 @@ static List<TForm>        scoUndoTForms;
 static List<TForm>        scoRetiredTForms;
 static DefnPos          scoCondList;
 static int              scoDefCounter;
+static int              scoExtendCounter;
+static int              scoExtendFrontier;
 
 /******************************************************************************
  *
@@ -484,8 +486,10 @@ void
 scobindInitFile(void)
 {
         scoIdInfoList = listNil<IdInfo>;
-        scoUndoState  = false;
-        scoDefCounter = 1;
+        scoUndoState       = false;
+        scoDefCounter      = 1;
+        scoExtendCounter   = 0;
+        scoExtendFrontier  = 0;
 }
 
 void
@@ -574,6 +578,9 @@ scobindSave()
 local void
 scobindValue(AbSyn absyn)
 {
+        if (abExtendFrontier(absyn) < 0)
+                abSetExtendFrontier(absyn, scoExtendFrontier);
+
         switch (abTag(absyn)) {
         case AB_Nothing:
                 break;
@@ -862,11 +869,16 @@ scobindLambdaList(void)
         while (scoLambdaList) {
                 AbSyn   lhs = car(scoLambdaList);
                 AbSyn   rhs = car(cdr(scoLambdaList));
+                int     savedFrontier = scoExtendFrontier;
+
+                if (abExtendFrontier(rhs) >= 0)
+                        scoExtendFrontier = abExtendFrontier(rhs);
 
                 scobindPushDefine(lhs);
                 scobindLevel(rhs, scobindLambda, scobindLambdaFlags);
                 scobindPopDefine(lhs);
 
+                scoExtendFrontier = savedFrontier;
                 scoLambdaList = listFreeCons<AbSyn>(scoLambdaList);
                 scoLambdaList = listFreeCons<AbSyn>(scoLambdaList);
         }
@@ -2047,6 +2059,9 @@ scobindDefineId(AbSyn id, AbSyn type, AbSyn val)
 local void
 scobindDefineRhs(AbSyn lhs, AbSyn rhs, DeclContext context)
 {
+        if (abExtendFrontier(rhs) < 0)
+                abSetExtendFrontier(rhs, scoExtendFrontier);
+
         if (abIsAnyLambda(rhs)) {
                 listPush(AbSyn, lhs, scoLambdaList);
                 listPush(AbSyn, rhs, scoLambdaList);
@@ -2151,10 +2166,17 @@ scobindExtend(AbSyn absyn)
                         AbSyn   rhs = argv[i]->abDefine.rhs;
 
                         scobindExtendDeclare(lhs, rhs);
+                        if (abExtendFrontier(argv[i]) < 0)
+                                abSetExtendFrontier(argv[i],
+                                                    scoExtendFrontier);
                         scobindDefineRhs(lhs, rhs, SCO_Sig_Extend);
                 }
-                else
+                else {
                         scobindExtendDeclare(argv[i], NULL);
+                        if (abExtendFrontier(argv[i]) < 0)
+                                abSetExtendFrontier(argv[i],
+                                                    scoExtendFrontier);
+                }
         }
 }
 
@@ -2197,7 +2219,7 @@ scobindExtendId(AbSyn id, AbSyn type, AbSyn val)
         declInfo = scobindDeclareId(id, type, val, SCO_Sig_Extend);
         scobindSetSigUse(declInfo, SCO_Sig_Extend, id);
         typeTf = type ? abTForm(type) : NULL;
-        if (fintMode == FINT_LOOP && type && !typeTf)
+        if (type && !typeTf)
                 typeTf = tfSyntaxFrAbSyn(scoStab, type);
         syme = stabDefExtendee(scoStab, sym, typeTf, doc);
         abSetSyme(id, syme);
@@ -2207,9 +2229,12 @@ scobindExtendId(AbSyn id, AbSyn type, AbSyn val)
         if (ext == NULL) {
                 TForm   template_ = tfSyntaxExtend(scoStab, id, type);
                 ext = symeNewExtend(sym, template_, car(scoStab));
+                symeSetExtendNo(ext, ++scoExtendCounter);
                 car(scoStab)->extendSymes =
                         listCons<Syme>(ext, car(scoStab)->extendSymes);
         }
+        if (symeExtendNo(ext) > scoExtendFrontier)
+                scoExtendFrontier = symeExtendNo(ext);
 
         /* Associate the extendee with the extension. */
         symeSetExtension(syme, ext);
@@ -2240,7 +2265,18 @@ scobindGetExtend(AbSyn id, AbSyn type)
                         ext = abuse ? symeExtension(abSyme(abuse)) : NULL;
 
                         if (ext) {
-                                TForm typeTf = type ? abTForm(type) : NULL;
+                                TForm typeTf;
+
+                                /*
+                                 * Extension construction is lexical.  An
+                                 * incomplete extension in an enclosing scope
+                                 * is an outer layer, not a partially assembled
+                                 * extension of the current scope.
+                                 */
+                                if (symeDefLevel(ext) != car(scoStab))
+                                        continue;
+
+                                typeTf = type ? abTForm(type) : NULL;
                                 if (type && !typeTf)
                                         typeTf = tfSyntaxFrAbSyn(scoStab, type);
                                 if (typeTf && tfCanExtend(typeTf, symeType(ext))) {

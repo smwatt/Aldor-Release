@@ -42,7 +42,72 @@ with open(out,'w') as fp:
 print(len(rows))
 PY
 census=$(wc -l < "$work/map.tsv" | tr -d ' ')
-[ "$census" -eq 686 ] || fail "AxlLib classified census is $census, expected 686"
+[ "$census" -eq 688 ] || fail "AxlLib classified census is $census, expected 688"
+
+# Test-reference integrity.  A locally generated but untracked golden can
+# make the developer tests pass and still disappear from a release archive.
+python3 - "$distro" "$work/map.tsv" <<'PYGOLDENS'
+import pathlib, subprocess, sys
+
+distro = pathlib.Path(sys.argv[1]).resolve()
+project = distro.parent
+root = distro / 'lib/axllib/testout'
+suffix = {'phase': '.R', 'int': '.out', 'run': '.out', 'errs': '.E'}
+wanted = set()
+for line in pathlib.Path(sys.argv[2]).read_text().splitlines():
+    kind, name, mode = line.split('\t')
+    if mode != 'ok':
+        continue
+    if kind == 'script':
+        wanted.add(name + 'R')
+    elif kind in suffix:
+        assert name.endswith('.as'), (kind, name)
+        wanted.add(name[:-3] + suffix[kind])
+
+missing = sorted(name for name in wanted if not (root / name).is_file())
+if missing:
+    raise SystemExit('missing active AxlLib references: ' + ', '.join(missing))
+
+try:
+    r = subprocess.run(['git', '-C', str(project), 'rev-parse',
+                        '--show-toplevel'], text=True, capture_output=True)
+except FileNotFoundError:
+    r = None
+if r and r.returncode == 0 and pathlib.Path(r.stdout.strip()).resolve() == project:
+    files = subprocess.run(
+        ['git', '-C', str(project), 'ls-files', '-z', '--',
+         'distro/lib/axllib/testout/'],
+        check=True, capture_output=True).stdout.decode().split('\0')
+    tracked = {pathlib.PurePosixPath(f).name for f in files if f}
+    untracked = sorted(wanted - tracked)
+    if untracked:
+        raise SystemExit('untracked active AxlLib references: ' +
+                         ', '.join(untracked))
+print('active AxlLib references verified:', len(wanted))
+PYGOLDENS
+
+# Every platform traverses the same ordered gate list. Only subordinate
+# gate bodies may contain platform/configuration variants.
+python3 - "$distro/modernization/validate.sh" <<'PYORDER'
+import pathlib, re, sys
+src = pathlib.Path(sys.argv[1]).read_text()
+core = re.findall(r'^run_core_gate ([-\w]+)', src, re.M)
+aux = re.findall(r'^aux_begin ([-\w]+)', src, re.M)
+expected_core = [
+    'where-scope', 'aldorhash32', 'bigint64-regression',
+    'domain-specialization', 'defgcd-determinism', 'semantic-recovery'
+]
+expected_aux = [
+    'portability', 'varargs-abi', 'ccode-int-format-abi', 'message-varargs',
+    'test-harness', 'build-entry', 'foreign-c-empty', 'foreign-prototype',
+    'generated-c-smoke', 'generated-c-hygiene', 'generated-c-c99',
+    'compiler-self-tests', 'implementation-c99', 'unitools',
+    'algebra-matrix', 'generated-c-compare'
+]
+if core != expected_core or aux != expected_aux:
+    raise SystemExit(f'noncanonical gate order: core={core}, aux={aux}')
+print('stable release-gate sequence verified')
+PYORDER
 
 mkdir -p "$work/root/toolbin" "$work/root/testout/lib/axllib"
 cp "$distro/build-fns.sh" "$work/root/toolbin/build-fns.sh"
@@ -109,19 +174,19 @@ set -e
 # Every classified (kind,file) is invoked exactly once and -nodiff reaches the
 # real testaldor call after -only parsing.
 invoked=$(awk '{n += $3} END {print n+0}' "$SYN_CALLS")
-[ "$invoked" -eq 686 ] || fail "AxlLib invoked $invoked classified results, expected 686"
+[ "$invoked" -eq 688 ] || fail "AxlLib invoked $invoked classified results, expected 688"
 if grep -vE '^(script|phase|gen|comp|int|run|errs) yes [0-9]+$' "$SYN_CALLS" >/dev/null; then
   fail "-only/-nodiff propagation to testaldor is incorrect"
 fi
 
-grep -q '686 OK' "$work/axllib.out" || fail "expected 686 OK results not reported"
+grep -q '688 OK' "$work/axllib.out" || fail "expected 688 OK results not reported"
 grep -q '  0 diff' "$work/axllib.out" || fail "unexpected synthetic differences reported"
 grep -q '  0 err' "$work/axllib.out" || fail "unexpected synthetic errors reported"
 
 results="$ALDORROOT/testout/lib/axllib/results.tsv"
 [ -f "$results" ] || fail "AxlLib results.tsv was not written"
 rows=$(awk 'END {print NR-1}' "$results")
-[ "$rows" -eq 686 ] || fail "AxlLib results.tsv has $rows rows, expected 686"
+[ "$rows" -eq 688 ] || fail "AxlLib results.tsv has $rows rows, expected 688"
 if ! awk -F '\t' 'NR==1 {next} NF != 5 || $1 != "axllib" || $2 !~ /^(ok|fix|diff|err)$/ || $5 !~ /^(OK|DIFFERENT|ERROR)$/ {bad=1} END {exit bad}' "$results"; then
   fail "AxlLib results.tsv contains an unrecognized row"
 fi

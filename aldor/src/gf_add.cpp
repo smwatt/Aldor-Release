@@ -37,6 +37,7 @@ local Foam         gen0RtDomainHash             (Foam);
 local void         gen0MakeDomainSelf     (void);
 local void         gen0TypeAddDefaultSelfSlot   (void);
 local void         gen0MakeDomainDefaults (Foam);
+local Foam         gen0MakeLazyCategory   (Foam);
 local void         gen0MakeCategoryParents(AbSyn);
 local int          gen0MakeCatParents0    (AbSyn, Foam, int);
 local int          gen0MakeCatParentsIf   (AbSyn, Foam, int);
@@ -814,6 +815,41 @@ gen0TypeAddDefaultSelfSlot()
 }
 
 /*
+ * Delay a direct category value without delaying construction of the domain
+ * that refers to it.  The runtime installs a dummy CatObj and calls this
+ * one-argument getter only when the default package is actually needed.
+ */
+local Foam
+gen0MakeLazyCategory(Foam category)
+{
+        GenFoamState    saved;
+        Foam            foam, clos, call;
+
+        assert(foamTag(category) == FOAM_Glo);
+
+        clos = gen0ProgClosEmpty();
+        foam = gen0ProgInitEmpty("lazyCategory0", NULL);
+
+        saved = gen0ProgSaveState(PT_ExFn);
+
+        gen0AddParam(foamNewDecl(FOAM_SInt, strCopy("idx"),
+                                 emptyFormatSlot));
+        gen0AddStmt(foamNewReturn(category), NULL);
+
+        gen0ProgPushFormat(emptyFormatSlot);
+        gen0ProgFiniEmpty(foam, FOAM_Word, int0);
+        gen0AddLexLevels(foam, 1);
+        foamOptInfo(foam) = inlInfoNew(NULL, foam, NULL, false);
+
+        gen0ProgRestoreState(saved);
+
+        call = gen0BuiltinCCall(FOAM_Word, "rtLazyCatFrInit",
+                                "runtime", 2, clos, foamNewSInt(int0));
+        foamPure(call) = true;
+        return call;
+}
+
+/*
  * Create the defaults for a domain.
  */
 local void
@@ -822,6 +858,14 @@ gen0MakeDomainDefaults(Foam defaults)
         Foam result;
 
         if (!defaults || foamTag(defaults) == FOAM_Nil) return;
+
+        /*
+         * A top-level category global may not yet be published when an
+         * extension domain is created from the initializer prefix.  Preserve
+         * the category dependency lazily rather than reading a null global.
+         */
+        if (foamTag(defaults) == FOAM_Glo)
+                defaults = gen0MakeLazyCategory(defaults);
 
         result = gen0BuiltinCCall(FOAM_Word, "domainAddDefaults!",
                                   "runtime", 3, foamNewPar(int0), defaults,

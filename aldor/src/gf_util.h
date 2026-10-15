@@ -54,9 +54,23 @@ typedef struct foamSig {
         Foam     ref;
 } *FoamSig;
 
+/*
+ * Code-generation state for an imported function at one Foam lambda level.
+ * The Syme identifies the import semantically; the remaining fields belong
+ * to this GenFoamState and must not be shared with nested Foam programs.
+ */
+typedef struct genFoamImport {
+        Syme            syme;
+        AInt            index;
+        FoamTag         kind;
+        bool            initialized;
+        bool            allocated;
+} *GenFoamImport;
+
 DECLARE_LIST(DomainCache);
 DECLARE_LIST(VarPool);
 DECLARE_LIST(FoamSig);
+DECLARE_LIST(GenFoamImport);
 
 /*
  * The types of lambda levels that the code generator creates.
@@ -116,7 +130,7 @@ typedef struct gfs {
         FoamList        inits;          /* the initialization code */
         FoamList *      importPlace;    /* Positions that are safe for gets */
         AIntList        importPlacePrev;/* safe places nested by where */
-        SymeList        funImportList;  /* functions imported into prog */
+        GenFoamImportList funImportList;/* functions imported into prog */
         TFormList       domImportList;  /* domains imported into prog */
         FoamList        domList;        /* vars for imported domains */
         bool            hasTemps;       /* true iff prog has temp variables */

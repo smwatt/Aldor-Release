@@ -2050,6 +2050,14 @@ tiTfCollectDependees(Table<Symbol, List<TFormUses>> tbl, TFormUses S, TForm tf)
 
         if (sym && tfIsCategoryMap(tf))
                 tiTfCollectSymDependees(tbl, S, sym);
+
+        /*
+         * An extension category is interpreted in the context of the
+         * meaning being extended, so that meaning must be ready first.
+         */
+        for (al = S->extension; al; al = cdr(al))
+                tiTfCollectSefoDependees(tbl, S, car(al));
+
         for (al = S->extendees; al; al = cdr(al))
                 tiTfCollectSefoDependees(tbl, S, car(al));
         tiTfCollectSefoDependees(tbl, S, tfGetExpr(tf));

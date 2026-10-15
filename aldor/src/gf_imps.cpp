@@ -82,6 +82,13 @@ gen0InitImport(Syme syme)
 
         idx = gen0MoveToImportPlace(&ss, symeLexLevel);
 
+        /*
+         * The recursive exporter/domain generation below can visit the same
+         * semantic Syme in another GenFoamState.  Preserve this state's FOAM
+         * slot before that happens.
+         */
+        AInt importIndex = gen0VarIndex(syme);
+
         gen0SetSymeInit(syme, int0);
 
         if (tfIsArchive(exporter))
@@ -92,7 +99,7 @@ gen0InitImport(Syme syme)
         else
                 call = gen0GetDomImport(syme, gen0GetDomain(exporter, idx));
 
-        foam = gen0NewLex(idx, gen0VarIndex(syme));
+        foam = gen0NewLex(idx, importIndex);
 
         gen0UseStackedFormat(int0);
         gen0AddStmt(foamNewDef(foam, call), NULL);
@@ -290,10 +297,11 @@ gen0GetLibImport(Syme syme, TForm exporter)
 local void
 gen0SetSymeInit(Syme syme, AInt level)
 {
-        List<Syme>        l = gen0NthState(level)->funImportList;
-        for(; l != 0; l = cdr(l))
-                if (symeEqual(syme, car(l))) {
-                        symeSetImportInit(car(l));
+        List<GenFoamImport> l = gen0NthState(level)->funImportList;
+
+        for (; l != 0; l = cdr(l))
+                if (symeEqual(syme, car(l)->syme)) {
+                        car(l)->initialized = true;
                         return;
                 }
         return;

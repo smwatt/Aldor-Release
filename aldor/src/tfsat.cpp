@@ -492,6 +492,8 @@ tfSatSubList(AbSyn ab)
 
                 S     = abTUnique(op);
                 sigma = tfSatSubList(op);
+                if (sigma == absFail())
+                        break;
                 mask  = tfSatMapArgs(mask, sigma, S, ab, argc, abApplyArgf);
 
                 if (!tfSatSucceed(mask)) {

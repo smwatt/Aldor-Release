@@ -1,5 +1,10 @@
 # Aldor 1.5: A language from the 90s designed for the 20s
 
+This introduction describes Aldor 1.5, with examples reflecting
+version 1.5.1. The latest release is Aldor 1.5.1.
+
+**[Download Aldor 1.5.1](https://github.com/smwatt/Aldor-Release/releases/latest)**
+
 ## What is Aldor?
 
 Aldor is a programming language built around a relatively small collection of
@@ -103,6 +108,11 @@ test: large families of related types, layers of parameterization, algorithms
 stated over abstract properties, and representations chosen for performance.
 Mechanisms developed to cope cleanly with that degree of structure have
 proven useful well beyond the setting that originally required them.
+
+Aldor 1.5 restores the language as an actively maintained, portable,
+open-source system. More than an exercise in software preservation, this
+release establishes a platform for renewed experimentation with programming
+languages, compilation, and symbolic computation.
 
 The following examples show what some of these ideas look like in actual
 Aldor programs.
@@ -515,45 +525,27 @@ https://github.com/smwatt/Aldor-Release/releases
 
 ## Prebuilt Aldor packages
 
-Prebuilt Aldor 1.5.1 packages are available for the following
-platform/compiler combinations:
+Prebuilt Aldor 1.5.1 packages are available for the following platforms. One compiler toolchain has been selected for each platform, although both GCC and Clang have been successfully built and tested on all six.
 
-| Platform | Architecture | Toolchain |
-| --- | --- | --- |
-| Cygwin | x86_64 | GCC |
-| Cygwin | x86_64 | Clang |
-| Debian Linux | riscv64 | GCC |
-| Debian Linux | riscv64 | Clang |
-| macOS | arm64 | GCC |
-| macOS | arm64 | Apple Clang |
-| macOS | x86_64 | GCC |
-| macOS | x86_64 | Apple Clang |
-| Ubuntu Linux | aarch64 | GCC |
-| Ubuntu Linux | aarch64 | Clang |
-| Ubuntu Linux | x86_64 | GCC |
-| Ubuntu Linux | x86_64 | Clang |
+| Platform            | Toolchain | Package                               |
+|---------------------|-------|-------------------------------------------|
+| Cygwin x86-64       | GCC   | `aldor-1.5.1-cygwin-x86_64-gcc.tgz`       |
+| Debian RISC-V 64    | GCC   | `aldor-1.5.1-debian-riscv64-gcc.tgz`      |
+| macOS Apple Silicon | Clang | `aldor-1.5.1-macos-aarch64-clang.tgz`     |
+| macOS Intel         | Clang | `aldor-1.5.1-macos-x86_64-clang.tgz`      |
+| Ubuntu 24.04 x86-64 | GCC   | `aldor-1.5.1-ubuntu24.04-x86_64-gcc.tgz`  |
+| Ubuntu 26.04 ARM64  | GCC   | `aldor-1.5.1-ubuntu26.04-aarch64-gcc.tgz` |
 
-For these configurations all tests pass.
+All builds and tests pass for the twelve platform/toolchain combinations.
 
-Package names have the form:
-
-```text
-aldor-1.5.1-<platform>-<architecture>-<toolchain>.tgz
-```
-
-For example:
-
-```text
-aldor-1.5.1-ubuntu-x86_64-gcc.tgz
-aldor-1.5.1-macos-arm64-clang.tgz
-```
+The packages and standalone source distribution are available from the [Aldor releases page](https://github.com/smwatt/Aldor-Release/releases/latest).
 
 ### Using a prebuilt package
 
 Unpack the package in a convenient location:
 
 ```sh
-tar xzf aldor-1.5.1-ubuntu-x86_64-gcc.tgz
+tar xzf aldor-1.5.1-ubuntu24.04-x86_64-gcc.tgz
 ```
 
 Aldor uses the environment variable `ALDORROOT` to identify the root of the
